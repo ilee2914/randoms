@@ -1,4 +1,4 @@
-USE xanadu83;
+USE randos;
 
 /*Table structure for table `rechargedata` */
 

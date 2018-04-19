@@ -106,7 +106,9 @@ Player::Player(Session *session) :
 	merchant_storage_mesos_(0),
 	crusader_combo_value_(1),
 	chalk_board_text_(""),
-	name_("")//,
+	name_(""),
+	ctx(nullptr),
+	endChat(false)//,
 	//summon_timer_(World::get_instance()->get_io_service())
 {
 }
@@ -1242,8 +1244,7 @@ bool Player::add_mesos(int amount) {
 		long long amount_test = amount;
 		mesos_test += amount_test;
 
-		if (mesos_test > INT_MAX) // prevent players having more than INT_MAX (~2,1 billion usually) mesos
-		{
+		if (mesos_test > INT_MAX) { // prevent players having more than INT_MAX (~2,1 billion usually) mesos
 			return false;
 		}
 	}
@@ -1666,6 +1667,9 @@ void Player::set_fame(int fame) {
 	}
 }
 
+void Player::gain_exp(int xp) {
+	set_exp(xp + exp_);
+}
 void Player::set_exp(int new_exp) {
 	// stores the highest level that the job of the player allows
 	unsigned char max_level = 200;
@@ -2671,7 +2675,7 @@ void Player::set_crusader_combo_value(signed char value) {
 	crusader_combo_value_ = value;
 }
 
-void Player::send_npc() {
+void Player::send_npc(int m, int t, int s) {
 	// check if there is a shop for that npc, if so, open that for the player and get out of this function
 	int shop_id = npc_->id_;
 	ShopData *npc_shop = ShopDataProvider::get_instance()->get_shop_data(shop_id);
@@ -2722,7 +2726,17 @@ void Player::send_npc() {
 
 	default:
 	{
-		npc_script_handler();
+		std::cout << npc_->id_ << std::endl;
+		npc_script_handler(m, t, s);
 	}
 	}
+}
+
+void Player::disposeChat() {
+	endChat = true;
+}
+
+void Player::dispose() {
+	duk_destroy_heap(ctx);
+	endChat = false;
 }

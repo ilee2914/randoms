@@ -97,6 +97,28 @@ void Player::send_ok(std::string text) {
 	send_packet(&packet1);
 }
 
+void Player::send_accept_decline(std::string text) {
+	// packet
+	PacketCreator packet1;
+	packet1.send_accept_decline(npc_->id_, text);
+	send_packet(&packet1);
+}
+
+void Player::send_get_number(std::string text, int def, int min, int max) {
+	// packet
+	PacketCreator packet1;
+	packet1.send_get_number(npc_->id_, text, def, min, max);
+	send_packet(&packet1);
+}
+
+void Player::send_get_text(std::string text) {
+	// packet
+	PacketCreator packet1;
+	packet1.send_get_text(npc_->id_, text);
+	send_packet(&packet1);
+}
+
+
 void Player::send_style(int styles[], int size) {
 	std::string text = "";
 

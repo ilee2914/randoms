@@ -381,7 +381,7 @@ void Map::add_player(Player *player) {
 
 	// display the monsters
 	for (auto mob : mobs_) {
-		if (!mob->is_dead() && mob->get_object_id() != 0) {
+		if (!mob->is_dead()) {
 			{
 				PacketCreator packet;
 				packet.SpawnMonster(mob, mob_constants::kSpawnTypesOldSpawn);
@@ -822,18 +822,16 @@ void Map::spawn_monster(int mob_id, short x, short y, short foothold, signed cha
 		return;
 	}
 
-	if (get_mob_object_id() != 0) {
-		Mob *mob = new Mob(this, mob_id, get_mob_object_id(), x, y, foothold, flip ? 3 : 2, data->max_hp_, data->max_mp_, data->is_boss_, mapMob, mobTime);
-		{
-			PacketCreator packet;
-			packet.SpawnMonster(mob, spawn_type, from);
-			send_packet(&packet);
-		}
-
-		mob->find_control(true);
-		if (mapMob)
-			mobs_.push_back(mob);
+	Mob *mob = new Mob(this, mob_id, get_mob_object_id(), x, y, foothold, flip ? 3 : 2, data->max_hp_, data->max_mp_, data->is_boss_, mapMob, mobTime);
+	{
+		PacketCreator packet;
+		packet.SpawnMonster(mob, spawn_type, from);
+		send_packet(&packet);
 	}
+
+	mob->find_control(true);
+	if (mapMob)
+		mobs_.push_back(mob);
 }
 
 void Map::spawn_monster_init(int mob_id, short x, short y, short foothold, int mobTime, bool flip) {
@@ -842,10 +840,8 @@ void Map::spawn_monster_init(int mob_id, short x, short y, short foothold, int m
 		return;
 	}
 
-	if (get_mob_object_id() != 0) {
-		Mob *mob = new Mob(this, mob_id, get_mob_object_id(), x, y, foothold, flip ? 3 : 2, data->max_hp_, data->max_mp_, data->is_boss_, true, mobTime);
-		mobs_.push_back(mob);
-	}
+	Mob *mob = new Mob(this, mob_id, get_mob_object_id(), x, y, foothold, flip ? 3 : 2, data->max_hp_, data->max_mp_, data->is_boss_, true, mobTime);
+	mobs_.push_back(mob);
 }
 
 std::vector<Mob *> *Map::get_original_mobs() {

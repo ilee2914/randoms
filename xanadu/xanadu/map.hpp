@@ -22,8 +22,7 @@ class Player;
 class MapData;
 struct MapReactorData;
 
-class Map
-{
+class Map {
 public:
 
 	// constructor

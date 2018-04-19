@@ -669,7 +669,9 @@ void Player::handle_use_chat() {
 				send_packet(&packet);
 			}
 		}
-
+		else if (command == "dispose") {
+			duk_destroy_heap(ctx);
+		}
 		else if (command == "fm") {
 			set_map(910000000);
 		}

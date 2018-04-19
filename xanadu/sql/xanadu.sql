@@ -1,5 +1,5 @@
-CREATE DATABASE xanadu83;
-USE xanadu83;
+CREATE DATABASE randos;
+USE randos;
 
 CREATE TABLE buddy_lists (
   `primary_id` INT NOT NULL AUTO_INCREMENT,
@@ -44,6 +44,7 @@ CREATE TABLE characters (
   PRIMARY KEY (`id`)
 );
 
+ALTER TABLE characters auto_increment = 10000;
 CREATE TABLE equips (
  `primary_id` INT NOT NULL AUTO_INCREMENT,
   equip_id INT NOT NULL,

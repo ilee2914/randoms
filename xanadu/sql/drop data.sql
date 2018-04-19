@@ -1,4 +1,4 @@
-USE xanadu83;
+USE randos;
 
 DROP TABLE IF EXISTS `dropdata`;
 

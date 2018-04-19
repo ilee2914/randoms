@@ -11,8 +11,7 @@
 #include "item_data_provider.hpp"
 #include "tools.hpp"
 
-void PacketCreator::ShowNpc(Npc *npc)
-{
+void PacketCreator::ShowNpc(Npc *npc) {
 	write<short>(send_headers::kSPAWN_NPC);
 	write<int>(npc->get_object_id());
 	write<int>(npc->get_npc_id());
@@ -25,14 +24,12 @@ void PacketCreator::ShowNpc(Npc *npc)
 	write<bool>(true); // sets wether the npc is shown or not (1/true = show, 0/false = hide)
 }
 
-void PacketCreator::Bought(signed char code)
-{
+void PacketCreator::Bought(signed char code) {
 	write<short>(send_headers::kCONFIRM_SHOP_TRANSACTION);
 	write<signed char>(code);
 }
 
-void PacketCreator::ShowNpcShop(ShopData *data)
-{
+void PacketCreator::ShowNpcShop(ShopData *data) {
 	write<short>(send_headers::kOPEN_NPC_SHOP);
 
 	write<int>(data->get_npc_id());
@@ -41,12 +38,10 @@ void PacketCreator::ShowNpcShop(ShopData *data)
 
 	write<short>(static_cast<short>(items->size()));
 
-	for (auto it : *items)
-	{
+	for (auto it : *items) {
 		ShopItemData *item = it.second;
 		ItemData *data = ItemDataProvider::get_instance()->get_item_data(item->id);
-		if (!data)
-		{
+		if (!data) {
 			return;
 		}
 
@@ -56,14 +51,11 @@ void PacketCreator::ShowNpcShop(ShopData *data)
 		write<int>(0); // can be used for <value> minutes after purchase (for USE items and maybe more)
 		write<int>(0);
 
-		if (tools::is_star(item->id))
-		{
+		if (tools::is_star(item->id)) {
 			double num = 0.3;
 			long long value = *(long long*)(&num);
 			write<long long>(value);
-		}
-		else
-		{
+		} else {
 			write<short>(1); // quantity
 		}
 
@@ -71,8 +63,7 @@ void PacketCreator::ShowNpcShop(ShopData *data)
 	}
 }
 
-void PacketCreator::send_simple(int npc_id, std::string text)
-{
+void PacketCreator::send_simple(int npc_id, std::string text) {
 	write<short>(send_headers::kNPC_TALK);
 	write<signed char>(4);
 	write<int>(npc_id);
@@ -81,8 +72,7 @@ void PacketCreator::send_simple(int npc_id, std::string text)
 	write<std::string>(text);
 }
 
-void PacketCreator::send_yes_no(int npc_id, std::string text)
-{
+void PacketCreator::send_yes_no(int npc_id, std::string text) {
 	write<short>(send_headers::kNPC_TALK);
 	write<signed char>(4);
 	write<int>(npc_id);
@@ -91,8 +81,39 @@ void PacketCreator::send_yes_no(int npc_id, std::string text)
 	write<std::string>(text);
 }
 
-void PacketCreator::send_back_next(int npc_id, std::string text, bool back, bool next)
-{
+void PacketCreator::send_get_number(int npc_id, std::string text, int def, int min, int max) {
+	write<short>(send_headers::kNPC_TALK);
+	write<signed char>(4);
+	write<int>(npc_id);
+	write<signed char>(3); // type: getnum
+	write<signed char>(0); // speaker
+	write<std::string>(text);
+	write<int>(def);
+	write<int>(min);
+	write<int>(max);
+	write<int>(0);
+}
+
+void PacketCreator::send_get_text(int npc_id, std::string text) {
+	write<short>(send_headers::kNPC_TALK);
+	write<signed char>(4);
+	write<int>(npc_id);
+	write<signed char>(2); // type: YesNo
+	write<signed char>(0); // speaker
+	write<std::string>(text);
+	write<std::string>("");
+	write<int>(0);
+}
+
+void PacketCreator::send_accept_decline(int npc_id, std::string text) {
+	write<short>(send_headers::kNPC_TALK);
+	write<signed char>(4);
+	write<int>(npc_id);
+	write<signed char>(0x0C); // type: YesNo
+	write<signed char>(0); // speaker
+	write<std::string>(text);
+}
+void PacketCreator::send_back_next(int npc_id, std::string text, bool back, bool next) {
 	write<short>(send_headers::kNPC_TALK);
 	write<signed char>(4);
 	write<int>(npc_id);
@@ -104,8 +125,7 @@ void PacketCreator::send_back_next(int npc_id, std::string text, bool back, bool
 	write<signed char>(next);
 }
 
-void PacketCreator::send_style(int styles[], int size, int npc_id, std::string &text)
-{
+void PacketCreator::send_style(int styles[], int size, int npc_id, std::string &text) {
 	write<short>(send_headers::kNPC_TALK);
 	write<signed char>(4);
 	write<int>(npc_id);
@@ -115,8 +135,7 @@ void PacketCreator::send_style(int styles[], int size, int npc_id, std::string &
 
 	write<signed char>(size);
 
-	for (int i = 0; i < size; ++i)
-	{
+	for (int i = 0; i < size; ++i) {
 		write<int>(styles[i]);
 	}
 }
@@ -130,14 +149,12 @@ void PacketCreator::send_style(int styles[], int size, int npc_id, std::string &
 // 33: Due to the lack of service fee, you were unable to retrieve mesos or items.
 // 34: Unable to retrieve mesos and items due to full inventory.
 
-void PacketCreator::FredrickMessage(signed char type)
-{
+void PacketCreator::FredrickMessage(signed char type) {
 	write<short>(send_headers::kFREDRICK_MESSAGE);
 	write<signed char>(type);
 }
 
-void PacketCreator::GetFredrickStorage(std::unordered_map<signed char, std::shared_ptr<Item>> items, int mesos)
-{
+void PacketCreator::GetFredrickStorage(std::unordered_map<signed char, std::shared_ptr<Item>> items, int mesos) {
 	write<short>(send_headers::kFREDRICK_OPERATION);
 	write<signed char>(0x23); // action
 	write<int>(9030000); // npc id
@@ -149,8 +166,7 @@ void PacketCreator::GetFredrickStorage(std::unordered_map<signed char, std::shar
 
 	write<signed char>(static_cast<signed char>(items.size()));
 
-	for (auto item : items)
-	{
+	for (auto item : items) {
 		ItemInfo(item.second.get(), false);
 	}
 
@@ -158,10 +174,8 @@ void PacketCreator::GetFredrickStorage(std::unordered_map<signed char, std::shar
 	write<signed char>(0);
 }
 
-namespace storage_packet_action_constants
-{
-	enum
-	{
+namespace storage_packet_action_constants {
+	enum {
 		kTakeOut = 9,
 		kErrorInventoryFull = 10, // Error: Inventory is full
 		kErrorNotEnoughMesos = 11, // Error: You do not have enough mesos
@@ -172,8 +186,7 @@ namespace storage_packet_action_constants
 	};
 }
 
-void PacketCreator::GetStorage(int npc_id, signed char slots, std::vector<std::shared_ptr<Item>> items, int mesos)
-{
+void PacketCreator::GetStorage(int npc_id, signed char slots, std::vector<std::shared_ptr<Item>> items, int mesos) {
 	write<short>(send_headers::kOPEN_STORAGE);
 	write<signed char>(storage_packet_action_constants::kOpenStorage);
 	write<int>(npc_id);
@@ -187,8 +200,7 @@ void PacketCreator::GetStorage(int npc_id, signed char slots, std::vector<std::s
 
 	write<signed char>(static_cast<signed char>(items.size()));
 
-	for (auto item : items)
-	{
+	for (auto item : items) {
 		ItemInfo(item.get(), false);
 	}
 
@@ -196,14 +208,12 @@ void PacketCreator::GetStorage(int npc_id, signed char slots, std::vector<std::s
 	write<signed char>(0);
 }
 
-void PacketCreator::GetStorageFull()
-{
+void PacketCreator::GetStorageFull() {
 	write<short>(send_headers::kOPEN_STORAGE);
 	write<signed char>(storage_packet_action_constants::kErrorInventoryFull);
 }
 
-void PacketCreator::MesoStorage(signed char slots, int mesos)
-{
+void PacketCreator::MesoStorage(signed char slots, int mesos) {
 	write<short>(send_headers::kOPEN_STORAGE);
 	write<signed char>(storage_packet_action_constants::kStoreMesos);
 	write<signed char>(slots);
@@ -213,8 +223,7 @@ void PacketCreator::MesoStorage(signed char slots, int mesos)
 	write<int>(mesos);
 }
 
-void PacketCreator::StoreOrTakeOutStorage(bool store, signed char slots, signed char inventory_id, std::vector<std::shared_ptr<Item>> items)
-{
+void PacketCreator::StoreOrTakeOutStorage(bool store, signed char slots, signed char inventory_id, std::vector<std::shared_ptr<Item>> items) {
 	write<short>(send_headers::kOPEN_STORAGE);
 	write<signed char>(store ? storage_packet_action_constants::kStoreItems : storage_packet_action_constants::kTakeOut);
 	write<signed char>(slots);
@@ -224,20 +233,16 @@ void PacketCreator::StoreOrTakeOutStorage(bool store, signed char slots, signed 
 
 	signed char items_size = 0;
 
-	for (auto &item : items)
-	{
-		if (item->get_inventory_id() == inventory_id)
-		{
+	for (auto &item : items) {
+		if (item->get_inventory_id() == inventory_id) {
 			++items_size;
 		}
 	}
 
 	write<signed char>(items_size);
 
-	for (auto &item : items)
-	{
-		if (item->get_inventory_id() == inventory_id)
-		{
+	for (auto &item : items) {
+		if (item->get_inventory_id() == inventory_id) {
 			ItemInfo(item.get(), false);
 		}
 	}

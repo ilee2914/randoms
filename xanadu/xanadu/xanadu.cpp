@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 
 	// initialize the scripting engine
 
-	script_engine::initialize_angelscript_engine();
+	//script_engine::initialize_angelscript_engine();
 
 	// create and initialize world
 

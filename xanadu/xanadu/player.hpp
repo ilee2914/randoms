@@ -17,6 +17,8 @@
 #include "timer.hpp"
 #include "timer_id.hpp"
 
+#include "duktape-2.2.0\src\duktape.h"
+
 class Effect;
 class HiredMerchant;
 class Messenger;
@@ -145,6 +147,7 @@ public:
 	void set_fame(int fame);
 	int get_fame();
 	void set_exp(int exp);
+	void gain_exp(int exp);
 	int get_exp();
 	void add_nx_cash_credit(int nx_cash_credit);
 	std::shared_ptr<Item> get_pet(long long unique_id);
@@ -196,6 +199,9 @@ public:
 	void send_back_next(std::string text);
 	void send_back_ok(std::string text);
 	void send_ok(std::string text);
+	void send_get_text(std::string text);
+	void send_get_number(std::string text, int def, int min, int max);
+	void send_accept_decline(std::string text);
 	void send_style(int styles[], int size);
 	void set_state(int state);
 	int get_state();
@@ -238,8 +244,10 @@ public:
 	signed char get_crusader_combo_value();
 	void set_crusader_combo_value(signed char value);
 
-	void send_npc();
-	void npc_script_handler();
+	void send_npc(int, int, int);
+	void npc_script_handler(int, int, int);
+	void dispose();
+	void disposeChat();
 
 	// packet handlers
 	void handle_packet(unsigned short bytes_amount);
@@ -394,6 +402,8 @@ public:
 
 private:
 
+	duk_context * ctx;
+	bool endChat;
 	bool in_hide_;
 	bool trade_locked_;
 	bool in_game_;

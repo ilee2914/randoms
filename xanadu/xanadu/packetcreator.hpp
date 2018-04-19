@@ -188,6 +188,9 @@ public:
 	void send_simple(int npc_id, std::string text);
 	void send_yes_no(int npc_id, std::string text);
 	void send_back_next(int npc_id, std::string text, bool back, bool next);
+	void send_accept_decline(int npc_id, std::string text);
+	void send_get_number(int npc_id, std::string text, int, int, int);
+	void send_get_text(int npc_id, std::string text);
 	void send_style(int styles[], int size, int npc_id, std::string &text);
 	// storage
 	void FredrickMessage(signed char type);

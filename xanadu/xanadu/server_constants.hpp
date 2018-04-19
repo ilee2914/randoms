@@ -6,7 +6,7 @@ constexpr unsigned short kServerPort = 8484;
 
 constexpr signed char kChannelsCount = 2;
 
-constexpr int kExpRate = 10;
+constexpr int kExpRate = 100;
 constexpr int kMesoRate = 5;
 constexpr int kDropRate = 3;
 

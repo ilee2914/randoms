@@ -109,6 +109,7 @@
     <ClCompile Include="aes\aes_modes.c" />
     <ClCompile Include="aes\aes_ni.c" />
     <ClCompile Include="cash_shop_item_data_provider.cpp" />
+    <ClCompile Include="duktape-2.2.0\src\duktape.c" />
     <ClCompile Include="equip_data_provider.cpp" />
     <ClCompile Include="cash_shop_package_data_provider.cpp" />
     <ClCompile Include="cash_shop_packets.cpp" />
@@ -125,7 +126,6 @@
     <ClCompile Include="movement_handler.cpp" />
     <ClCompile Include="mts_handler.cpp" />
     <ClCompile Include="pq_packets.cpp" />
-    <ClCompile Include="script_handler.cpp" />
     <ClCompile Include="packetcreator.cpp" />
     <ClCompile Include="pet_data.cpp" />
     <ClCompile Include="pet_data_provider.cpp" />
@@ -172,9 +172,7 @@
     <ClCompile Include="quest_handler.cpp" />
     <ClCompile Include="reactor_handler.cpp" />
     <ClCompile Include="reactor_packets.cpp" />
-    <ClCompile Include="scriptarray\scriptarray.cpp" />
-    <ClCompile Include="scriptstdstring\scriptstdstring.cpp" />
-    <ClCompile Include="scriptstdstring\scriptstdstring_utils.cpp" />
+    <ClCompile Include="script_handler.cpp" />
     <ClCompile Include="shop_data.cpp" />
     <ClCompile Include="shop_data_provider.cpp" />
     <ClCompile Include="skill_data.cpp" />
@@ -232,6 +230,9 @@
     <ClInclude Include="cash_shop_package_data_provider.hpp" />
     <ClInclude Include="crypto_constants.hpp" />
     <ClInclude Include="drop_constants.hpp" />
+    <ClInclude Include="dukglue-master\include\dukglue\dukglue.h" />
+    <ClInclude Include="duktape-2.2.0\src\duktape.h" />
+    <ClInclude Include="duktape-2.2.0\src\duk_config.h" />
     <ClInclude Include="equip_data_provider.hpp" />
     <ClInclude Include="game_constants.hpp" />
     <ClInclude Include="guild_constants.hpp" />
@@ -285,8 +286,6 @@
     <ClInclude Include="pq_constants.hpp" />
     <ClInclude Include="quest_constants.hpp" />
     <ClInclude Include="quest_data_provider.hpp" />
-    <ClInclude Include="scriptarray\scriptarray.h" />
-    <ClInclude Include="scriptstdstring\scriptstdstring.h" />
     <ClInclude Include="script_handler.h" />
     <ClInclude Include="server_constants.hpp" />
     <ClInclude Include="shop_data_provider.hpp" />

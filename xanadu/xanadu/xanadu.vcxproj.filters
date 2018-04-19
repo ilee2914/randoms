@@ -40,12 +40,6 @@
     <Filter Include="script engine">
       <UniqueIdentifier>{4db7b314-48d8-41dc-8931-35908c91d67b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="script engine\scriptstdstring">
-      <UniqueIdentifier>{25c254a2-510e-4456-9569-fbd738d7f8d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="script engine\scriptarray">
-      <UniqueIdentifier>{3dd487db-2f4a-41a9-be49-66889ef19965}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="session.cpp">
@@ -358,20 +352,8 @@
     <ClCompile Include="mts_handler.cpp">
       <Filter>receive_packet_handler</Filter>
     </ClCompile>
-    <ClCompile Include="scriptstdstring\scriptstdstring.cpp">
-      <Filter>script engine\scriptstdstring</Filter>
-    </ClCompile>
-    <ClCompile Include="scriptstdstring\scriptstdstring_utils.cpp">
-      <Filter>script engine\scriptstdstring</Filter>
-    </ClCompile>
-    <ClCompile Include="scriptarray\scriptarray.cpp">
-      <Filter>script engine\scriptarray</Filter>
-    </ClCompile>
     <ClCompile Include="quest_handler.cpp">
       <Filter>receive_packet_handler</Filter>
-    </ClCompile>
-    <ClCompile Include="script_handler.cpp">
-      <Filter>script engine</Filter>
     </ClCompile>
     <ClCompile Include="stat_packets.cpp">
       <Filter>send_packet_creator</Filter>
@@ -384,6 +366,12 @@
     </ClCompile>
     <ClCompile Include="player_interation_packets.cpp">
       <Filter>send_packet_creator</Filter>
+    </ClCompile>
+    <ClCompile Include="script_handler.cpp">
+      <Filter>script engine</Filter>
+    </ClCompile>
+    <ClCompile Include="duktape-2.2.0\src\duktape.c">
+      <Filter>script engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -669,16 +657,19 @@
     <ClInclude Include="server_constants.hpp">
       <Filter>constants</Filter>
     </ClInclude>
-    <ClInclude Include="scriptstdstring\scriptstdstring.h">
-      <Filter>script engine\scriptstdstring</Filter>
-    </ClInclude>
-    <ClInclude Include="scriptarray\scriptarray.h">
-      <Filter>script engine\scriptarray</Filter>
-    </ClInclude>
     <ClInclude Include="quest_constants.hpp">
       <Filter>constants</Filter>
     </ClInclude>
     <ClInclude Include="script_handler.h">
+      <Filter>script engine</Filter>
+    </ClInclude>
+    <ClInclude Include="duktape-2.2.0\src\duktape.h">
+      <Filter>script engine</Filter>
+    </ClInclude>
+    <ClInclude Include="duktape-2.2.0\src\duk_config.h">
+      <Filter>script engine</Filter>
+    </ClInclude>
+    <ClInclude Include="dukglue-master\include\dukglue\dukglue.h">
       <Filter>script engine</Filter>
     </ClInclude>
   </ItemGroup>

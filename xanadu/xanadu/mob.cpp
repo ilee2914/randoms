@@ -362,11 +362,9 @@ void Mob::reset() {
 	hp_ = max_hp_;
 	mp_ = max_mp_;
 	{
-		if (object_id_ != 0) {
-			PacketCreator packet;
-			packet.SpawnMonster(this, mob_constants::kSpawnTypesNewSpawn);
-			map_->send_packet(&packet);
-		}
+		PacketCreator packet;
+		packet.SpawnMonster(this, mob_constants::kSpawnTypesNewSpawn);
+		map_->send_packet(&packet);
 	}
 	find_control(true);
 }
