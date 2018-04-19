@@ -47,6 +47,9 @@ public:
 	void remove_item(int item_id, short amount);
 	void remove_item_by_slot(signed char slot, short amount, bool send = true, bool trading = false);
 
+	bool have_item(int item_id);
+	bool can_hold(int item_id, int amount);
+	bool can_hold_helper(std::shared_ptr<Item> item);
 private:
 
     signed char id_;

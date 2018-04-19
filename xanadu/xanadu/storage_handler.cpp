@@ -7,10 +7,8 @@
 #include "constants.hpp"
 #include "tools.hpp"
 
-namespace StorageReceivePacketActions
-{
-	enum
-	{
+namespace StorageReceivePacketActions {
+	enum {
 		kTakeOutItem = 4,
 		kStoreItem = 5,
 		kArrange = 6,
@@ -19,27 +17,23 @@ namespace StorageReceivePacketActions
 	};
 }
 
-void Player::handle_storage_reqest()
-{
+void Player::handle_storage_reqest() {
 	npc_->set_state(1000);
 
 	signed char action = read<signed char>();
 
-	switch (action)
-	{
+	switch (action) {
 	case StorageReceivePacketActions::kTakeOutItem:
 	{
 		signed char inventory_id = read<signed char>();
 
 		// check if the target inventory is valid
 		Inventory *inventory = get_inventory(inventory_id);
-		if (!inventory)
-		{
+		if (!inventory) {
 			return;
 		}
 		signed char slot = read<signed char>();
-		if (slot >= storage_items_.size())
-		{
+		if (slot >= storage_items_.size()) {
 			return;
 		}
 		auto item = storage_items_[slot];
@@ -66,21 +60,18 @@ void Player::handle_storage_reqest()
 
 		// check if the target inventory is valid
 		Inventory *inventory = get_inventory(inventory_id);
-		if (!inventory)
-		{
+		if (!inventory) {
 			return;
 		}
 
 		// check if the target item is valid
 		auto item = inventory->get_item_by_slot(static_cast<signed char>(item_slot));
-		if (!item)
-		{
+		if (!item) {
 			return;
 		}
 
 		// check if the target amount is valid
-		if (item_amount < 1 || item_amount > item->get_amount())
-		{
+		if (item_amount < 1 || item_amount > item->get_amount()) {
 			return;
 		}
 
@@ -90,10 +81,8 @@ void Player::handle_storage_reqest()
 
 		// add copied item to storage items
 		signed char i;
-		for (i = 0; i < storage_items_.size(); ++i)
-		{
-			if (storage_items_[i]->get_inventory_id() > inventory_id)
-			{
+		for (i = 0; i < storage_items_.size(); ++i) {
+			if (storage_items_[i]->get_inventory_id() > inventory_id) {
 				break;
 			}
 		}
@@ -140,18 +129,15 @@ void Player::handle_storage_reqest()
 constexpr signed char kFredrickHandlerActionTakeOut = 26;
 constexpr signed char kFredrickHandlerActionExit = 28;
 
-void Player::handle_merchant_storage_request()
-{
+void Player::handle_merchant_storage_request() {
 	npc_->set_state(1000);
 
 	signed char action = read<signed char>();
 
-	switch (action)
-	{
+	switch (action) {
 	case kFredrickHandlerActionTakeOut:
 	{
-		if (!add_mesos(merchant_storage_mesos_))
-		{
+		if (!add_mesos(merchant_storage_mesos_)) {
 			{
 				PacketCreator packet;
 				packet.FredrickMessage(31);
@@ -167,13 +153,11 @@ void Player::handle_merchant_storage_request()
 		signed char free_use_slots = get_inventory(kInventoryConstantsTypesUse)->get_free_slots();
 		signed char free_setup_slots = get_inventory(kInventoryConstantsTypesSetup)->get_free_slots();
 
-		for (auto it : merchant_storage_items_)
-		{
+		for (auto it : merchant_storage_items_) {
 			auto item = it.second;
 			signed char inventory_id = item->get_inventory_id();
 
-			switch (inventory_id)
-			{
+			switch (inventory_id) {
 			case kInventoryConstantsTypesEquip:
 				--free_equip_slots;
 				break;
@@ -189,8 +173,7 @@ void Player::handle_merchant_storage_request()
 			}
 		}
 
-		if (free_equip_slots < 0 || free_etc_slots < 0 || free_use_slots < 0 || free_setup_slots < 0)
-		{
+		if (free_equip_slots < 0 || free_etc_slots < 0 || free_use_slots < 0 || free_setup_slots < 0) {
 			{
 				PacketCreator packet;
 				packet.FredrickMessage(34);
@@ -200,20 +183,17 @@ void Player::handle_merchant_storage_request()
 			return;
 		}
 
-		for (auto it : merchant_storage_items_)
-		{
+		for (auto it : merchant_storage_items_) {
 			auto item = it.second;
 			signed char inventory_id = item->get_inventory_id();
 
 			// check if the target inventory is valid
 			Inventory *inventory = get_inventory(inventory_id);
-			if (!inventory)
-			{
+			if (!inventory) {
 				return;
 			}
 
-			if (!inventory->add_item_find_slot(item))
-			{
+			if (!inventory->add_item_find_slot(item)) {
 				{
 					PacketCreator packet;
 					packet.FredrickMessage(34);

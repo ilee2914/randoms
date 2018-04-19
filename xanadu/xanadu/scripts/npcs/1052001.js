@@ -72,7 +72,7 @@ function action(mode, type, selection) {
         start();
         return;
     } else if (mode != 1 || status == 7 && type != 1 || (actionx["1stJob"] && status == 4) || (cm.haveItem(4031008) && status == 2) || (actionx["3thJobI"] && status == 1)){
-        if (mode == 0 && status == 2 && type == 1)
+        if (mode == 0 && status == 1 && type == 1)
             cm.sendOk("You know there is no other choice...");
         if (!(mode == 0 && type != 1)){
             cm.dispose();

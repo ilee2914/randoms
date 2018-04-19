@@ -1857,6 +1857,40 @@ short Player::get_item_amount(int itemid) {
 	return amount;
 }
 
+bool Player::have_item(int id) {
+	Inventory *inventory = get_inventory(tools::get_inventory_id_from_item_id(id));
+	if (!inventory) {
+		return false;
+	}
+	return inventory->have_item(id);
+}
+
+bool Player::gain_item(int id, short amount) {
+	if (amount < 0) {
+		remove_item(id, amount*-1);
+	} else {
+		return give_item(id, amount);
+	}
+	return true;
+}
+
+bool Player::has_item(int id, int amount) {
+	return get_item_amount(id) >= amount;
+}
+
+bool Player::can_hold_one(int id) {
+	return can_hold(id, 1);
+}
+bool Player::can_hold(int id, int amount) {
+	Inventory *inventory = get_inventory(tools::get_inventory_id_from_item_id(id));
+	if (!inventory) return false;
+	return inventory->can_hold(id, amount);
+}
+
+Player* Player::get_player() {
+	return this;
+}
+
 bool Player::give_item(int item_id, short amount) {
 	Inventory *inventory = get_inventory(tools::get_inventory_id_from_item_id(item_id));
 	if (!inventory) {

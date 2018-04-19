@@ -31,6 +31,7 @@ const int as_CASH = kInventoryConstantsTypesCash;
 void Player::npc_script_handler(int mode, int type, int selection) {
 	// Handles file loading
 	if (!ctx || mode == 0) {
+		duk_destroy_heap(ctx);
 		int npc_id = npc_->id_;
 
 		std::string npc_id_string = std::to_string(npc_id);
@@ -39,7 +40,6 @@ void Player::npc_script_handler(int mode, int type, int selection) {
 
 		if (!f) {
 			file_name_string = "scripts\\npcs\\default.js";
-			//cout << npc_id << " not coded" << endl;
 			f = fopen(file_name_string.c_str(), "rb");
 		}
 		char buf[16384];
@@ -50,11 +50,15 @@ void Player::npc_script_handler(int mode, int type, int selection) {
 		if (!ctx) return;
 		duk_push_lstring(ctx, (const char *)buf, (duk_size_t)len);
 
-		if (duk_peval(ctx) != 0) {
-			duk_destroy_heap(ctx);
-			cout << "goofed" << endl;
-			return;
+		try {
+			if (duk_peval(ctx) != 0) {
+				cout << "goofed" << endl;
+				return;
+			}
+		} catch (DukErrorException e) {
+			cout << "ERROR : " << e.what() << endl;
 		}
+		
 		duk_pop(ctx);
 
 		dukglue_register_method(ctx, &Player::send_ok, "sendOk");
@@ -70,7 +74,6 @@ void Player::npc_script_handler(int mode, int type, int selection) {
 
 		dukglue_register_method(ctx, &Player::disposeChat, "dispose");
 		
-		
 		dukglue_register_method(ctx, &Player::get_mesos, "getMeso");
 		dukglue_register_method(ctx, &Player::get_job, "getJobId");
 		dukglue_register_method(ctx, &Player::add_mesos, "gainMeso");
@@ -78,7 +81,6 @@ void Player::npc_script_handler(int mode, int type, int selection) {
 		dukglue_register_method(ctx, &Player::get_level, "getLevel");
 		dukglue_register_method(ctx, &Player::get_name, "getName");
 		dukglue_register_method(ctx, &Player::get_gender, "getGender");
-
 		
 		dukglue_register_method(ctx, &Player::set_hair, "setHair");
 		dukglue_register_method(ctx, &Player::set_face, "setFace");
@@ -87,7 +89,16 @@ void Player::npc_script_handler(int mode, int type, int selection) {
 		dukglue_register_method(ctx, &Player::set_job, "changeJobById");
 
 		dukglue_register_method(ctx, &Player::set_map, "warp");
-		
+		dukglue_register_method(ctx, &Player::get_player, "getPlayer");
+
+		dukglue_register_method(ctx, &Player::get_item_amount, "itemQuantity");
+		dukglue_register_method(ctx, &Player::gain_item, "gainItem");
+		dukglue_register_method(ctx, &Player::have_item, "haveItem");
+		dukglue_register_method(ctx, &Player::can_hold, "canHold");
+		dukglue_register_method(ctx, &Player::can_hold_one, "canHold");
+
+		dukglue_register_method(ctx, &Player::set_map, "warp");
+
 		dukglue_register_global(ctx, this, "cm");
 		
 	}
@@ -112,5 +123,5 @@ void Player::npc_script_handler(int mode, int type, int selection) {
 		cout << "ERROR : " <<  e.what() << endl;
 	}
 
-	if (endChat) dispose();
+	//if (endChat) dispose();
 }

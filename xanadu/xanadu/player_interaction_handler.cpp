@@ -13,21 +13,17 @@
 #include "packetcreator.hpp"
 #include "constants.hpp"
 
-void Player::handle_item_transportation()
-{
+void Player::handle_item_transportation() {
 	signed char action = read<signed char>();
 
-	switch (action)
-	{
+	switch (action) {
 	case 0: // Create
 	{
 		signed char creation_type = read<signed char>();
-		switch (creation_type)
-		{
+		switch (creation_type) {
 		case 3: // Trade
 		{
-			if (trade_partner_)
-			{
+			if (trade_partner_) {
 				return;
 			}
 			{
@@ -39,16 +35,13 @@ void Player::handle_item_transportation()
 		}
 		case 5: // Hired Merchant
 		{
-			if (merchant_)
-			{
+			if (merchant_) {
 				return;
 			}
-			if (!map_->can_open_store(this))
-			{
+			if (!map_->can_open_store(this)) {
 				return;
 			}
-			if (merchant_storage_items_.size() > 0)
-			{
+			if (merchant_storage_items_.size() > 0) {
 				{
 					PacketCreator packet;
 					packet.ShowMessage("Please retrieve your stored items and mesos from NPC Fredrick in the Free Market Entrance first.", 1);
@@ -63,15 +56,13 @@ void Player::handle_item_transportation()
 			int item_id = read<int>();
 
 			Inventory *inventory = get_inventory(kInventoryConstantsTypesCash);
-			if (!inventory)
-			{
+			if (!inventory) {
 				return;
 			}
 
 			auto store = inventory->get_item_by_slot(static_cast<signed char>(item_slot));
 
-			if (!store || store->get_item_id() != item_id)
-			{
+			if (!store || store->get_item_id() != item_id) {
 				return;
 			}
 
@@ -91,8 +82,7 @@ void Player::handle_item_transportation()
 		int target_player_id = read<int>();
 		Player *invited = World::get_instance()->GetPlayerById(target_player_id);
 
-		if (!invited || invited->get_trade_partner())
-		{
+		if (!invited || invited->get_trade_partner()) {
 			{
 				PacketCreator packet;
 				packet.TradeError(0, 1);
@@ -118,8 +108,7 @@ void Player::handle_item_transportation()
 	}
 	case 4: // Enter Miniroom
 	{
-		if (trade_partner_)
-		{
+		if (trade_partner_) {
 			{
 				PacketCreator packet;
 				packet.JoinTrade(this);
@@ -135,15 +124,12 @@ void Player::handle_item_transportation()
 		// a merchant can either be entered as a visitor
 		// or as the owner (maintenance)
 
-		else if (!merchant_)
-		{
+		else if (!merchant_) {
 			int merchant_id = read<int>();
 			auto merchant = map_->get_hired_merchant(merchant_id);
 
-			if (merchant)
-			{
-				if (merchant->is_owner(id_))
-				{
+			if (merchant) {
+				if (merchant->is_owner(id_)) {
 					merchant_ = merchant;
 					merchant->set_open(false);
 					merchant->remove_all_visitors();
@@ -152,25 +138,19 @@ void Player::handle_item_transportation()
 						packet.GetHiredMerchant(this, merchant, false);
 						send_packet(&packet);
 					}
-				}
-				else if (!merchant->is_open())
-				{
+				} else if (!merchant->is_open()) {
 					{
 						PacketCreator packet;
 						packet.PlayerShopMessage(18);
 						send_packet(&packet);
 					}
-				}
-				else if (merchant->get_empty_visitor_slot() == -1)
-				{
+				} else if (merchant->get_empty_visitor_slot() == -1) {
 					{
 						PacketCreator packet;
 						packet.PlayerShopMessage(2);
 						send_packet(&packet);
 					}
-				}
-				else
-				{
+				} else {
 					merchant_ = merchant;
 					merchant->add_visitor(this);
 					{
@@ -188,8 +168,7 @@ void Player::handle_item_transportation()
 	{
 		std::string message = (name_ + " : " + read<std::string>());
 
-		if (trade_partner_)
-		{
+		if (trade_partner_) {
 			{
 				PacketCreator packet;
 				packet.ShowTradeChat(1, message);
@@ -202,8 +181,7 @@ void Player::handle_item_transportation()
 			}
 		}
 
-		else if (merchant_)
-		{
+		else if (merchant_) {
 			merchant_->room_chat(merchant_->get_playerslot(id_), message);
 		}
 
@@ -211,18 +189,14 @@ void Player::handle_item_transportation()
 	}
 	case 0x0A: // Exit Miniroom
 	{
-		if (trade_partner_)
-		{
-			if (trade_partner_->get_trade_partner() == this)
-			{
+		if (trade_partner_) {
+			if (trade_partner_->get_trade_partner() == this) {
 				add_mesos(trade_mesos);
 
-				for (auto item : trade_items_)
-				{
+				for (auto item : trade_items_) {
 					Inventory *inventory = get_inventory(item->get_inventory_id());
 
-					if (!inventory)
-					{
+					if (!inventory) {
 						continue;
 					}
 
@@ -235,12 +209,10 @@ void Player::handle_item_transportation()
 
 				auto trade_partner__items = trade_partner_->get_trade_items();
 
-				for (auto item : *trade_partner__items)
-				{
+				for (auto item : *trade_partner__items) {
 					Inventory *inventory = trade_partner_->get_inventory(item->get_inventory_id());
 
-					if (!inventory)
-					{
+					if (!inventory) {
 						continue;
 					}
 
@@ -260,15 +232,10 @@ void Player::handle_item_transportation()
 				packet.EnableAction();
 				send_packet(&packet);
 			}
-		}
-		else if (merchant_)
-		{
-			if (merchant_->is_owner(id_))
-			{
+		} else if (merchant_) {
+			if (merchant_->is_owner(id_)) {
 				merchant_->set_open(true);
-			}
-			else
-			{
+			} else {
 				merchant_->remove_visitor(this);
 			}
 
@@ -278,8 +245,7 @@ void Player::handle_item_transportation()
 	}
 	case 0x0B: // Open a Miniroom / Open up a hired merchant
 	{
-		if (merchant_ && map_->can_open_store(this))
-		{
+		if (merchant_ && map_->can_open_store(this)) {
 			merchant_->set_open(true);
 			map_->add_hired_merchant(merchant_);
 			{
@@ -293,8 +259,7 @@ void Player::handle_item_transportation()
 	case 0x0F: // Add item to trade
 	{
 		// check if the trade partner is valid
-		if (!trade_partner_ || trade_partner_->get_trade_partner() != this || trade_partner_->get_map() != map_)
-		{
+		if (!trade_partner_ || trade_partner_->get_trade_partner() != this || trade_partner_->get_map() != map_) {
 			return;
 		}
 
@@ -306,21 +271,18 @@ void Player::handle_item_transportation()
 
 		// check if the target inventory is valid
 		Inventory *inventory = get_inventory(inventory_id);
-		if (!inventory)
-		{
+		if (!inventory) {
 			return;
 		}
 
 		// check if the target item is valid
 		std::shared_ptr<Item> item = inventory->get_item_by_slot(static_cast<signed char>(item_slot));
-		if (!item)
-		{
+		if (!item) {
 			return;
 		}
 
 		// check if the target amount is valid
-		if (item_amount < 1 || item_amount > item->get_amount())
-		{
+		if (item_amount < 1 || item_amount > item->get_amount()) {
 			return;
 		}
 
@@ -353,8 +315,7 @@ void Player::handle_item_transportation()
 	case 0x10: // add mesos to trade
 	{
 		int mesos = read<int>();
-		if (!trade_partner_ || mesos < 1 || mesos > mesos_)
-		{
+		if (!trade_partner_ || mesos < 1 || mesos > mesos_) {
 			return;
 		}
 		add_mesos(-mesos);
@@ -374,8 +335,7 @@ void Player::handle_item_transportation()
 	case 0x11: // confirm the trade
 	{
 		// check if the trade partner is valid
-		if (!trade_partner_ || trade_partner_->get_trade_partner() != this || trade_partner_->get_map() != map_)
-		{
+		if (!trade_partner_ || trade_partner_->get_trade_partner() != this || trade_partner_->get_map() != map_) {
 			return;
 		}
 		// send the confirmation packet to the other trader
@@ -384,14 +344,12 @@ void Player::handle_item_transportation()
 		trade_partner_->send_packet(&packet20);
 
 		// check if the trade partner has confirmed the trade already
-		if (!trade_partner_->is_trade_confirmed())
-		{
+		if (!trade_partner_->is_trade_confirmed()) {
 			trade_locked_ = true;
 			return;
 		}
 		// give the items and mesos from this player to the trade partner
-		for (size_t i = 0; i < trade_items_.size(); ++i)
-		{
+		for (size_t i = 0; i < trade_items_.size(); ++i) {
 			auto item = trade_items_[i];
 			trade_partner_->get_inventory(item->get_inventory_id())->add_item_find_slot(item);
 		}
@@ -399,11 +357,9 @@ void Player::handle_item_transportation()
 
 		// give the items and mesos from the trader partner to this player
 		auto pitems = trade_partner_->get_trade_items();
-		for (auto item : *pitems)
-		{
+		for (auto item : *pitems) {
 			Inventory *inventory = get_inventory(item->get_inventory_id());
-			if (inventory)
-			{
+			if (inventory) {
 				inventory->add_item_find_slot(item);
 			}
 		}
@@ -428,8 +384,7 @@ void Player::handle_item_transportation()
 	}
 	case 20: // Hired Merchant Maintenance
 	{
-		if (merchant_)
-		{
+		if (merchant_) {
 			return;
 		}
 
@@ -439,8 +394,7 @@ void Player::handle_item_transportation()
 
 		auto merchant = map_->get_hired_merchant(map_object_id);
 
-		if (merchant && merchant->is_owner(id_))
-		{
+		if (merchant && merchant->is_owner(id_)) {
 			{
 				PacketCreator packet;
 				packet.MerchantStoreMaintenanceResponse(map_object_id);
@@ -454,8 +408,7 @@ void Player::handle_item_transportation()
 	{
 		std::shared_ptr<HiredMerchant> merchant = get_hired_merchant();
 
-		if (!merchant || !merchant->is_owner(id_))
-		{
+		if (!merchant || !merchant->is_owner(id_)) {
 			return;
 		}
 
@@ -465,27 +418,22 @@ void Player::handle_item_transportation()
 		short amount_per_bundle = read<short>();
 		int price = read<int>();
 		Inventory *inventory = get_inventory(inventory_id);
-		if (!inventory)
-		{
+		if (!inventory) {
 			return;
 		}
 		std::shared_ptr<Item> item = inventory->get_item_by_slot(static_cast<signed char>(item_slot));
-		if (!item)
-		{
+		if (!item) {
 			return;
 		}
-		if ((item->get_amount() < (bundles * amount_per_bundle)) && !item->is_star())
-		{
+		if ((item->get_amount() < (bundles * amount_per_bundle)) && !item->is_star()) {
 			return;
 		}
-		if (price < 1)
-		{
+		if (price < 1) {
 			return;
 		}
 		// create a copy of the original item
 		std::shared_ptr<Item> copy(new Item(*item));
-		if (!item->is_star())
-		{
+		if (!item->is_star()) {
 			copy->set_amount(amount_per_bundle);
 		}
 		inventory->remove_item_by_slot(static_cast<signed char>(item_slot), (item->is_star() ? item->get_amount() : (bundles * amount_per_bundle)), true, true);
@@ -504,8 +452,7 @@ void Player::handle_item_transportation()
 		signed char slot = read<signed char>();
 		short amount = read<short>();
 
-		if (merchant_ && !merchant_->is_owner(id_) && amount > 0 && merchant_->get_item(slot))
-		{
+		if (merchant_ && !merchant_->is_owner(id_) && amount > 0 && merchant_->get_item(slot)) {
 			merchant_->buy_item(this, slot, amount);
 		}
 
@@ -516,8 +463,7 @@ void Player::handle_item_transportation()
 		skip_bytes(1);
 		short slot = read<short>();
 
-		if (merchant_ && merchant_->is_owner(id_) && merchant_->get_item(slot))
-		{
+		if (merchant_ && merchant_->is_owner(id_) && merchant_->get_item(slot)) {
 			merchant_->return_item(slot, this);
 			merchant_->remove_item(slot);
 			{
@@ -550,10 +496,8 @@ void Player::handle_item_transportation()
 	}
 	case 0x29: // Close Merchant
 	{
-		if (merchant_ && merchant_->is_owner(id_))
-		{
-			if (map_->get_hired_merchant(merchant_->get_id()))
-			{
+		if (merchant_ && merchant_->is_owner(id_)) {
+			if (map_->get_hired_merchant(merchant_->get_id())) {
 				map_->remove_hired_merchant(merchant_->get_id());
 				{
 					PacketCreator packet;
@@ -569,12 +513,10 @@ void Player::handle_item_transportation()
 			int counter = 0;
 			auto items = merchant_->get_items();
 
-			for (auto it : *items)
-			{
+			for (auto it : *items) {
 				auto merchant_item = it.second;
 
-				if (merchant_item->get_bundles() > 0)
-				{
+				if (merchant_item->get_bundles() > 0) {
 					merchant_storage_items_[counter] = merchant_item->get_item();
 					merchant_storage_items_[counter]->set_amount(merchant_item->get_quantity());
 					++counter;

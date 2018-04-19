@@ -12,17 +12,14 @@
 #include "equip_data_provider.hpp"
 #include "equip_data.hpp"
 
-short getRandomStat(short stat)
-{
-	if (stat == 0)
-	{
+short getRandomStat(short stat) {
+	if (stat == 0) {
 		return stat;
 	}
 
 	stat += (tools::random_int(0, 6) - 3);
 
-	if (stat < 1)
-	{
+	if (stat < 1) {
 		stat = 1;
 	}
 
@@ -31,7 +28,7 @@ short getRandomStat(short stat)
 
 // constructor
 
-Item::Item(int item_id, bool random_equip_stats):
+Item::Item(int item_id, bool random_equip_stats) :
 	slot_(0),
 	flag_(kItemConstantsFlagsNone),
 	amount_(1),
@@ -65,30 +62,24 @@ Item::Item(int item_id, bool random_equip_stats):
 	hand_(0),
 	speed_(0),
 	jump_(0),
-	hammers_used_(0)
-{
-	if (is_pet())
-	{
+	hammers_used_(0) {
+	if (is_pet()) {
 		PetData *data = PetDataProvider::get_instance()->get_data_by_id(item_id);
-		if (data)
-		{
+		if (data) {
 			unique_id_ = World::get_instance()->get_cash_item_unique_sn_id();
 			name_ = data->get_name();
 		}
 	}
 
-	if (is_equip())
-	{
+	if (is_equip()) {
 		EquipData *data = EquipDataProvider::get_instance()->get_item_data(item_id);
-		if (!data)
-		{
+		if (!data) {
 			return;
 		}
 
 		slots_ = data->slots;
 
-		if (random_equip_stats)
-		{
+		if (random_equip_stats) {
 			str_ = getRandomStat(data->str);
 			dex_ = getRandomStat(data->dex);
 			intt_ = getRandomStat(data->intt);
@@ -104,9 +95,7 @@ Item::Item(int item_id, bool random_equip_stats):
 			hand_ = getRandomStat(data->hand);
 			jump_ = getRandomStat(data->jump);
 			speed_ = getRandomStat(data->speed);
-		}
-		else
-		{
+		} else {
 			str_ = data->str;
 			dex_ = data->dex;
 			intt_ = data->intt;
@@ -131,155 +120,126 @@ Item::Item(int item_id, bool random_equip_stats):
 	unique_id_ = world->get_cash_item_unique_sn_id();
 }
 
-bool Item::is_star()
-{
+bool Item::is_star() {
 	return tools::is_star(item_id_);
 }
 
-bool Item::is_pet()
-{
+bool Item::is_pet() {
 	bool check = PetDataProvider::get_instance()->get_data_by_id(item_id_) != nullptr;
 	return check;
 }
 
-bool Item::is_equip()
-{
+bool Item::is_equip() {
 	bool check = EquipDataProvider::get_instance()->get_item_data(item_id_) != nullptr;
 	return check;
 }
 
-signed char Item::get_inventory_id()
-{
+signed char Item::get_inventory_id() {
 	return tools::get_inventory_id_from_item_id(item_id_);
 }
 
-signed char Item::get_slot()
-{
+signed char Item::get_slot() {
 	return slot_;
 }
 
-short Item::get_flag()
-{
+short Item::get_flag() {
 	return flag_;
 }
 
-short Item::get_amount()
-{
+short Item::get_amount() {
 	return amount_;
 }
 
-int Item::get_item_id()
-{
+int Item::get_item_id() {
 	return item_id_;
 }
 
-long long Item::get_expiration_time()
-{
+long long Item::get_expiration_time() {
 	return (is_pet() ? kPermanentTime : kNoExpirationTime);
 }
 
-void Item::set_slot(signed char value)
-{
+void Item::set_slot(signed char value) {
 	slot_ = value;
 }
 
-void Item::set_amount(short value)
-{
+void Item::set_amount(short value) {
 	amount_ = value;
 }
 
-void Item::set_flag(short value)
-{
+void Item::set_flag(short value) {
 	flag_ = value;
 }
 
-void Item::set_item_id(int value)
-{
+void Item::set_item_id(int value) {
 	item_id_ = value;
 }
 
-std::string Item::get_name()
-{
+std::string Item::get_name() {
 	return name_;
 }
 
-std::string Item::get_owner_name()
-{
+std::string Item::get_owner_name() {
 	return name_;
 }
 
 // cash specific
 
-int Item::get_commodity_id_sn()
-{
+int Item::get_commodity_id_sn() {
 	return commodity_id_sn_;
 }
 
-void Item::set_commodity_id_sn(int commodity_id_sn)
-{
+void Item::set_commodity_id_sn(int commodity_id_sn) {
 	commodity_id_sn_ = commodity_id_sn;
 }
 
-long long Item::get_unique_id()
-{
+long long Item::get_unique_id() {
 	return unique_id_;
 }
 
 // pet specific
 
-signed char Item::get_stance()
-{
+signed char Item::get_stance() {
 	return stance_;
 }
 
-signed char Item::get_pet_level()
-{
+signed char Item::get_pet_level() {
 	return pet_level_;
 }
 
-signed char Item::get_pet_slot()
-{
+signed char Item::get_pet_slot() {
 	return pet_slot_;
 }
 
-signed char Item::get_pet_fullness()
-{
+signed char Item::get_pet_fullness() {
 	return 100;
 }
 
-short Item::get_pet_closeness()
-{
+short Item::get_pet_closeness() {
 	return closeness_;
 }
 
-short Item::get_position_x()
-{
+short Item::get_position_x() {
 	return position_x_;
 }
 
-short Item::get_position_y()
-{
+short Item::get_position_y() {
 	return position_y_;
 }
 
-void Item::set_pet_level(signed char level)
-{
+void Item::set_pet_level(signed char level) {
 	pet_level_ = level;
 }
 
-void Item::set_pet_slot(signed char pet_slot)
-{
+void Item::set_pet_slot(signed char pet_slot) {
 	pet_slot_ = pet_slot;
 }
 
-void Item::set_closeness(short closeness, Player *player)
-{
+void Item::set_closeness(short closeness, Player *player) {
 	closeness_ = closeness;
 
-	if (closeness >= kPetLevels[pet_level_ - 1])
-	{
+	if (closeness >= kPetLevels[pet_level_ - 1]) {
 		++pet_level_;
-		
+
 		{
 			// packet
 			PacketCreator packet;
@@ -303,13 +263,11 @@ void Item::set_closeness(short closeness, Player *player)
 	}
 }
 
-void Item::set_closeness(short closeness)
-{
+void Item::set_closeness(short closeness) {
 	closeness_ = closeness;
 }
 
-void Item::set_position(short x, short y, signed char stance)
-{
+void Item::set_position(short x, short y, signed char stance) {
 	position_x_ = x;
 	position_y_ = y;
 	stance_ = stance;
@@ -317,182 +275,146 @@ void Item::set_position(short x, short y, signed char stance)
 
 // equip specific
 
-void Item::set_free_slots(unsigned char slots)
-{
+void Item::set_free_slots(unsigned char slots) {
 	slots_ = slots;
 }
 
-unsigned char Item::get_free_slots()
-{
+unsigned char Item::get_free_slots() {
 	return slots_;
 }
 
-void Item::set_used_scrolls(unsigned char used_scrolls)
-{
+void Item::set_used_scrolls(unsigned char used_scrolls) {
 	used_scrolls_ = used_scrolls;
 }
 
-unsigned char Item::get_used_scrolls()
-{
+unsigned char Item::get_used_scrolls() {
 	return used_scrolls_;
 }
 
-void Item::set_str(short str)
-{
+void Item::set_str(short str) {
 	str_ = str;
 }
 
-short Item::get_str()
-{
+short Item::get_str() {
 	return str_;
 }
 
-void Item::set_dex(short dex)
-{
+void Item::set_dex(short dex) {
 	dex_ = dex;
 }
 
-short Item::get_dex()
-{
+short Item::get_dex() {
 	return dex_;
 }
 
-void Item::set_int(short intt)
-{
+void Item::set_int(short intt) {
 	intt_ = intt;
 }
 
-short Item::get_int()
-{
+short Item::get_int() {
 	return intt_;
 }
 
-void Item::set_luk(short luk)
-{
+void Item::set_luk(short luk) {
 	luk_ = luk;
 }
 
-short Item::get_luk()
-{
+short Item::get_luk() {
 	return luk_;
 }
 
-void Item::set_hp(short hp)
-{
+void Item::set_hp(short hp) {
 	hp_ = hp;
 }
 
-short Item::get_hp()
-{
+short Item::get_hp() {
 	return hp_;
 }
 
-void Item::set_mp(short mp)
-{
+void Item::set_mp(short mp) {
 	mp_ = mp;
 }
 
-short Item::get_mp()
-{
+short Item::get_mp() {
 	return mp_;
 }
 
-void Item::set_weapon_attack(short weapon_atk)
-{
+void Item::set_weapon_attack(short weapon_atk) {
 	weapon_atk_ = weapon_atk;
 }
 
-short Item::get_weapon_attack()
-{
+short Item::get_weapon_attack() {
 	return weapon_atk_;
 }
 
-void Item::set_magic_attack(short magic_atk)
-{
+void Item::set_magic_attack(short magic_atk) {
 	magic_atk_ = magic_atk;
 }
 
-short Item::get_magic_attack()
-{
+short Item::get_magic_attack() {
 	return magic_atk_;
 }
 
-void Item::set_weapon_defense(short weapon_def)
-{
+void Item::set_weapon_defense(short weapon_def) {
 	weapon_def_ = weapon_def;
 }
 
-short Item::get_weapon_defense()
-{
+short Item::get_weapon_defense() {
 	return weapon_def_;
 }
 
-void Item::set_magic_defense(short magic_def)
-{
+void Item::set_magic_defense(short magic_def) {
 	magic_def_ = magic_def;
 }
 
-short Item::get_magic_defense()
-{
+short Item::get_magic_defense() {
 	return magic_def_;
 }
 
-void Item::set_acc(short acc)
-{
+void Item::set_acc(short acc) {
 	acc_ = acc;
 }
 
-short Item::get_acc()
-{
+short Item::get_acc() {
 	return acc_;
 }
 
-void Item::set_avoid(short avo)
-{
+void Item::set_avoid(short avo) {
 	avo_ = avo;
 }
 
-short Item::get_avoid()
-{
+short Item::get_avoid() {
 	return avo_;
 }
 
-void Item::set_hand(short hand)
-{
+void Item::set_hand(short hand) {
 	hand_ = hand;
 }
 
-short Item::get_hand()
-{
+short Item::get_hand() {
 	return hand_;
 }
 
-void Item::set_speed(short speed)
-{
+void Item::set_speed(short speed) {
 	speed_ = speed;
 }
 
-short Item::get_speed()
-{
+short Item::get_speed() {
 	return speed_;
 }
 
-void Item::set_jump(short jump)
-{
+void Item::set_jump(short jump) {
 	jump_ = jump;
 }
 
-short Item::get_jump()
-{
+short Item::get_jump() {
 	return jump_;
 }
 
-void Item::set_hammers_used(int hammers_used)
-{
+void Item::set_hammers_used(int hammers_used) {
 	hammers_used_ = hammers_used;
 }
 
-int Item::get_hammers_used()
-{
+int Item::get_hammers_used() {
 	return hammers_used_;
 }

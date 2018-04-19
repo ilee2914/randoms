@@ -7,11 +7,11 @@ buglist
 
 -------------------- map and map life stuff (mobs, reactors, portals) --------------------
 
-- fix monster spawn rate (make use of mobRate info from maps) and check the correct timer seconds
+x- fix monster spawn rate (make use of mobRate info from maps) and check the correct timer seconds
 
 - fix reactors (need reactor objects system in maps, the map reactor data is already done)
 
-- drops (from mobs or from player) fly a bit weird when spawned
+x- drops (from mobs or from player) fly a bit weird when spawned
 
 - meso drops missing, non-optimal workaround in place at the moment
 
@@ -154,8 +154,6 @@ buglist
 - to-do save hammers used to database
 
 - equip isn't updated after using vicious hammer (note: this is just about the data that is displayed)
-
-- improve angelscript related code (maybe save bytecode, maybe do other caching, and more)
 
 - to-do maybe use multiple worker threads for asynchronous operations (requires code to be correct for multithreading, for example by using locks and atoms and designing it that way)
 

@@ -2,4 +2,7 @@
 x64/
 enc_temp_folder/
 *.wz/
+dukglue-master
+duktape-2.2.0
+scriptstdstring
 AS_DEBUG

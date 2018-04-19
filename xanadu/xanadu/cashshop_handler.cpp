@@ -12,8 +12,7 @@
 #include "cashshop_constants.hpp"
 #include "constants.hpp"
 
-void Player::handle_cash_shop_enter()
-{
+void Player::handle_cash_shop_enter() {
 	in_cash_shop_ = true;
 	map_->remove_player(this);
 	{
@@ -43,8 +42,7 @@ void Player::handle_cash_shop_enter()
 	}
 }
 
-void Player::handle_leave_cash_shop()
-{
+void Player::handle_leave_cash_shop() {
 	in_cash_shop_ = false;
 	{
 		PacketCreator packet;
@@ -54,8 +52,7 @@ void Player::handle_leave_cash_shop()
 	map_->add_player(this);
 }
 
-void Player::handle_update_cash_shop()
-{
+void Player::handle_update_cash_shop() {
 	{
 		PacketCreator packet;
 		packet.ShowCashPoints(nx_cash_credit_);
@@ -63,12 +60,10 @@ void Player::handle_update_cash_shop()
 	}
 }
 
-void Player::handle_cash_shop_action()
-{
+void Player::handle_cash_shop_action() {
 	signed char action = read<signed char>();
 
-	switch (action)
-	{
+	switch (action) {
 	case CashShopReceivePacketActions::kBuyCashItem:
 	{
 		skip_bytes(1);
@@ -76,15 +71,13 @@ void Player::handle_cash_shop_action()
 		int serial_number = read<int>();
 
 		CashItemData *cash_item = CashShopItemDataProvider::get_instance()->get_cash_item_data(serial_number);
-		if (!cash_item)
-		{
+		if (!cash_item) {
 			return;
 		}
 
 		int price = cash_item->price;
 
-		if (nx_cash_credit_ < price)
-		{
+		if (nx_cash_credit_ < price) {
 			return;
 		}
 
@@ -122,18 +115,15 @@ void Player::handle_cash_shop_action()
 		signed char inventory_id = read<signed char>();
 		Inventory *inventory = get_inventory(inventory_id);
 
-		if (!inventory)
-		{
+		if (!inventory) {
 			return;
 		}
 
-		if (inventory->get_slots() > 48)
-		{
+		if (inventory->get_slots() > 48) {
 			return;
 		}
 
-		if (nx_cash_credit_ < 4000)
-		{
+		if (nx_cash_credit_ < 4000) {
 			return;
 		}
 
@@ -157,13 +147,11 @@ void Player::handle_cash_shop_action()
 		skip_bytes(4); // type of cash used
 		skip_bytes(1);
 
-		if (storage_slots_ > 48)
-		{
+		if (storage_slots_ > 48) {
 			return;
 		}
 
-		if (nx_cash_credit_ < 4000)
-		{
+		if (nx_cash_credit_ < 4000) {
 			return;
 		}
 
@@ -187,8 +175,7 @@ void Player::handle_cash_shop_action()
 		skip_bytes(4); // type of cash used
 		int commodity_id_sn = read<int>();
 
-		if (character_slots_ < 6 && nx_cash_credit_ > 6900)
-		{
+		if (character_slots_ < 6 && nx_cash_credit_ > 6900) {
 			nx_cash_credit_ -= 6900;
 			character_slots_ += 1;
 			{
@@ -209,20 +196,16 @@ void Player::handle_cash_shop_action()
 	{
 		long long cash_item_unique_id_sn = read<long long>();
 
-		for (auto it : cashshop_storage_items_)
-		{
-			if (it->get_unique_id() == cash_item_unique_id_sn)
-			{
+		for (auto it : cashshop_storage_items_) {
+			if (it->get_unique_id() == cash_item_unique_id_sn) {
 
 				Inventory *inventory = get_inventory(it->get_inventory_id());
 
-				if (!inventory)
-				{
+				if (!inventory) {
 					continue;
 				}
 
-				if (!inventory->add_item_find_slot(it))
-				{
+				if (!inventory->add_item_find_slot(it)) {
 					// to-do send the cashshop error packet instead of those packets down there
 					{
 						PacketCreator packet;
@@ -259,8 +242,7 @@ void Player::handle_cash_shop_action()
 
 		bool worked = false;
 
-		for (auto it : *equip_inventory->get_items())
-		{
+		for (auto it : *equip_inventory->get_items()) {
 			if (it.second->get_unique_id() != cash_item_unique_id_sn)
 				continue;
 
@@ -278,12 +260,10 @@ void Player::handle_cash_shop_action()
 			break;
 		}
 
-		if (!worked)
-		{
+		if (!worked) {
 			Inventory *cash_inventory = get_inventory(kInventoryConstantsTypesCash);
 
-			for (auto it : *cash_inventory->get_items())
-			{
+			for (auto it : *cash_inventory->get_items()) {
 				if (it.second->get_unique_id() != cash_item_unique_id_sn)
 					continue;
 
@@ -310,8 +290,7 @@ void Player::handle_cash_shop_action()
 		skip_bytes(4); // type of cash used
 		int package_serial_number = read<int>();
 		CashItemData *package_cash_item = CashShopItemDataProvider::get_instance()->get_cash_item_data(package_serial_number);
-		if (!package_cash_item)
-		{
+		if (!package_cash_item) {
 			return;
 		}
 
@@ -325,16 +304,13 @@ void Player::handle_cash_shop_action()
 
 		std::vector<std::shared_ptr<Item>> items;
 
-		for (int serial_number : serial_numbers)
-		{
+		for (int serial_number : serial_numbers) {
 			CashItemData *cash_item = CashShopItemDataProvider::get_instance()->get_cash_item_data(serial_number);
-			if (!cash_item)
-			{
+			if (!cash_item) {
 				return;
 			}
 			int price = cash_item->price;
-			if (nx_cash_credit_ < price)
-			{
+			if (nx_cash_credit_ < price) {
 				return;
 			}
 			int item_id = cash_item->item_id;

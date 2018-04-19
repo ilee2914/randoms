@@ -34,8 +34,7 @@ class PlayerAttackInfo;
 class Summon;
 class PlayerNpc;
 
-class Player
-{
+class Player {
 public:
 
 	// default constructor
@@ -49,7 +48,7 @@ public:
 
 	// move constructor
 	Player(Player &&other) = default;
-	
+
 	// destructor
 	~Player();
 
@@ -157,6 +156,11 @@ public:
 	short get_item_amount(int itemid);
 	bool give_item(int itemid, short amount);
 	void remove_item(int itemid, short amount);
+	bool have_item(int itemid);
+	bool has_item(int id, int amound);
+	bool gain_item(int, short);
+	bool can_hold(int, int);
+	bool can_hold_one(int);
 	// messenger
 	signed char get_messenger_position();
 	void set_messenger_position(signed char position);
@@ -213,6 +217,7 @@ public:
 	void create_guild();
 	void disband_guild();
 	void change_guild_emblem();
+	Player* get_player();
 	// trading
 	void reset_trade();
 	void set_trade_partner(Player *partner);
@@ -349,15 +354,12 @@ public:
 	// this function template should be used to read bytes based on integer types
 
 	template<typename TYPE>
-	TYPE read()
-	{
-		if (recv_length_ <= recv_pos_)
-		{
+	TYPE read() {
+		if (recv_length_ <= recv_pos_) {
 			return 0;
 		}
 
-		if (sizeof(TYPE) > (recv_length_ - recv_pos_))
-		{
+		if (sizeof(TYPE) > (recv_length_ - recv_pos_)) {
 			return 0;
 		}
 
@@ -370,8 +372,7 @@ public:
 	// template function specialisation for reading bytes based on the type bool
 
 	template<>
-	bool read<bool>()
-	{
+	bool read<bool>() {
 		bool x = read<signed char>() != 0;
 
 		return x;
@@ -380,17 +381,14 @@ public:
 	// template function specialisation for reading bytes based on the type std::string
 
 	template<>
-	std::string read<std::string>()
-	{
+	std::string read<std::string>() {
 		int len = read<short>();
 
-		if (recv_length_ <= recv_pos_)
-		{
+		if (recv_length_ <= recv_pos_) {
 			return "";
 		}
 
-		if (len > (recv_length_ - recv_pos_))
-		{
+		if (len > (recv_length_ - recv_pos_)) {
 			return "";
 		}
 
