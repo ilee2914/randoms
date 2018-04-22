@@ -101,7 +101,7 @@ function action(mode, type, selection) {
         if(status == 0) {
             if(cm.getPlayer().gotPartyQuestItem("JBQ") && !cm.haveItem(4031058, 1)) {
                 if(cm.haveItem(4005004, 1)) {
-                    if(!cm.canHold(4031058)) {
+                    if(!cm.canHold(4031058, 1)) {
                         cm.sendNext("Have a free ETC slot available before accepting this trial.");
                         cm.dispose();
                     } else {

@@ -61,7 +61,7 @@ function action(mode, type, selection) {
                                     var mobs = cm.getMap().countMonsters();
                                 
                                     if(mobs > 0) {
-                                        if (!cm.haveItem(2270004)) {
+                                        if (!cm.haveItem(2270004, 1)) {
                                             if(cm.canHold(2270004, 10)) {
                                                 cm.gainItem(2270004, 10);
                                                 cm.sendOk("Take 10 #t2270004#. First, #rweaken the #o9300174##k and, once it gets low health, use the item I gave you to capture them.");

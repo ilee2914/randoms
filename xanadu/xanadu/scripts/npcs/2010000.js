@@ -199,7 +199,7 @@ function action(mode, type, selection) {
 	prizeQuantity = reward[itemSet][1];
 	if(!cm.haveItem(requiredItem,100)){
 	    cm.sendOk("Hmmm... are you sure you have #b100 #t" + requiredItem + "##k? If so, then please check and see if your item inventory is full or not.");
-	} else if(!cm.canHold(prizeItem)){
+	} else if(!cm.canHold(prizeItem, 1)){
 	    cm.sendOk("Your use and etc. inventory seems to be full. You need the free spaces to trade with me! Make room, and then find me.");
 	} else {
 	    cm.gainItem(requiredItem,-100);

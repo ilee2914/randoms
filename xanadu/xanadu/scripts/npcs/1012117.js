@@ -55,7 +55,7 @@ function action(mode, type, selection) {
             cm.sendYesNo("If you use the EXP coupon your hair will change RANDOMLY with a chance to obtain a new experimental style that even you didn't think was possible. Are you going to use #b#t5150040##k and really change your hairstyle?");
         }
         else if (status == 2) {
-            if (cm.haveItem(5150040) == true){
+            if (cm.haveItem(5150040, 1) == true){
                 hairnew = Array();
                 if (cm.getPlayer().getGender() == 0) {
                     for(var i = 0; i < mhair.length; i++) {

@@ -52,7 +52,7 @@ function canEnterDimensionMap(mapid, jobid) {
 }
 
 function start() {
-    if (canEnterDimensionMap(cm.getMapId(), cm.getJob().getId()) && cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059)) {
+    if (canEnterDimensionMap(cm.getMapId(), cm.getJob().getId()) && cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059, 1)) {
         var js = jobString(cm.getPlayer().getJob().getJobNiche());
         
         var em = cm.getEventManager("3rdJob_" + js);

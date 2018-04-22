@@ -60,10 +60,10 @@ function action(mode, type, selection){
             if (sel == undefined)
                 sel = selection;
             if(sel == 0){
-                if(cm.haveItem(2270002))
+                if(cm.haveItem(2270002, 1))
                     cm.sendNext("You already have #b#t2270002##k.");
-            else if(cm.canHold(2270002) && cm.canHold(2100067)){
-                if(cm.haveItem(2100067))
+            else if(cm.canHold(2270002, 1) && cm.canHold(2100067, 1)){
+                if(cm.haveItem(2100067, 1))
                     cm.removeAll(2100067);
                     cm.gainItem(2270002, 50);
                     cm.gainItem(2100067, 5);

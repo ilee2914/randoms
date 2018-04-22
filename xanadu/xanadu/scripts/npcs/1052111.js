@@ -27,8 +27,8 @@ function action(mode, type, selection){
 
 		if(status == 0) {
 			if(cm.isQuestStarted(20710)) {
-				if(!cm.hasItem(4032136)) {
-					if(cm.canHold(4032136)) {
+				if(!cm.haveItem(4032136, 1)) {
+					if(cm.canHold(4032136, 1)) {
 						cm.gainItem(4032136, 1);
 						cm.sendNext("You have found a #b#t4032136##k in the trash can!   #i4032136#");
 					} else {

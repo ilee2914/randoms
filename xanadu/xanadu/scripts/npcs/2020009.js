@@ -31,9 +31,9 @@ function start() {
 		cm.dispose();
 		return;
 	}
-    if (cm.haveItem(4031058))
+    if (cm.haveItem(4031058, 1))
 	    actionx["Mental"] = true;
-	else if (cm.haveItem(4031057))
+	else if (cm.haveItem(4031057, 1))
 	    actionx["Physical"] = true;
     cm.sendSimple("Anything you want from me?#b" + (cm.getJobId() % 10 == 0 ? "\r\n#L0#I want to make the 3th job advancement." : "") + "\r\n#L1#Please allow me to do the Zakum Dungeon Quest.");
 }
@@ -76,7 +76,7 @@ function action(mode, type, selection){
 	    if (status == 0)
 	        cm.sendNext("Great job completing the physical part of the test. I knew you could do it. Now that you have passed the first half of the test, here's the second half. Please give me the necklace first.");
 		else if (status == 1){
-		    if (cm.haveItem(4031057)){
+		    if (cm.haveItem(4031057, 1)){
 		        cm.gainItem(4031057, -1);
 				cm.getPlayer().setPartyQuestItemObtained("JBQ");
 			}

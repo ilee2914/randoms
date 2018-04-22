@@ -57,7 +57,7 @@ function action(mode, type, selection) {
             cm.sendYesNo("Buying #b"+temp+" #t4031346#(s)#k will cost you #b"+cost+" mesos#k. Are you sure you want to make the purchase?");
         }
     } else if(status == 4) {
-        if(cm.getMeso() < cost || !cm.canHold(4031346)) {
+        if(cm.getMeso() < cost || !cm.canHold(4031346, 1)) {
             cm.sendOk("Please check and see if you have enough mesos to make the purchase. Also, I suggest you check the etc. inventory and see if you have enough space available to make the purchase.");
         } else {
             cm.sendOk("See you again~");

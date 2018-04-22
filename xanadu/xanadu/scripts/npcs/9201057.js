@@ -13,7 +13,7 @@ function action(mode, type, selection) {
     if (cm.c.getPlayer().getMapId() == 103000100 || cm.c.getPlayer().getMapId() == 600010001){
 	var item = 4031711 + parseInt(cm.c.getPlayer().getMapId() / 300000000);
 
-        if(!cm.canHold(item)) {
+        if(!cm.canHold(item, 1)) {
             cm.sendNext("You don't have a etc. slot available.");
 	}
 	else if(cm.getMeso() >= 5000){

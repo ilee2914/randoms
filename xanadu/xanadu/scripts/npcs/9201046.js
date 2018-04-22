@@ -55,7 +55,7 @@ function action(mode, type, selection) {
                 var eim = cm.getPlayer().getEventInstance();
                 if(curMap == 670010750) {
                         if(cm.haveItem(4031597, 35)) {
-                                if(cm.canHold(1102101) && eim.getIntProperty("marriedGroup") == 0) {
+                                if(cm.canHold(1102101, 1) && eim.getIntProperty("marriedGroup") == 0) {
                                         eim.setIntProperty("marriedGroup", 1);
 
                                         var baseId = (cm.getPlayer().getGender() == 0) ? 1102101 : 1102104;

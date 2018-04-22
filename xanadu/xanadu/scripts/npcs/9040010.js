@@ -23,7 +23,7 @@ function start() {
     var eim = cm.getPlayer().getEventInstance();
     if (eim != null) {
         if (cm.isEventLeader()) {
-            if (cm.haveItem(4001024)) {
+            if (cm.haveItem(4001024, 1)) {
                 cm.removeAll(4001024);
                 var prev = eim.setProperty("bossclear", "true");
                 if (prev == null) {

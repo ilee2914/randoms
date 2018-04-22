@@ -75,7 +75,7 @@ function action(mode, type, selection) {
                     access = true;
                 }
             } else if (check == 1) {
-                if (!cm.haveItem(ticket)) {
+                if (!cm.haveItem(ticket, 1)) {
                     cm.sendOk("Hmmm, so where exactly is #b#t"+ticket+"##k?? Are you sure you have them? Please double-check.");
                     cm.dispose();
                 } else

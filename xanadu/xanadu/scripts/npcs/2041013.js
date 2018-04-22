@@ -58,7 +58,7 @@ function action(mode, type, selection) {
 		}
 		else if (status == 2){
 			cm.dispose();
-			if (cm.haveItem(5153002) == true){
+			if (cm.haveItem(5153002, 1) == true){
 				cm.gainItem(5153002, -1);
 				cm.setSkin(skin[selection]);
 				cm.sendOk("Enjoy your new and improved skin!");

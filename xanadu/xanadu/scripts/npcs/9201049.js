@@ -37,13 +37,13 @@ function start() {
     var rings = new Array(1112806, 1112803, 1112807, 1112809);
     var hasRing = false;
     for (var x = 0; x < rings.length && !hasRing; x++)
-        if (cm.haveItem(rings[x])) {
+        if (cm.haveItem(rings[x], 1)) {
             hasRing = true;
             break;
         }
     if (hasRing)
         cm.sendNext("You've reached the end of the wedding. You will receive an Onyx Chest for Bride and Groom and an Onyx Chest. Exchange them at Pila, she is at the top of Amoria.");
-    else if (cm.haveItem(4000313)) {
+    else if (cm.haveItem(4000313, 1)) {
         cm.sendNext("Wow the end of the wedding already ? Good bye then.!");
         status = 20;
     } else {

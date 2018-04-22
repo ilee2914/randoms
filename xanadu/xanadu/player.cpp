@@ -1297,6 +1297,15 @@ void Player::set_level(unsigned char newlevel) {
 	}
 }
 
+void Player::reset_stats() {
+	short temp = (str_ - 4 + dex_ - 4 + int_ - 4 + luk_ - 4);
+	set_ap(ap_ + temp);
+	set_str(4);
+	set_dex(4);
+	set_luk(4);
+	set_int(4);
+}
+
 void Player::set_job(short newjob) {
 	// player starts with level 10 -> mage starts at level 8 normally
 	/*
@@ -1305,16 +1314,6 @@ void Player::set_job(short newjob) {
 		add_sp(6);
 	}
 	*/
-
-	// reset the ap for beginner
-	if (is_beginner_job(job_)) {
-		short temp = (str_ - 4 + dex_ - 4 + int_ - 4 + luk_ - 4);
-		set_ap(ap_ + temp);
-		set_str(4);
-		set_dex(4);
-		set_luk(4);
-		set_int(4);
-	}
 
 	// update the job
 	job_ = newjob;
@@ -1768,7 +1767,10 @@ void Player::level_up() {
 	set_mp(max_mp_);
 }
 
-void Player::set_map(int mapid) {
+void Player::warp(int mapid) {
+	set_map(mapid, 0);
+}
+void Player::set_map(int mapid, int portal) {
 	World *world = World::get_instance();
 
 	Channel *channel = world->GetChannel(channel_id_);
@@ -1857,14 +1859,6 @@ short Player::get_item_amount(int itemid) {
 	return amount;
 }
 
-bool Player::have_item(int id) {
-	Inventory *inventory = get_inventory(tools::get_inventory_id_from_item_id(id));
-	if (!inventory) {
-		return false;
-	}
-	return inventory->have_item(id);
-}
-
 bool Player::gain_item(int id, short amount) {
 	if (amount < 0) {
 		remove_item(id, amount*-1);
@@ -1878,9 +1872,6 @@ bool Player::has_item(int id, int amount) {
 	return get_item_amount(id) >= amount;
 }
 
-bool Player::can_hold_one(int id) {
-	return can_hold(id, 1);
-}
 bool Player::can_hold(int id, int amount) {
 	Inventory *inventory = get_inventory(tools::get_inventory_id_from_item_id(id));
 	if (!inventory) return false;
@@ -2540,6 +2531,14 @@ int Player::get_hair() {
 
 Map* Player::get_map() {
 	return map_;
+}
+
+Map* Player::get_map_by_id(int id) {
+	return  World::get_instance()->GetChannel(channel_id_)->get_map(id);
+}
+
+short Player::get_player_count(int id) {
+	return  (short)World::get_instance()->GetChannel(channel_id_)->get_map(id)->get_players()->size();
 }
 
 signed char Player::get_spawn_point() {

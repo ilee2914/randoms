@@ -54,7 +54,7 @@ function action(mode, type, selection) {
 		} else{
             if (cm.getMeso() < 1500 && selection == 0)
                 cm.sendNext("I think you're lacking mesos. There are many ways to gather up some money, you know, like... selling your armor... defeating monsters... doing quests... you know what I'm talking about.");
-            else if(!cm.haveItem(4031134) && selection != 0){
+            else if(!cm.haveItem(4031134, 1) && selection != 0){
                 cm.sendNext("Hmmm, so where exactly is your #bVIP Ticket to Florina\r\nBeach#k? Are you sure you have one? Please double-check.");
             }else{
                 if(selection == 0)

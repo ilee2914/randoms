@@ -201,7 +201,7 @@ function action(mode, type, selection) {
                 complete = false;
         }
         if (stimulator){ //check for stimulator
-            if (!cm.haveItem(stimID)) {
+            if (!cm.haveItem(stimID, 1)) {
                 complete = false;
             }
         }

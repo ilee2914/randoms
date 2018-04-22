@@ -1,6 +1,6 @@
 function start() {
 	if (cm.isQuestStarted(22007)) {
-		if (!cm.haveItem(4032451)) {
+		if (!cm.haveItem(4032451, 1)) {
 			cm.gainItem(4032451, true);
 			cm.sendNext("#b(You have obtained an Egg. Deliver it to Utah.)");
 		} else {

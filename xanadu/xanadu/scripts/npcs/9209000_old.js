@@ -59,7 +59,7 @@ function action(mode, type, selection) {
             cm.sendNext("I buy the products at the Maple 7th Day Market and sell them in other towns. I trade memorabilia, spices, taxidermy shark, and more... but no Lazy Daisy's eggs.");
     }else if(status == 1){
         if(sel == 0){
-            if(cm.haveItem(3994090 + selection)){
+            if(cm.haveItem(3994090 + selection, 1)){
                 pickup = 3994090 + selection;
                 cm.sendYesNo("The current price is 180 mesos. Would you like to sell it now?"); //Make a price changer by hour.
             }else{

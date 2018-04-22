@@ -246,7 +246,7 @@ function action(mode, type, selection) {
                 for(var i = 0; complete && i < mats.length; i++)
                 {
                     if (matQty[i] * qty == 1)	{
-                        if (!cm.haveItem(mats[i] * qty))
+                        if (!cm.haveItem(mats[i] * qty, 1))
                         {
                             complete = false;
                         }

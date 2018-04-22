@@ -31,7 +31,7 @@
 var status;
 
 function start() {
-    if (cm.haveItem(4000313)) {
+    if (cm.haveItem(4000313, 1)) {
         cm.sendOk("You are a guest. Please continue with the wedding. I only warp out people who are here by accident.");
         cm.dispose();
     } else

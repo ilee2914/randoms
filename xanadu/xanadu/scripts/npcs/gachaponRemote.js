@@ -44,8 +44,8 @@ function action(mode, type, selection) {
             status++;
         else
             status--;
-		if(status == 0 && cm.haveItem(ticketId)) {
-			if(cm.canHold(1302000) && cm.canHold(2000000) && cm.canHold(3010001) && cm.canHold(4000000)) { // One free slot in every inventory.
+		if(status == 0 && cm.haveItem(ticketId, 1)) {
+			if(cm.canHold(1302000, 1) && cm.canHold(2000000, 1) && cm.canHold(3010001, 1) && cm.canHold(4000000, 1)) { // One free slot in every inventory.
 				cm.gainItem(ticketId, -1);
 				cm.doGachapon();
 			} else {

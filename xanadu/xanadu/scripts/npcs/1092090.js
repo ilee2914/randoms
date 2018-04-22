@@ -22,13 +22,13 @@
 status = -1;
 
 function start() {
-    if(cm.haveItem(4031847))
+    if(cm.haveItem(4031847, 1))
         cm.sendNext("The hungry calf is drinking all the milk! The bottle remains empty...");
-    else if(cm.haveItem(4031848) || cm.haveItem(4031849) || cm.haveItem(4031850)){
+    else if(cm.haveItem(4031848, 1) || cm.haveItem(4031849, 1) || cm.haveItem(4031850, 1)){
         cm.sendNext("The hungry calf is drinking all the milk! The bottle is now empty.");
-        if(cm.haveItem(4031848))
+        if(cm.haveItem(4031848, 1))
             cm.gainItem(4031848,-1);
-        else if(cm.haveItem(4031849))
+        else if(cm.haveItem(4031849, 1))
             cm.gainItem(4031849, -1);
         else
             cm.gainItem(4031850, -1);

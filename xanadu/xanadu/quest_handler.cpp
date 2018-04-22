@@ -4,13 +4,11 @@
 
 #include "quest_constants.hpp"
 
-void Player::handle_quest_action()
-{
+void Player::handle_quest_action() {
 	signed char action = read<signed char>();
 	int quest_id = read<unsigned short>();
 
-	switch (action)
-	{
+	switch (action) {
 	case QuestReceivePacketActions::kStart:
 	{
 		give_quest(quest_id);
@@ -19,7 +17,7 @@ void Player::handle_quest_action()
 	case QuestReceivePacketActions::kComplete:
 	{
 		int npc_id = read<int>();
-		complete_quest(quest_id, npc_id);
+		complete_quest_id(quest_id, npc_id);
 		break;
 	}
 	case QuestReceivePacketActions::kForfeit:

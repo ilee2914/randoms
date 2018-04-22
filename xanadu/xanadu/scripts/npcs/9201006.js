@@ -57,7 +57,7 @@ function action(mode, type, selection) {
                 if (cm.haveItem(engagementRings[x], 1))
                     hasEngagement = true;
             }
-            if (cm.haveItem(4000313) && hasEngagement) {
+            if (cm.haveItem(4000313, 1) && hasEngagement) {
                 cm.sendOk("Please continue with the wedding.");
                 cm.dispose();
             } else {

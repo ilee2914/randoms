@@ -40,9 +40,9 @@ function start() {
         }
     } else if (cm.getLevel() >= 30 && cm.getJobId() == 300) {
         actionx["2ndJob"] = true;
-        if (cm.haveItem(4031012))
+        if (cm.haveItem(4031012, 1))
             cm.sendNext("Haha...I knew you'd breeze through that test. I'll admit, you are a great bowman. I'll make you much stronger than you're right now. before that, however... you;ll need to choose one of two paths given to you. It'll be a difficult decision for you to make, but... if there's any question to ask, please do so.");
-        else if (cm.haveItem(4031011)){
+        else if (cm.haveItem(4031011, 1)){
             cm.sendOk("Go and see the #b#p1072002##k.");
             cm.dispose();
         } else
@@ -50,10 +50,10 @@ function start() {
     } else if (actionx["3thJobI"] || (cm.getPlayer().gotPartyQuestItem("JB3") && cm.getLevel() >= 70 && cm.getJobId() % 10 == 0 && parseInt(cm.getJobId() / 100) == 3 && !cm.getPlayer().gotPartyQuestItem("JBP"))){
         actionx["3thJobI"] = true;
         cm.sendNext("There you are. A few days ago, #b#p2020010##k of Ossyria talked to me about you. I see that you are interested in making the leap to the amazing world of the third job advancement for archers. To achieve that goal, I will have to test your strength in order to see whether you are worthy of the advancement. There is an opening in the middle of a deep forest in Victoria Island, where it'll lead you to a secret passage. Once inside, you'll face a clone of myself. Your task is to defeat her and bring #b#t4031059##k back with you.");
-    } else if (cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059)){
+    } else if (cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059, 1)){
         cm.sendNext("Please, bring me the #b#t4031059##k.");
         cm.dispose();
-    } else if (cm.haveItem(4031059) && cm.getPlayer().gotPartyQuestItem("JBP")){
+    } else if (cm.haveItem(4031059, 1) && cm.getPlayer().gotPartyQuestItem("JBP")){
         actionx["3thJobC"] = true;
         cm.sendNext("Nice work. You have defeated my clone and brought #b#t4031059##k back safely. You have now proven yourself worthy of the 3rd job advancement from the physical standpoint. Now you should give this necklace to #b#p2020011##k in Ossyria to take on the second part of the test. Good luck. You'll need it.");
     } else {
@@ -69,7 +69,7 @@ function action(mode, type, selection) {
     if (status == -1){
         start();
         return;
-    } else if (mode != 1 || status == 7 && type != 1 || (actionx["1stJob"] && status == 4) || (cm.haveItem(4031008) && status == 2) || (actionx["3thJobI"] && status == 1)){
+    } else if (mode != 1 || status == 7 && type != 1 || (actionx["1stJob"] && status == 4) || (cm.haveItem(4031008, 1) && status == 2) || (actionx["3thJobI"] && status == 1)){
         if (mode == 0 && status == 2 && type == 1)
             cm.sendOk("You know there is no other choice...");
         if (!(mode == 0 && type != 1)){
@@ -81,7 +81,7 @@ function action(mode, type, selection) {
         if (status == 0)
             cm.sendNextPrev("It is an important and final choice. You will not be able to turn back.");
         else if (status == 1){
-            if (cm.canHold(1452051) && cm.canHold(2060000)){
+            if (cm.canHold(1452051, 1) && cm.canHold(2060000, 1)){
                 if (cm.getJobId() == 0){
                     cm.changeJobById(300);
                     cm.gainItem(1452051, 1);
@@ -101,16 +101,16 @@ function action(mode, type, selection) {
             cm.dispose();    
     } else if(actionx["2ndJob"]){
         if (status == 0){
-            if (cm.haveItem(4031012))
+            if (cm.haveItem(4031012, 1))
                 cm.sendSimple("Alright, when you have made your decision, click on [I'll choose my occupation] at the bottom.#b\r\n#L0#Please explain to me what being the Hunter is all about.\r\n#L1#Please explain to me what being the Crossbowman is all about.\r\n#L3#I'll choose my occupation!");
             else {
                 cm.sendNext("Good decision. You look strong, but I need to see if you really are strong enough to pass the test, it's not a difficult test, so you'll do just fine. Here, take my letter first... make sure you don't lose it!");
 		if(!cm.isQuestStarted(100000)) cm.startQuest(100000);
 	   }
         } else if (status == 1){
-            if (!cm.haveItem(4031012)){
-                if (cm.canHold(4031010)){
-                    if (!cm.haveItem(4031010))
+            if (!cm.haveItem(4031012, 1)){
+                if (cm.canHold(4031010, 1)){
+                    if (!cm.haveItem(4031010, 1))
                         cm.gainItem(4031010, 1);
                     cm.sendNextPrev("Please get this letter to #b#p1072002##k who's around #b#m106010000##k near Henesys. She is taking care of the job of an instructor in place of me. Give her the letter and she'll test you in place of me. Best of luck to you.");
 		    cm.dispose();
@@ -134,7 +134,7 @@ function action(mode, type, selection) {
             job += selection * 10;
             cm.sendYesNo("So you want to make the second job advancement as the " + (job == 310 ? "#bHunter#k" : "#bCrossbowman#k") + "? You know you won't be able to choose a different job for the 2nd job advancement once you make your desicion here, right?");
         } else if (status == 3){
-            if (cm.haveItem(4031012))
+            if (cm.haveItem(4031012, 1))
                 cm.gainItem(4031012, -1);
             
             cm.sendNext("Alright, you're the " + (job == 310 ? "#bHunter#k" : "#bCrossbowman#k") + " from here on out. " + (job == 310 ? "#bHunter#k" : "#bCrossbowman#k") + "s are the intelligent bunch with incredible vision, able to pierce the arrow through the heart of the monsters with ease... please train yourself each and everyday. I'll help you become even stronger than you already are.");
@@ -175,9 +175,9 @@ function start() {
     } else {
         if (cm.getLevel() >= 30 && cm.getJobId() == 300) {
             actionx["2ndJob"] = true;
-            if (cm.haveItem(4031012))
+            if (cm.haveItem(4031012, 1))
                 
-            else if (cm.haveItem(4031010)){
+            else if (cm.haveItem(4031010, 1)){
                 cm.sendOk("Go and see the #b#p1072002##k.");
                 cm.dispose();
             } else
@@ -204,7 +204,7 @@ function action(mode, type, selection) {
     if (status == -1){
         start();
         return;
-    } else if (mode != 1 || status == 7 && type != 1 || (cm.haveItem(4031010) && status == 2)){
+    } else if (mode != 1 || status == 7 && type != 1 || (cm.haveItem(4031010, 1) && status == 2)){
         if (mode == 0 && status == 2)
             cm.sendOk("Make up your mind and visit me again.");
         if (!(mode == 0 && type != 1)){
@@ -227,16 +227,16 @@ function action(mode, type, selection) {
         }
     } else if(actionx["2ndJob"]){
         if (status == 0){
-            if (cm.haveItem(4031012))
+            if (cm.haveItem(4031012, 1))
                 cm.sendSimple("Alright, when you have made your decision, click on [I'll choose my occupation] at the bottom.#b\r\n#L0#Please explain to me what being the Hunter is all about.\r\n#L1#Please explain to me what being the Crossbowman is all about.\r\n#L2#I'll choose my occupation!");
             else {
                 cm.sendNext("Good decision. You look strong, but I need to see if you really are strong enough to pass the test, it's not a difficult test, so you'll do just fine. Here, take my letter first... make sure you don't lose it!");
 		if(!cm.isQuestStarted(100000)) cm.startQuest(100000);
 	    }
         } else if (status == 1){
-            if (!cm.haveItem(4031012)){
-                if (cm.canHold(4031010)){
-                    if (!cm.haveItem(4031010))
+            if (!cm.haveItem(4031012, 1)){
+                if (cm.canHold(4031010, 1)){
+                    if (!cm.haveItem(4031010, 1))
                         cm.gainItem(4031010, 1);
                     cm.sendNextPrev("Please get this letter to #b#p1072002##k who's around #b#m106010000##k near Henesys. She is taking care of the job of an instructor in place of me. Give her the letter and she'll test you in place of me. Best of luck to you.");
                 } else {
@@ -254,7 +254,7 @@ function action(mode, type, selection) {
             job += selection * 10;
             cm.sendYesNo("So you want to make the second job advancement as the " + (job == 310 ? "#bHunter#k" : "#bCrossbowman#k") + "? You know you won't be able to choose a different job for the 2nd job advancement once you make your desicion here, right?");
         } else if (status == 3){
-            if (cm.haveItem(4031012))
+            if (cm.haveItem(4031012, 1))
                 cm.gainItem(4031012, -1);
 	    cm.completeQuest(100002);
             cm.sendNext("Alright, you're the " + (job == 310 ? "#bHunter#k" : "#bCrossbowman#k") + " from here on out. Hunters are the intelligent bunch with incredible vision, able to pierce the arrow through the heart of the monsters with ease... please train yourself each and everyday. I'll help you become even stronger than you already are.");

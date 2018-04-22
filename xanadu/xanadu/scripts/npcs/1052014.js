@@ -80,7 +80,7 @@ function action(mode, type, selection) {
                 advance = true;
                     
                 if(status == 0) {
-                        hasCoin = cm.haveItem(coinId);
+                        hasCoin = cm.haveItem(coinId, 1);
                         cm.sendNext("This is the vending machine of the Internet Cafe. Place your erasers or #t" + coinId + "# earned throughout the quests to redeem a prize. You can place #bany amount of erasers#k, however take note that bigger shots improves the reward possibilities!");
                 } else if(status == 1) {
                         var sendStr;

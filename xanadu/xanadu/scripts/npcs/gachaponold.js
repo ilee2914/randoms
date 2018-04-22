@@ -35,7 +35,7 @@ function start() {
 	if(remoteGachapon)
 		ticketId = 5451000;
 		
-    if (cm.haveItem(ticketId)) {
+    if (cm.haveItem(ticketId, 1)) {
         cm.sendYesNo("You may use Gachapon. Would you like to use your Gachapon ticket?");
     } else {
         cm.sendSimple("Welcome to the " + cm.getPlayer().getMap().getMapName() + " Gachapon. How may I help you?\r\n\r\n#L0#What is Gachapon?#l\r\n#L1#Where can you buy Gachapon tickets?#l");
@@ -45,8 +45,8 @@ function start() {
 function action(mode, type, selection){
 	if(mode == -1) {
 		cm.dispose();
-	} else if (mode == 1 && cm.haveItem(ticketId)) {
-		if(cm.canHold(1302000) && cm.canHold(2000000) && cm.canHold(3010001) && cm.canHold(4000000)) { // One free slot in every inventory.
+	} else if (mode == 1 && cm.haveItem(ticketId, 1)) {
+		if(cm.canHold(1302000, 1) && cm.canHold(2000000, 1) && cm.canHold(3010001, 1) && cm.canHold(4000000, 1)) { // One free slot in every inventory.
 			cm.gainItem(ticketId, -1);
 			cm.doGachapon(cm.getNpc());
 		} else {

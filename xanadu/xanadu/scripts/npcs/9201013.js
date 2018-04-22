@@ -32,7 +32,7 @@ function start() {
 function action(mode, type, selection) {
     cm.dispose();
     if (selection == 0) {
-        if (cm.haveItem(4214002)) { 
+        if (cm.haveItem(4214002, 1)) { 
             cm.sendNext("Alright here are you invitations make sure your guest have them or they can't come in!"); 
             cm.gainItem(4031395,10); 
      
@@ -41,13 +41,13 @@ function action(mode, type, selection) {
             status = 9; 
         } 
     } else if (selection == 1) {
-        if (cm.haveItem(5251003)) { 
+        if (cm.haveItem(5251003, 1)) { 
             cm.sendNext("Alright, I'll give you your premium wedding receipt and make sure you don't lose it! If you lose your receipt you won't be able to get invitations or enter the cathedral!"); 
             cm.gainItem(4214002,1);
         } else if (selection == 2) {
             cm.sendNext("Have both the bride and groom buy a premium cathedral wedding ticket from the cash shop. Then ask me to prepare your wedding and i'll give you a wedding receipt. Talk to me if you want invitations so other guests can join. When you're ready just have everyone come to me and i'll let you or the guests in. Inside Debbie will warp you out to Amoria if you chose to leave. Nicole will warp you to the next map.");
         } else if (selection == 3) {
-            if (cm.haveItem(4214002)) { 
+            if (cm.haveItem(4214002, 1)) { 
                 cm.sendNext("Okay go on in. Once you're ready click the Priest and he'll get you married."); 
                 cm.warp(680000210, 2); 
             } else { 
@@ -55,7 +55,7 @@ function action(mode, type, selection) {
                 status = 9; 
             } 
         } else if (selection == 4) {
-            if (cm.haveItem(4031395)) { 
+            if (cm.haveItem(4031395, 1)) { 
                 cm.sendNext("Okay go on in. Once the bride and groom is ready click Nicole on the bottom to warp to the next map. Or use Debbie to leave to Amoria."); 
                 cm.warp(680000210,0); 
      

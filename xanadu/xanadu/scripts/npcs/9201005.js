@@ -66,7 +66,7 @@ function action(mode, type, selection) {
 				cm.dispose();
 				break;
 			case 1:
-				if (cm.haveItem(4000313)) {
+				if (cm.haveItem(4000313, 1)) {
 					cm.sendOk("You already have a Gold Maple Leaf. Go give them to your guests before you go into the wedding.");
 					cm.dispose();
                 } else if (hasEngageRing) {
@@ -89,7 +89,7 @@ function action(mode, type, selection) {
 				}
 				break;
 			case 3:
-				if (cm.haveItem(4000313)) {
+				if (cm.haveItem(4000313, 1)) {
 					cm.warp(680000210, 0);
 					cm.sendOk("Enjoy the wedding. Don't drop your Gold Maple Leaf or you won't be able to finish the whole wedding.");
 					cm.dispose();

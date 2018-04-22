@@ -19,7 +19,7 @@ function action(mode, type, selection) {
 		cm.dispose();
 	} else if (cm.getMapId() == 910330001) {
 		var itemid = 4001321;
-		if (!cm.canHold(itemid)) {
+		if (!cm.canHold(itemid, 1)) {
 			cm.sendOk("Please make room for 1 ETC slot.");
 		} else {
 			cm.gainItem(itemid,1);
@@ -44,7 +44,7 @@ function action(mode, type, selection) {
 			}
 			//todo
 		} else if (selection == 2) {
-			if (cm.haveItem(4001321)) {
+			if (cm.haveItem(4001321, 1)) {
 				if (cm.bonus_PyramidSubway(-1)) {
 					cm.gainItem(4001321, -1);
 				} else {
@@ -63,7 +63,7 @@ function action(mode, type, selection) {
 			var mons = parseInt(data);
 			if (mons < 10000) {
 				cm.sendOk("Please defeat at least 10,000 monsters in the Station and look for me again. Kills : " + mons);
-			} else if (cm.canHold(1142141) && !cm.haveItem(1142141)){
+			} else if (cm.canHold(1142141, 1) && !cm.haveItem(1142141, 1)){
 				cm.gainItem(1142141,1);
 				cm.startQuest(29931);
 				cm.completeQuest(29931);

@@ -16,7 +16,7 @@ var hasCoupon = false;
 
 function start() {
 	status = -1;
-        if(cm.haveItem(4032288)) hasCoupon = true;
+        if(cm.haveItem(4032288, 1)) hasCoupon = true;
         
 	action(1, 0, 0);
 }

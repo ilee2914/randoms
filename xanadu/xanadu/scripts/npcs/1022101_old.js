@@ -78,7 +78,7 @@ function action(mode, type, selection) {
 			choice = selection;
 			
 			if(selection > 0) {
-				if(!cm.haveItem(itemToUse) && vp == 0) {
+				if(!cm.haveItem(itemToUse, 1) && vp == 0) {
 					cm.sendOk("I'm sorry, but you don't have any #t" +itemToUse + " or Vote Points.");
 					cm.dispose();
 					return;
@@ -113,12 +113,12 @@ function action(mode, type, selection) {
 			}
 		} else if(status == 2) {
 			var useVP = false;
-			if(!cm.hasItem(itemToUse) && vp > 0)
+			if(!cm.haveItem(itemToUse, 1) && vp > 0)
 				useVP = true;
 				
 			if(choice == 0) {
 				// VP Exchange
-				if(!cm.canHold(itemToUse)) {
+				if(!cm.canHold(itemToUse, 1)) {
 					cm.sendOk("It looks like you don't have enough space in your #rETC#k inventory to hold the #t" + itemToUse + "#" + (vp > 0 ? "s" : "") + ".");
 					cm.dispose();
 					return;

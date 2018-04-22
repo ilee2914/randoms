@@ -72,7 +72,7 @@ function action(mode, type, selection) {
                         if(!cm.isEventLeader()) {
                                 cm.sendOk("Only your event leader is allowed to interact with the Schedule.");
                         } else if(cm.getMapId() == 240050100) {
-                                if(cm.haveItem(4001087) && cm.haveItem(4001088) && cm.haveItem(4001089) && cm.haveItem(4001090) && cm.haveItem(4001091)) {
+                                if(cm.haveItem(4001087, 1) && cm.haveItem(4001088, 1) && cm.haveItem(4001089, 1) && cm.haveItem(4001090, 1) && cm.haveItem(4001091, 1)) {
                                         cm.gainItem(4001087, -1);
                                         cm.gainItem(4001088, -1);
                                         cm.gainItem(4001089, -1);

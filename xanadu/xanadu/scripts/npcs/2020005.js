@@ -82,7 +82,7 @@ function action(mode, type, selection) {
         }
         cm.sendYesNo("Are you sure you want to buy #r"+amount+" #t"+item[selected]+"(s)##k? It'll cost you "+cost[selected]+" mesos per #t"+item[selected]+"#, which will cost you #r"+totalcost+" mesos#k in total.");
     } else if(status == 3) {
-        if(cm.getMeso() < totalcost || !cm.canHold(item[selected])) {
+        if(cm.getMeso() < totalcost || !cm.canHold(item[selected], 1)) {
             cm.sendNext("Are you sure you have enough mesos? Please check and see if your etc. or use inventory is full, or if you have at least #r"+totalcost+"#k mesos.");
             cm.dispose();
         }

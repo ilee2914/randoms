@@ -32,7 +32,7 @@ function isTransformed(ch) {
 }
 
 function start() {
-    if(!(isTransformed(cm.getPlayer()) || cm.haveItem(4001086))) {
+    if(!(isTransformed(cm.getPlayer()) || cm.haveItem(4001086, 1))) {
         cm.sendOk("This is the cave of the mighty Horntail, supreme ruler of the Leafre Canyons. Only those #bdeemed worthy#k to meet him can pass here, #boutsiders#k are not welcome. Get lost!");
         cm.dispose();
         return;
@@ -46,7 +46,7 @@ function action(mode, type, selection) {
         cm.dispose();
     else if (selection == 1) {
         if(cm.getMeso() >= price) {
-            if(!cm.canHold(2000005)) {
+            if(!cm.canHold(2000005, 1)) {
                 cm.sendOk("Sorry, you don't have a slot on your inventory for the item!");
             } else {
                 cm.gainMeso(-price);

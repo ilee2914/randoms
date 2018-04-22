@@ -1,5 +1,5 @@
 function start() {
-    if(cm.haveItem(4031047)){
+    if(cm.haveItem(4031047, 1)){
         var em = cm.getEventManager("Boats");
         if (em.getProperty("entry") == "true")
             cm.sendYesNo("Do you want to go to Ellinia?");

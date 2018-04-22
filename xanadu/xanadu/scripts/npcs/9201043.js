@@ -53,7 +53,7 @@ function action(mode, type, selection) {
                 cm.dispose();
             }
         } else if (status == 1 && selection == 1) {
-            if (cm.haveItem(4031592)) {
+            if (cm.haveItem(4031592, 1)) {
                 cm.sendOk("You already have an Entrance Ticket!");
                 cm.dispose();
             }

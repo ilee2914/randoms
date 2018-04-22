@@ -5,7 +5,7 @@ var selectedMap = -1;
 var mesos;
 
 function start() {
-	if (cm.hasItem(4032313,1)) {
+	if (cm.haveItem(4032313,1)) {
 		cm.sendOk("I see that you have a coupon to go to Henesys. One moment while I bring you right over!");
 	} else {
 		cm.sendNext("Hello, I drive the Regular Cab. If you want to go from town to town safely and fast, then ride our cab. We'll glady take you to your destination with an affordable price.");
@@ -29,7 +29,7 @@ function action(mode, type, selection) {
         else
             status--;
         if (status == 1) {
-        	if (cm.hasItem(4032313,1)) {
+        	if (cm.haveItem(4032313,1)) {
         		cm.gainItem(4032313, -1);
                 cm.warp(maps[0], 0);
                 cm.dispose();

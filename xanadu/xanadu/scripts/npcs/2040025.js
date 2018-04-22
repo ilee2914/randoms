@@ -28,7 +28,7 @@ var status = 0;
 var map = 221024400;
 
 function start() {
-    if (cm.haveItem(4001020))
+    if (cm.haveItem(4001020, 1))
         cm.sendSimple("You can use #bEos Rock Scroll#k to activate #bSecond Eos Rock#k. Which of these rocks would you like to teleport to?#b\r\n#L0#First Eos Rock (100th Floor)#l\r\n#L1#Third Eos Rock (41st Floor)#l");
     else {
         cm.sendOk("There's a rock that will enable you to teleport to #bFirst Eos Rock or Third Eos Rock#k, but it cannot be activated without the scroll.");

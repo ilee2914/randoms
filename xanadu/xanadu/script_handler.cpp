@@ -30,7 +30,7 @@ const int as_CASH = kInventoryConstantsTypesCash;
 
 void Player::npc_script_handler(int mode, int type, int selection) {
 	// Handles file loading
-	if (!ctx || mode == 0) {
+	if (!ctx || mode + type + selection == -1) {
 		duk_destroy_heap(ctx);
 		int npc_id = npc_->id_;
 
@@ -87,20 +87,26 @@ void Player::npc_script_handler(int mode, int type, int selection) {
 		dukglue_register_method(ctx, &Player::set_skin_color, "setSkin");
 
 		dukglue_register_method(ctx, &Player::set_job, "changeJobById");
+		dukglue_register_method(ctx, &Player::reset_stats, "resetStats");
 
-		dukglue_register_method(ctx, &Player::set_map, "warp");
+		dukglue_register_method(ctx, &Player::warp, "warp");
+		dukglue_register_method(ctx, &Player::get_map_by_id, "getWarpMap");
+		//dukglue_register_method(ctx, &Map::get_players, "getCharacters");
 		dukglue_register_method(ctx, &Player::get_player, "getPlayer");
 
 		dukglue_register_method(ctx, &Player::get_item_amount, "itemQuantity");
-		dukglue_register_method(ctx, &Player::gain_item, "gainItem");
-		dukglue_register_method(ctx, &Player::have_item, "haveItem");
+		dukglue_register_method(ctx, &Player::gain_item, "gainItem");			//one
+		dukglue_register_method(ctx, &Player::has_item, "haveItem");
 		dukglue_register_method(ctx, &Player::can_hold, "canHold");
-		dukglue_register_method(ctx, &Player::can_hold_one, "canHold");
 
-		dukglue_register_method(ctx, &Player::set_map, "warp");
+		dukglue_register_method(ctx, &Player::give_quest, "startQuest");
+		dukglue_register_method(ctx, &Player::is_quest_started, "isQuestStarted");
+		dukglue_register_method(ctx, &Player::is_quest_completed, "isQuestCompleted");
+		dukglue_register_method(ctx, &Player::get_quest_status, "getQuestStatus");
+		dukglue_register_method(ctx, &Player::complete_quest, "completeQuest");
+		dukglue_register_method(ctx, &Player::complete_quest, "forceCompleteQuest");
 
 		dukglue_register_global(ctx, this, "cm");
-		
 	}
 
 	//cout << mode << " " << type << " " << selection << endl;

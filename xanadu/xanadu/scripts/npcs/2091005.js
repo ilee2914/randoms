@@ -181,7 +181,7 @@ function action(mode, type, selection) {
                         }
 
                     } else if (selectedMenu == 2) { //I want to receive a belt.
-                        if (!cm.canHold(belts[0])) {
+                        if (!cm.canHold(belts[0], 1)) {
                             cm.sendNext("Make room in your EQUIP inventory before trying to claim a belt!");
                             cm.dispose();
                             return;

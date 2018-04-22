@@ -38,7 +38,7 @@ function action(mode, type, selection) {
     } else if (mode == 0) {
         cm.sendNext("Hmmm ... too busy to do it right now? If you feel like doing it, though, come back and find me.");
     } else if (mode == 1) {
-        if (cm.haveItem(4031128))
+        if (cm.haveItem(4031128, 1))
             cm.sendNext("Get that letter, jump over obstacles with your pet, and take that letter to my brother Trainer Frod. Give him the letter and something good is going to happen to your pet.");
         else {
             cm.gainItem(4031128, 1);

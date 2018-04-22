@@ -92,7 +92,7 @@ function action(mode, type, selection) {
             }
         } else if (status == 1) {
             if (selection == 1) {
-                if (!cm.haveItem(expedItem)) {
+                if (!cm.haveItem(expedItem, 1)) {
                     cm.sendOk("As the expedition leader, you must have on your inventory a #b#t" + expedItem + "##k to battle " + expedBoss + "!");
                     cm.dispose();
                     return;

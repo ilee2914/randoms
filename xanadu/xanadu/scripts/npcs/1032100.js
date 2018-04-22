@@ -77,7 +77,7 @@ function action(mode, type, selection) {
             }
         } else if (status == 3) {
             if (selected == 0) {
-                if (cm.haveItem(4011000) && cm.haveItem(4011001) && cm.haveItem(4011002) && cm.haveItem(4011003) && cm.haveItem(4011004) && cm.haveItem(4011005) && cm.haveItem(4011006) && cm.getMeso() > 10000) {
+                if (cm.haveItem(4011000, 1) && cm.haveItem(4011001, 1) && cm.haveItem(4011002, 1) && cm.haveItem(4011003, 1) && cm.haveItem(4011004, 1) && cm.haveItem(4011005, 1) && cm.haveItem(4011006, 1) && cm.getMeso() > 10000) {
                     cm.gainMeso(-10000);
                     for(var i = 4011000; i<4011007; i++) {
                         cm.gainItem(i,-1);
@@ -88,7 +88,7 @@ function action(mode, type, selection) {
                     cm.sendNext("Are you sure you have enough mesos? Please check and see if you have the refined #bBronze Plate#k, #bSteel Plate#k,\r\n#bMithril Plate#k, #bAdamantium Plate#k, #bSilver Plate#k, #bOrihalcon Plate#k and #bGold Plate#k, one of each.");
                 }
             } else if (selected == 1) {
-                if (cm.haveItem(4021000) && cm.haveItem(4021001) && cm.haveItem(4021002) && cm.haveItem(4021003) && cm.haveItem(4021004) && cm.haveItem(4021005) && cm.haveItem(4021006) && cm.haveItem(4021007) && cm.haveItem(4021008) && cm.getMeso() > 15000) {
+                if (cm.haveItem(4021000, 1) && cm.haveItem(4021001, 1) && cm.haveItem(4021002, 1) && cm.haveItem(4021003, 1) && cm.haveItem(4021004, 1) && cm.haveItem(4021005, 1) && cm.haveItem(4021006, 1) && cm.haveItem(4021007, 1) && cm.haveItem(4021008, 1) && cm.getMeso() > 15000) {
                     cm.gainMeso(-15000);
                     for(var j = 4021000; j<4011009; j++) {
                         cm.gainItem(j,-1);
@@ -99,7 +99,7 @@ function action(mode, type, selection) {
                     cm.sendNext("Are you sure you have enough mesos? Please check and see if you have the refined #bGarnet#k, #bAmethyst#k, #bAquaMarine#k, #bEmerald#k, #bOpal#k, #bSapphire#k, #bTopaz#k, #bDiamond#k and #bBlack Crystal#k, one of each.");
                 }
             } else if (selected == 2) {
-                if (cm.haveItem(4001006) && cm.haveItem(4011007) && cm.haveItem(4021008) && cm.getMeso() > 30000) {
+                if (cm.haveItem(4001006, 1) && cm.haveItem(4011007, 1) && cm.haveItem(4021008, 1) && cm.getMeso() > 30000) {
                     cm.gainMeso(-30000);
                     for(var k = 4021000; k<4021009; k+=1001) {
                         cm.gainItem(k,-1);

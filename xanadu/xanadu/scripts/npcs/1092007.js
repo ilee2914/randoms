@@ -29,7 +29,7 @@ function action(mode, type, selection){
 
         if (status == 0){
             if (cm.getQuestStatus(2175) == 1){
-                if (cm.getPlayer().canHold(2030019)){
+                if (cm.getPlayer().canHold(2030019, 1)){
                     cm.sendOk("Please take this #b#t2030019##k, it will make your life a lot easier.  #i2030019#");
                     cm.gainItem(2030019, 1);
                 }

@@ -16,7 +16,7 @@ function action(mode, type, selection) {
         }
         status++;
         if(status == 1) {
-            if (cm.getMeso() >= cost && cm.canHold(4031045)) {
+            if (cm.getMeso() >= cost && cm.canHold(4031045, 1)) {
                 cm.gainItem(4031045,1);
                 cm.gainMeso(-cost);
                 cm.dispose();

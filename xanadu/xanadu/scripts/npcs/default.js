@@ -1,3 +1,3 @@
 function start() {
-	cm.sendOk("NPC not coded.");
+	cm.getPlayer().gainItem(4000004,1);
 }

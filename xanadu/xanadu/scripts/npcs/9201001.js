@@ -45,7 +45,7 @@ function action(mode, type, selection) {
             } else if (selection == 2) {
                 if(cm.haveItem(leaf, 1)) {
 					var chair1 = chairs[Math.floor(Math.random()*chairs.length)];
-					if(cm.canHold(chair1)){
+					if(cm.canHold(chair1, 1)){
 						cm.gainItem(chair1);
 						cm.gainItem(leaf, -1);
 						cm.sendOk("Here is your random chair!");

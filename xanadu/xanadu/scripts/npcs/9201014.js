@@ -55,7 +55,7 @@ function action(mode, type, selection) {
         cm.sendSimple(msg);
     } else if (status == 1) {
         if (selection == 0) {
-            if (cm.haveItem(4031424)) {
+            if (cm.haveItem(4031424, 1)) {
                 var rand = Math.floor(Math.random() * 4);
                 if (rand == 0)
                     cm.gainItem(2022179,10);
@@ -71,7 +71,7 @@ function action(mode, type, selection) {
                 cm.dispose();
             }
         } else if (selection == 1) {
-            if (cm.haveItem(4031423)) {
+            if (cm.haveItem(4031423, 1)) {
                 cm.sendSimple("You may choose your prize.\r\n#L0#Triangular Sushi#l\r\n#L1#50 power elixers#l\r\n#L2#10 Swiss Cheese#l\r\n#L3#3 Onyx Apples#l");
             } else {
                 cm.sendOk("You don't have an Onyx Chest");

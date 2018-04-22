@@ -72,7 +72,7 @@ function action(mode, type, selection) {
                         return;
                     }
 
-                    if (!cm.haveItem(4001018)) { //fire ore
+                    if (!cm.haveItem(4001018, 1)) { //fire ore
                         cm.sendNext("Please bring the #bFire Ore#k with you.");
                         cm.dispose();
                     }

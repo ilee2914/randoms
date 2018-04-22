@@ -47,10 +47,10 @@ function start() {
     } else if (actionx["3thJobI"] || (cm.getPlayer().gotPartyQuestItem("JB3") && cm.getLevel() >= 70 && cm.getJobId() % 10 == 0 && parseInt(cm.getJobId() / 100) == 5 && !cm.getPlayer().gotPartyQuestItem("JBP"))){
         actionx["3thJobI"] = true;
         cm.sendNext("There you are. A few days ago, #b#p2020013##k of Ossyria talked to me about you. I see that you are interested in making the leap to the world of the third job advancement for pirates. To archieve that goal, I will have to test your strength in order to see whether you are worthy of the advancement. There is an opening in the middle of a cave on Victoria Island, where it'll lead you to a secret passage. Once inside, you'll face a clone of myself. Your task is to defeat him and bring #b#t4031059##k back with you.");
-    } else if (cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059)){
+    } else if (cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059, 1)){
         cm.sendNext("Please, bring me the #b#t4031059##k.");
         cm.dispose();
-    } else if (cm.haveItem(4031059) && cm.getPlayer().gotPartyQuestItem("JBP")){
+    } else if (cm.haveItem(4031059, 1) && cm.getPlayer().gotPartyQuestItem("JBP")){
         actionx["3thJobC"] = true;
         cm.sendNext("Nice work. You have defeated my clone and brought #b#t4031059##k back safely. You have now proven yourself worthy of the 3rd job advancement from the physical standpoint. Now you should give this necklace to #b#p2020013##k in Ossyria to take on the second part of the test. Good luck. You'll need it.");
     } else {
@@ -66,7 +66,7 @@ function action(mode, type, selection) {
     if (status == -1){
         start();
         return;
-    } else if (mode != 1 || status == 7 && type != 1 || (actionx["1stJob"] && status == 4) || (cm.haveItem(4031008) && status == 2) || (actionx["3thJobI"] && status == 1)){
+    } else if (mode != 1 || status == 7 && type != 1 || (actionx["1stJob"] && status == 4) || (cm.haveItem(4031008, 1) && status == 2) || (actionx["3thJobI"] && status == 1)){
         if (mode == 0 && status == 2 && type == 1)
             cm.sendOk("You know there is no other choice...");
         if (!(mode == 0 && type != 1)){
@@ -78,7 +78,7 @@ function action(mode, type, selection) {
         if (status == 0)
             cm.sendYesNo("Oh...! You look like someone that can definitely be a part of us... all you need is a little slang, and... yeah... so, what do you think? Wanna be the Pirate?");
         else if (status == 1){
-            if (cm.canHold(2070000) && cm.canHold(1472061)){
+            if (cm.canHold(2070000, 1) && cm.canHold(1472061, 1)){
                 if (cm.getJobId() == 0){
                     cm.changeJobById(500);
                     cm.gainItem(1492000, 1);
@@ -146,7 +146,7 @@ function action(mode, type, selection) {
                 cm.sendYesNo("So you want to make the second job advancement as the " + (job == 510 ? "#bBrawler#k" : "#bGunslinger#k") + "? You know you won't be able to choose a different job for the 2nd job advancement once you make your decision here, right?");
             }
         } else if (status == 3){
-            if (cm.haveItem(4031012))
+            if (cm.haveItem(4031012, 1))
                 cm.gainItem(4031012, -1);
             
             if(job == 510) cm.sendNext("From here on out, you are a #bBrawler#k. Brawlers rule the world with the power of their bare fists...which means they need to train their body more than others. If you have any trouble training, I'll be more than happy to help.");

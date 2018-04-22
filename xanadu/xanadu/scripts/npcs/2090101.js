@@ -83,7 +83,7 @@ function action(mode, type, selection) {
         else if (status == 2){
             cm.dispose();
             if (beauty == 1){
-                if (cm.haveItem(5150024)){
+                if (cm.haveItem(5150024, 1)){
                     cm.gainItem(5150024, -1);
                     cm.setHair(hairnew[Math.floor(Math.random() * hairnew.length)]);
                     cm.sendOk("Enjoy your new and improved hairstyle!");
@@ -92,7 +92,7 @@ function action(mode, type, selection) {
                 }
             }
             if (beauty == 2){
-                if (cm.haveItem(5151019)){
+                if (cm.haveItem(5151019, 1)){
                     cm.gainItem(5151019, -1);
                     cm.setHair(haircolor[Math.floor(Math.random() * haircolor.length)]);
                     cm.sendOk("Enjoy your new and improved haircolor!");

@@ -61,7 +61,7 @@ function action(mode, type, selection) {
         if (cm.getMeso() < item[1] * amount)
             cm.sendNext("Are you lacking mesos by any chance? Please check and see if you have an empty slot available at your etc. inventory, and if you have at least #r" + (item[1] * selectedItem) + "#k mesos with you.");
         else {
-            if (cm.canHold(item[0])) {
+            if (cm.canHold(item[0], 1)) {
                 cm.gainMeso(-item[1] * amount);
                 cm.gainItem(item[0], amount);
                 cm.sendNext("Thank you for coming. Stuff here can always be made so if you need something, please come again.");

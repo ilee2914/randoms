@@ -81,19 +81,19 @@ function action(mode, type, selection) {
 				cm.sendSimple("You who lack fear of death's cruelty, make your decision!\r\n#L0##i3994115##l#L1##i3994116##l#L2##i3994117##l#L3##i3994118##l");
 			} else if (selected == 3) {
 				if (selection == 0) {
-					if (cm.haveItem(4001322)) {
+					if (cm.haveItem(4001322, 1)) {
 						return;
 					}
 				} else if (selection == 1) {
-				    if (cm.haveItem(4001323)) {
+				    if (cm.haveItem(4001323, 1)) {
 						return;
 					}
 				} else if (selection == 2) {
-					if (cm.haveItem(4001324)) {
+					if (cm.haveItem(4001324, 1)) {
 						return;
 					}
 				} else if (selection == 3) {
-					if (cm.haveItem(4001325)) {
+					if (cm.haveItem(4001325, 1)) {
 						return;
 					}
 				}
@@ -168,7 +168,7 @@ function action(mode, type, selection) {
 		} else if (status == 1) {
 			var itemid = 4001325;
 			if (cm.getPlayer().getLevel() >= 60) itemid = 4001325;
-			if (cm.canHold(itemid)) {
+			if (cm.canHold(itemid, 1)) {
 				cm.gainItem(itemid);
 				cm.warp(926010000);
 			} else 

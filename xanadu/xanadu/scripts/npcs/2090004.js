@@ -36,10 +36,10 @@ function action(mode, type, selection) {
 	}
 
 	if (status == 0) {
-		if (cm.isQuestActive(3821) && !cm.haveItem(4031554) && !cm.haveItem(4161030) && cm.isQuestCompleted(3830)) {
+		if (cm.isQuestActive(3821) && !cm.haveItem(4031554, 1) && !cm.haveItem(4161030, 1) && cm.isQuestCompleted(3830)) {
                         //player lost his book, help him complete quest anyways
                     
-                        if(cm.canHold(4031554)) {
+                        if(cm.canHold(4031554, 1)) {
                                 cm.sendOk("Oh, the boy wanted you to bring him a #t4031554#? No problem, I was on his debt anyway. Now, tell him I am repaying the debt, OK?");
                                 cm.gainItem(4031554, 1);
                                 cm.dispose();
@@ -67,7 +67,7 @@ function action(mode, type, selection) {
 			matQtySet = new Array(3,3,new Array(10,10),new Array(20,1),new Array(20,20),10,new Array(1,1),new Array(20,20,20));
                         matQtyMeso = new Array(0,0,910,950,1940,600,700,1000);
                     
-                        if(!cm.haveItem(4161030)) {
+                        if(!cm.haveItem(4161030, 1)) {
                                 cm.sendNext("If you want to make a medicine, you must study the Book on Herbal Medicine first. Nothing is more dangerous than practicing a medicine without proper knowledge.");
                                 cm.dispose();
                                 return;

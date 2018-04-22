@@ -45,13 +45,13 @@ function action(mode, type, selection) {
         else
             status--;
         if (status == 0 && mode == 1) {
-			if (cm.haveItem(ticketId)) {
+			if (cm.haveItem(ticketId, 1)) {
 				cm.sendYesNo("You may use the " + curMapName + " Gachapon. Would you like to use your Gachapon ticket?");
 			} else {
 				cm.sendSimple("Welcome to the " + curMapName + " Gachapon. How may I help you?\r\n\r\n#L0#What is Gachapon?#l\r\n#L1#Where can you buy Gachapon tickets?#l");
 			}
-		} else if(status == 1 && cm.haveItem(ticketId)) {
-			if(cm.canHold(1302000) && cm.canHold(2000000) && cm.canHold(3010001) && cm.canHold(4000000)) { // One free slot in every inventory.
+		} else if(status == 1 && cm.haveItem(ticketId, 1)) {
+			if(cm.canHold(1302000, 1) && cm.canHold(2000000, 1) && cm.canHold(3010001, 1) && cm.canHold(4000000, 1)) { // One free slot in every inventory.
 				cm.gainItem(ticketId, -1);
 				cm.doGachapon();
 			} else {

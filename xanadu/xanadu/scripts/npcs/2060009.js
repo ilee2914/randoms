@@ -6,7 +6,7 @@ var atHerbTown = false;
 function start() {
     if(cm.getPlayer().getMap().getId() == 251000100) atHerbTown = true;
 	
-    if (cm.haveItem(4031242)){
+    if (cm.haveItem(4031242, 1)){
 		if(atHerbTown)
 			menu = "#L0##bI will use #t4031242##k to move to #b#m230030200##k.#l\r\n#L1#Go to #b#m230000000##k after paying #b10000mesos#k.#l";
 		else

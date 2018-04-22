@@ -25,7 +25,7 @@ var fhair = Array(31150, 31250, 31310, 31050, 31050, 31030, 31070, 31091, 31001)
 var hairnew = Array();
 
 function start() {
-    if (cm.isQuestCompleted(8860) && !cm.haveItem(4031528)) {
+    if (cm.isQuestCompleted(8860) && !cm.haveItem(4031528, 1)) {
         cm.sendNext("I've already done your hair once as a trade-for-services, sport. You'll have to snag an EXP Hair coupon from the Cash Shop if you want to change it again!");
         cm.dispose();
     } else
@@ -51,7 +51,7 @@ function action(mode, type, selection) {
                 hairnew.push(fhair[j]);
         cm.sendNext("Here we go!");
     } else {
-        if (cm.haveItem(4031528)) {
+        if (cm.haveItem(4031528, 1)) {
             cm.gainItem(4031528, -1);
             cm.setHair(hairnew[Math.floor(Math.random() * hairnew.length)]);
             cm.sendNextPrev("Not bad, if I do say so myself! I knew those books I studied would come in handy...");

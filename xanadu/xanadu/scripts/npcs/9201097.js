@@ -114,7 +114,7 @@ function action(mode, type, selection) {
             cm.gainItem(requiredItem,-qnt);
             cm.gainMeso(prizeQuantity);
             cm.sendOk("For your #b" + qnt + " #t"+requiredItem+"##k, here's #b" + prizeQuantity + " mesos#k. What do you think? Did you like the items I gave you in return? I plan on being here for awhile, so if you gather up more items, I'm always open for a trade...");
-        } else if(!cm.canHold(prizeItem)){
+        } else if(!cm.canHold(prizeItem, 1)){
 	    cm.sendOk("Your use and etc. inventory seems to be full. You need the free spaces to trade with me! Make room, and then find me.");
 	} else {
 	    cm.gainItem(requiredItem,-qnt);

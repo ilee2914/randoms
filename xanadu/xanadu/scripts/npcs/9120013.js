@@ -45,7 +45,7 @@ function action(mode, type, selection) {
         else
             status--;
         if (status == 0 && mode == 1) {
-            if (cm.isQuestStarted(8012) && !cm.haveItem(4031064)){ //quest in progress
+            if (cm.isQuestStarted(8012) && !cm.haveItem(4031064, 1)){ //quest in progress
                 cm.sendYesNo("Did you get them all? Are you going to try to answer all of my questions?");
             }
             else { //quest not started or already completed

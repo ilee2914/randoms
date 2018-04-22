@@ -50,22 +50,22 @@ function action(mode, type, selection) {
     var engagementRings = Array(4031360, 4031358, 4031362, 4031364);
     var hasEngage = false;
     for (i = 0; i < engagementRings.length && !hasEngage; i++) {
-        if (cm.haveItem(engagementRings[i]))
+        if (cm.haveItem(engagementRings[i], 1))
             hasEngage = true;
     }
     var Rings = Array(1112806, 1112803, 1112807, 1112809);
     var hasRing = false;
     for (i = 0; i < Rings.length; i++) {
-        if (cm.haveItem(Rings[i])) {
+        if (cm.haveItem(Rings[i], 1)) {
             hasRing = true;
         }
     }
 
     if (status == 0) {
-        if (cm.haveItem(4000313) && hasEngage) {
+        if (cm.haveItem(4000313, 1) && hasEngage) {
             cm.sendOk("You can't leave yet! You need to click High Priest John and get married before I can let you leave.");
             cm.dispose();
-        } else if (cm.haveItem(4000313) && hasRing) {
+        } else if (cm.haveItem(4000313, 1) && hasRing) {
             var choice = Array("Go to the Cherished Visage Photos", "What should I be doing");
             var msg = "What can I help you with?";
             for (i = 0; i < choice.length; i++) {

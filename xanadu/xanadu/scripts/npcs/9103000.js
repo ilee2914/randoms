@@ -57,7 +57,7 @@ function action(mode, type, selection) {
                                         cm.sendOk("One or more event team members is missing, please wait for them to reach here first.");
                                         cm.dispose();
                                 }
-                                else if(cm.hasItem(4001106, 30)) {
+                                else if(cm.haveItem(4001106, 30)) {
                                         qty = cm.getItemQuantity(4001106);
                                         cm.sendYesNo("Splendid! You have retrieved " + qty + " #t4001106# from this run, now your team will receive the fair amount of EXP from this action. Are you ready to get transported out?");
                                 }

@@ -36,7 +36,7 @@ function start(mode, type, selection){
 }
 
 function action(mode, type, selection) {
-    if(!(cm.haveItem(4031853) || cm.haveItem(4031854) || cm.haveItem(4031855))) {
+    if(!(cm.haveItem(4031853, 1) || cm.haveItem(4031854, 1) || cm.haveItem(4031855, 1))) {
         rolled = Math.floor(Math.random() * 3);
         
         if(rolled == 0) cm.gainItem(4031853, 1);

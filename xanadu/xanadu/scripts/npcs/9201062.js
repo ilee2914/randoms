@@ -69,7 +69,7 @@ function action(mode, type, selection) {
         }
         else if (status == 2){
             cm.dispose();
-            if (cm.haveItem(5152036) == true){
+            if (cm.haveItem(5152036, 1) == true){
                 cm.gainItem(5152036, -1);
                 cm.setFace(colors[selection]);
                 cm.sendOk("Enjoy your new and improved cosmetic lenses!");

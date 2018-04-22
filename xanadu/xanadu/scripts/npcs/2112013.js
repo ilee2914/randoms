@@ -44,7 +44,7 @@ function start() {
             cm.gainExp(egain);
         } else if(res == 2) {  // letter
             var letter = 4001130;
-            if(!cm.canHold(letter)) {
+            if(!cm.canHold(letter, 1)) {
                 cm.sendOk("You got a letter, however it didn't fit on your inventory, so you put it back.");
                 cm.dispose();
                 return;

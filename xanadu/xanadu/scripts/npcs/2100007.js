@@ -30,7 +30,7 @@ function action(mode, type, selection) {
 			cm.sendStyle("With our specialized machine, you can see yourself after the treatment in advance. What kind of skin-treatment would you like to do? Choose the style of your liking...", skin);
 		} else if (status == 2){
 			cm.dispose();
-			if (cm.haveItem(5153007) == true){
+			if (cm.haveItem(5153007, 1) == true){
 				cm.gainItem(5153007, -1);
 				cm.setSkin(skin[selection]);
 				cm.sendOk("Enjoy your new and improved skin!");

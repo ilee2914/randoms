@@ -134,7 +134,7 @@ function action(mode, type, selection) {
             }else if (sel == 2)
                 cm.sendNextPrev("Even if it someday moves again, it's sad to see them stop altogether. Please be nice to them while they are alive and moving. Feed them well, too. Isn't it nice to know that there's something alive that follows and listens to only you?");
             else if (sel == 27){
-                if (cm.getMeso() < 250000 || !cm.canHold(4160011))
+                if (cm.getMeso() < 250000 || !cm.canHold(4160011, 1))
                     cm.sendOk("Please check if your inventory has empty slot or you don't have enough mesos.");
                 else {
                     cm.gainMeso(-250000);

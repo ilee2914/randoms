@@ -26,7 +26,7 @@
 */
 
 function start() {
-    if (cm.haveItem(4001020))
+    if (cm.haveItem(4001020, 1))
         cm.sendYesNo("You can use #bEos Rock Scroll#k to activate #bFourth Eos Rock#k. Will you head over to #bThird Eos Rock#k at the 41st floor?");
     else {
         cm.sendOk("There's a rock that will enable you to teleport to #bThird Eos Rock#k, but it cannot be activated without the scroll.");

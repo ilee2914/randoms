@@ -7,7 +7,7 @@ function start() {
     em = cm.getEventManager("Subway");
     var text = "Here's the ticket reader.";
 	var hasTicket = false;
-    if (cm.haveItem(4031713) && cm.getPlayer().getMapId() == 600010001){
+    if (cm.haveItem(4031713, 1) && cm.getPlayer().getMapId() == 600010001){
         text += "\r\n#b#L0##t4031713#";
 		hasTicket = true;
 	}
@@ -37,7 +37,7 @@ function action(mode, type, selection) {
         }
         oldSelection = selection;
     }else if(status == 1){
-        if (oldSelection == 0 && cm.haveItem(4031713)) {
+        if (oldSelection == 0 && cm.haveItem(4031713, 1)) {
             if(em.getProperty("entry") == "true") {
                 cm.gainItem(4031713, -1);
                 cm.warp(600010002);

@@ -48,7 +48,7 @@ function action(mode, type, selection) {
             cm.sendSimple("Well, hello! Welcome to the Lian Hua Hua Skin-Care! Would you like to have a firm, tight, healthy looking skin like mine?  With #b#tCBD Skin Coupon##k, you can let us take care of the rest and have the kind of skin you've always wanted!\r\n\#L1#Sounds Good! (uses #i5153010# #t5153010#)#l");
         }
         else if (status == 1) {
-            if (!cm.haveItem(5153010)) {
+            if (!cm.haveItem(5153010, 1)) {
                 cm.sendOk("It looks like you don't have the coupon you need to receive the treatment. I'm sorry but it looks like we cannot do it for you.");
                 cm.dispose();
                 return;

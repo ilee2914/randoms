@@ -48,7 +48,7 @@ function action(mode, type, selection) {
                         status--;
     
                 if(status == 0) {
-                        if(!cm.haveItem(4220153)) {
+                        if(!cm.haveItem(4220153, 1)) {
                                 cm.sendOk("(Scratch scratch...)");
                                 cm.dispose();
                         } else {

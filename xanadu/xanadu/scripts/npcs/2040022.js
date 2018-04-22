@@ -215,7 +215,7 @@ function action(mode, type, selection) {
                 for(var i = 0; complete && i < mats.length; i++)
                 {
                     if (matQty[i] * selection == 1) {
-                        if (!cm.haveItem(mats[i]))
+                        if (!cm.haveItem(mats[i], 1))
                         {
                             complete = false;
                         }
@@ -231,7 +231,7 @@ function action(mode, type, selection) {
         }
 			
         if (stimulator){ //check for stimulator
-            if (!cm.haveItem(stimID))
+            if (!cm.haveItem(stimID, 1))
             {
                 complete = false;
             }

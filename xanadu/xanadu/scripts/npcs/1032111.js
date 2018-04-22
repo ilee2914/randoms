@@ -24,8 +24,8 @@ function action(mode, type, selection){
 
 	if(status == 0){
 		if(cm.isQuestStarted(20716)){
-			if(!cm.hasItem(4032142)){
-				if(cm.canHold(4032142)){
+			if(!cm.haveItem(4032142, 1)){
+				if(cm.canHold(4032142, 1)){
 					cm.gainItem(4032142, 1);
 					cm.sendOk("You bottled up some of the clear tree sap.  #i4032142#");
 				}

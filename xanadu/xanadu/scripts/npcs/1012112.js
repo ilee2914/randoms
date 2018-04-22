@@ -87,8 +87,8 @@ function action(mode, type, selection) {
                                         cm.sendYesNo("So you want to exchange #b20 #b#t4001158##k for the event-designed hat?");
                                 }
                         } else {
-                                if(cm.hasItem(4001158, 20)) {
-                                        if(cm.canHold(1002798)) {
+                                if(cm.haveItem(4001158, 20)) {
+                                        if(cm.canHold(1002798, 1)) {
                                                 cm.gainItem(4001158, -20);
                                                 cm.gainItem(1002798, 20);
                                                 cm.sendNext("Here it is. Enjoy!");

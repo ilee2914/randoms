@@ -40,7 +40,6 @@ void Player::handle_request_npc() {
 	npc_->set_selected(-1);
 	npc_->set_state(0);
 
-	std::cout << npc_id << std::endl;
 	send_npc(0,0,npc_->selected_);
 }
 

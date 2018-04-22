@@ -80,10 +80,6 @@ Map::Map(int id, Channel *channel) :
 			has_monsters_ = true;
 		}
 
-		if (mobs->size() > 0) {
-			MapMobData * mob = mobs->at(0);
-			spawn_monster_init(mob->mob_id, mob->position_x, mob->position_y, mob->foothold, mob->mobTime, mob->flip);
-		}
 		// reactors
 
 		// TODO:

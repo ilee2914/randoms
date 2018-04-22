@@ -1,7 +1,7 @@
 //
 
 #include "player.hpp"
-
+#include "playernpc.hpp"
 #include "quest.hpp"
 #include "quest_data.hpp"
 #include "quest_data_provider.hpp"
@@ -10,19 +10,15 @@
 #include "world.hpp"
 #include "server_constants.hpp"
 
-void Player::give_quest(int quest_id)
-{
+void Player::give_quest(int quest_id) {
 	QuestData *data = QuestDataProvider::get_instance()->get_quest_data(quest_id);
-	if (!data)
-	{
+	if (!data) {
 		return;
 	}
-	if (quests_in_progress_.find(quest_id) != quests_in_progress_.end())
-	{
+	if (quests_in_progress_.find(quest_id) != quests_in_progress_.end()) {
 		return;
 	}
-	if (completed_quests_.find(quest_id) != completed_quests_.end())
-	{
+	if (completed_quests_.find(quest_id) != completed_quests_.end()) {
 		return;
 	}
 
@@ -32,8 +28,7 @@ void Player::give_quest(int quest_id)
 	// mode values:
 	// 0 = forfeit, 1 = update, 2 = completed
 	signed char mode = 1;
-	if (quest->is_completed())
-	{
+	if (quest->is_completed()) {
 		mode = 2;
 	}
 	{
@@ -44,15 +39,30 @@ void Player::give_quest(int quest_id)
 	rewards_data(quest_id, true);
 }
 
-void Player::complete_quest(int quest_id, int npc_id)
-{
+void Player::complete_quest(int quest_id) {
+	complete_quest_id(quest_id, npc_->id_);
+}
+
+bool Player::is_quest_started(int id) {
+	return get_quest_status(id) > 0;
+}
+
+bool Player::is_quest_completed(int id) {
+	return get_quest_status(id) == 2;
+}
+
+short Player::get_quest_status(int quest_id) {
+	if (quests_in_progress_[quest_id]) return 1;
+	if (completed_quests_[quest_id]) return 2;
+	return 0;
+}
+
+void Player::complete_quest_id(int quest_id, int npc_id) {
 	QuestData *data = QuestDataProvider::get_instance()->get_quest_data(quest_id);
-	if (!data)
-	{
+	if (!data) {
 		return;
 	}
-	if (quests_in_progress_.find(quest_id) == quests_in_progress_.end())
-	{
+	if (quests_in_progress_.find(quest_id) == quests_in_progress_.end()) {
 		return;
 	}
 
@@ -61,29 +71,24 @@ void Player::complete_quest(int quest_id, int npc_id)
 	auto killed_monsters = quest->get_killed_mobs2();
 	auto required_monsters = data->get_required_mobs();
 
-	for (auto &it : *required_monsters)
-	{
+	for (auto &it : *required_monsters) {
 		int required_monster_id = it.first;
 		int required_amount = it.second;
 		auto temp_it = killed_monsters->find(required_monster_id);
-		if (temp_it == killed_monsters->end())
-		{
+		if (temp_it == killed_monsters->end()) {
 			return;
 		}
-		if (temp_it->second < required_amount)
-		{
+		if (temp_it->second < required_amount) {
 			return;
 		}
 	}
 
 	// check if the player has the items that are required to complete the quest
 	auto required_items = data->get_required_items();
-	for (auto &it : *required_items)
-	{
+	for (auto &it : *required_items) {
 		int required_item_id = it.first;
 		int required_amount = it.second;
-		if (get_item_amount(required_item_id) < required_amount)
-		{
+		if (get_item_amount(required_item_id) < required_amount) {
 			return;
 		}
 
@@ -97,8 +102,7 @@ void Player::complete_quest(int quest_id, int npc_id)
 	// mode values:
 	// 0 = forfeit, 1 = update, 2 = completed
 	signed char mode = 1;
-	if (quest->is_completed())
-	{
+	if (quest->is_completed()) {
 		mode = 2;
 	}
 	{
@@ -114,11 +118,9 @@ void Player::complete_quest(int quest_id, int npc_id)
 	rewards_data(quest_id, false);
 }
 
-void Player::remove_quest(int quest_id)
-{
+void Player::remove_quest(int quest_id) {
 	auto iterator = quests_in_progress_.find(quest_id);
-	if (iterator == quests_in_progress_.end())
-	{
+	if (iterator == quests_in_progress_.end()) {
 		return;
 	}
 
@@ -132,43 +134,33 @@ void Player::remove_quest(int quest_id)
 	quests_in_progress_.erase(quest_id);
 }
 
-void Player::initialize_player_quests(int quest_id, bool is_completed, int mob_id, int amount)
-{
+void Player::initialize_player_quests(int quest_id, bool is_completed, int mob_id, int amount) {
 	std::shared_ptr<Quest> quest(new Quest(quest_id, is_completed));
-	if (is_completed)
-	{
+	if (is_completed) {
 		completed_quests_[quest_id] = quest;
-	}
-	else
-	{
+	} else {
 		quests_in_progress_[quest_id] = quest;
 		quest->add_killed_mob(mob_id, amount);
 	}
 }
 
-void Player::rewards_data(int quest_id, bool start)
-{
+void Player::rewards_data(int quest_id, bool start) {
 	QuestData *data = QuestDataProvider::get_instance()->get_quest_data(quest_id);
-	if (!data)
-	{
+	if (!data) {
 		return;
 	}
 
 	auto rewards = data->get_rewards_data();
 
-	for (auto &it : *rewards)
-	{
+	for (auto &it : *rewards) {
 		QuestRewardData *reward = it;
 
-		if (reward->start == start)
-		{
-			if (reward->item)
-			{
+		if (reward->start == start) {
+			if (reward->item) {
 				give_item(reward->id, reward->count);
 			}
 
-			else if (reward->exp)
-			{
+			else if (reward->exp) {
 				int gain = (kExpRate * reward->id);
 				set_exp(exp_ + gain);
 				{
@@ -178,8 +170,7 @@ void Player::rewards_data(int quest_id, bool start)
 				}
 			}
 
-			else if (reward->fame)
-			{
+			else if (reward->fame) {
 				set_fame(get_fame() + reward->id);
 				{
 					PacketCreator packet;
@@ -188,8 +179,7 @@ void Player::rewards_data(int quest_id, bool start)
 				}
 			}
 
-			else if (reward->mesos)
-			{
+			else if (reward->mesos) {
 				add_mesos(reward->id);
 				{
 					PacketCreator packet;
@@ -201,12 +191,10 @@ void Player::rewards_data(int quest_id, bool start)
 	}
 }
 
-std::unordered_map<int, std::shared_ptr<Quest>> *Player::get_quests_in_progress()
-{
+std::unordered_map<int, std::shared_ptr<Quest>> *Player::get_quests_in_progress() {
 	return &quests_in_progress_;
 }
 
-std::unordered_map<int, std::shared_ptr<Quest>> *Player::get_completed_quests()
-{
+std::unordered_map<int, std::shared_ptr<Quest>> *Player::get_completed_quests() {
 	return &completed_quests_;
 }

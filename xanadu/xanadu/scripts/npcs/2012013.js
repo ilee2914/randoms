@@ -1,5 +1,5 @@
 function start() {
-    if(cm.haveItem(4031074)){
+    if(cm.haveItem(4031074, 1)){
         var em = cm.getEventManager("Trains");
         if (em.getProperty("entry") == "true") {
             cm.sendYesNo("Do you want to go to Ludibrium?");

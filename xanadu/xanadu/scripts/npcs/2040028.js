@@ -47,7 +47,7 @@ function action(mode, type, selection) {
         if(status == 0) {
             var greeting = "Thank you for finding the pendulum. Are you ready to return to Eos Tower?";
             if (cm.isQuestStarted(3230)) {
-                if (cm.haveItem(4031094)) {
+                if (cm.haveItem(4031094, 1)) {
                     cm.completeQuest(3230);
                     cm.gainItem(4031094, -1);
                 } else

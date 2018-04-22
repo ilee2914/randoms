@@ -43,12 +43,12 @@ function action(mode, type, selection) {
         }
     }
     if (status == 1) {
-        if (cm.haveItem(4031801))
+        if (cm.haveItem(4031801, 1))
             cm.sendNext("Okay, now give me 150 mesos... Hey, what's that? Is that the recommendation letter from Lucas, the chief of Amherst? Hey, you should have told me you had this. I, Shanks, recognize greatness when I see one, and since you have been recommended by Lucas, I see that you have a great, great potential as an adventurer. No way would I charge you for this trip!");
         else
             cm.sendNext("Bored of this place? Here... Give me #e150 mesos#n first...");
     } else if (status == 2) {
-        if (cm.haveItem(4031801))
+        if (cm.haveItem(4031801, 1))
             cm.sendNextPrev("Since you have the recommendation letter, I won't charge you for this. Alright, buckle up, because we're going to head to Victoria Island right now, and it might get a bit turbulent!!");
         else
         if (cm.getLevel() > 6) {
@@ -62,7 +62,7 @@ function action(mode, type, selection) {
             cm.dispose();
         }
     } else if (status == 3) {
-        if (cm.haveItem(4031801)) {
+        if (cm.haveItem(4031801, 1)) {
             cm.gainItem(4031801, -1);
         } else {
             cm.gainMeso(-150);

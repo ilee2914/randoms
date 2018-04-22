@@ -93,7 +93,7 @@ function action(mode, type, selection) {
         else if (status == 2){
             cm.dispose();
             if (beauty == 1){
-                if (cm.haveItem(5152027)){
+                if (cm.haveItem(5152027, 1)){
                     cm.gainItem(5152027, -1);
                     cm.setFace(facenew[Math.floor(Math.random() * facenew.length)]);
                     cm.sendOk("Enjoy your new and improved face!");
@@ -102,7 +102,7 @@ function action(mode, type, selection) {
                 }
             }
             if (beauty == 2){
-                if (cm.haveItem(5152028)){
+                if (cm.haveItem(5152028, 1)){
                     cm.gainItem(5152028, -1);
                     cm.setFace(facenew[selection]);
                     cm.sendOk("Enjoy your new and improved face!");

@@ -46,7 +46,7 @@ function action(mode, type, selection) {
             if (selection == 0) {
                 cm.sendYesNo("If you leave now, you can't participate in this event for the next 24 hours. Are you sure you want to leave?");
                 } else if (selection == 1) {
-                if (cm.getMesos < 1 && !cm.canHold(1322005)) {
+                if (cm.getMesos < 1 && !cm.canHold(1322005, 1)) {
                 cm.sendOk("You don't have enough mesos or you don't have any space in your inventory.");
                 cm.dispose();
                 } else {

@@ -57,7 +57,7 @@ function action(mode, type, selection) {
             cm.sendStyle("I can completely change the look of your hair. Aren't you ready for a change? With #b#t5151028##k, I'll take care of the rest. Choose the color of your liking!", haircolor);
         } else if (status == 2) {
             if (beauty == 1){
-                if (cm.haveItem(5150033)){
+                if (cm.haveItem(5150033, 1)){
                     cm.gainItem(5150033, -1);
                     cm.setHair(hairnew[selection]);
                     cm.sendOk("Enjoy your new and improved hairstyle!");
@@ -65,7 +65,7 @@ function action(mode, type, selection) {
                     cm.sendOk("Hmmm...it looks like you don't have our designated coupon...I'm afraid I can't give you a haircut without it. I'm sorry.");
             }
             if (beauty == 2){
-                if (cm.haveItem(5151028)){
+                if (cm.haveItem(5151028, 1)){
                     cm.gainItem(5151028, -1);
                     cm.setHair(haircolor[selection]);
                     cm.sendOk("Enjoy your new and improved haircolor!");

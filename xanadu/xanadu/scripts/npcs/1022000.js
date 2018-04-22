@@ -41,9 +41,9 @@ function start() {
         }
     } else if (cm.getLevel() >= 30 && cm.getJobId() == 100) {
         actionx["2ndJob"] = true;
-        if (cm.haveItem(4031012))
+        if (cm.haveItem(4031012, 1))
             cm.sendNext("Oh... you came back safe! I knew you'd breeze through. I'll admit, you are a strong, formidable Warrior! Alright, I'll make you an even stronger Warrior than you already are. But before that, you need to choose one of the three paths that you'll be given. It isn't going to be easy, so if you have and questions, feel free to ask.");
-        else if (cm.haveItem(4031008)){
+        else if (cm.haveItem(4031008, 1)){
             cm.sendOk("Go and see the #b#p1072000##k.");
             cm.dispose();
         } else
@@ -51,10 +51,10 @@ function start() {
     } else if (actionx["3thJobI"] || (cm.getPlayer().gotPartyQuestItem("JB3") && cm.getLevel() >= 70 && (cm.getJobId() % 10 == 0 && parseInt(cm.getJobId() / 100) == 1 && !cm.getPlayer().gotPartyQuestItem("JBP")))) {
         actionx["3thJobI"] = true;
         cm.sendNext("I was waiting for you. Few days ago, I heard about you from #b#p2020008##k in Ossyria. Well... I'd like to test your strength. There is a secret passage near the ant tunnel. Nobody but you can go into that passage. If you go into the passage, you will meat my the other self. Beat him and bring #b#t4031059##k to me.");
-    } else if (cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059)){
+    } else if (cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059, 1)){
         cm.sendNext("Please, bring me the #b#t4031059##k.");
         cm.dispose();
-    } else if (cm.haveItem(4031059) && cm.getPlayer().gotPartyQuestItem("JBP")){
+    } else if (cm.haveItem(4031059, 1) && cm.getPlayer().gotPartyQuestItem("JBP")){
         actionx["3thJobC"] = true;
         cm.sendNext("Wow... You beat my the other self and brought #b#t4031059##k to me. Good! this surely proves your strength. In terms of strength, you are ready to advance to 3th job. As I promised, I will give #b#t4031057##k to you. Give this necklace to #b#p2020008##k in Ossyria and you will be able to take second test of 3rd job advancement. Good Luck~");
     } else {
@@ -70,7 +70,7 @@ function action(mode, type, selection) {
     if (status == -1){
         start();
         return;
-    } else if (mode != 1 || status == 7 && type != 1 || (actionx["1stJob"] && status == 4) || (cm.haveItem(4031008) && status == 2) || (actionx["3thJob"] && status == 1)){
+    } else if (mode != 1 || status == 7 && type != 1 || (actionx["1stJob"] && status == 4) || (cm.haveItem(4031008, 1) && status == 2) || (actionx["3thJob"] && status == 1)){
         if (mode == 0 && status == 2 && type == 1)
             cm.sendOk("Make up your mind and visit me again.");
         if (!(mode == 0 && type != 1)){
@@ -82,7 +82,7 @@ function action(mode, type, selection) {
         if (status == 0)
             cm.sendNextPrev("It is an important and final choice. You will not be able to turn back.");
         else if (status == 1){
-            if (cm.canHold(1302077)){
+            if (cm.canHold(1302077, 1)){
                 if (cm.getJobId() == 0){
                     cm.changeJobById(100);
                     cm.gainItem(1302077, 1);
@@ -101,16 +101,16 @@ function action(mode, type, selection) {
             cm.dispose();
     } else if(actionx["2ndJob"]){
         if (status == 0){
-            if (cm.haveItem(4031012))
+            if (cm.haveItem(4031012, 1))
                 cm.sendSimple("Alright, when you have made your decision, click on [I'll choose my occupation] at the bottom.#b\r\n#L0#Please explain to me what being the Fighter is all about.\r\n#L1#Please explain to me what being the Page is all about.\r\n#L2#Please explain to me what being the Spearman is all about.\r\n#L3#I'll choose my occupation!");
             else {
                 cm.sendNext("Good decision. You look strong, but I need to see if you really are strong enough to pass the test, it's not a difficult test, so you'll do just fine. Here, take my letter first... make sure you don't lose it!");
 		if(!cm.isQuestStarted(100003)) cm.startQuest(100003);
 	    }
         } else if (status == 1){
-            if (!cm.haveItem(4031012)){
-                if (cm.canHold(4031008)){
-                    if(!cm.haveItem(4031008))
+            if (!cm.haveItem(4031012, 1)){
+                if (cm.canHold(4031008, 1)){
+                    if(!cm.haveItem(4031008, 1))
                         cm.gainItem(4031008, 1);
                     cm.sendNextPrev("Please get this letter to #b#p1072000##k who's around #b#m102020300##k near Perion. He is taking care of the job of an instructor in place of me. Give him the letter and he'll test you in place of me. Best of luck to you.");
                 } else {
@@ -132,14 +132,14 @@ function action(mode, type, selection) {
                     cm.sendSimple("Now... have you made up your mind? Please choose the job you'd like to select for your 2nd job advancement. #b\r\n#L0#Fighter\r\n#L1#Page\r\n#L2#Spearman");
             }
         } else if (status == 2){
-            if (cm.haveItem(4031008)){
+            if (cm.haveItem(4031008, 1)){
                 cm.dispose();
                 return;
             }
             job += selection * 10;
             cm.sendYesNo("So you want to make the second job advancement as the " + (job == 110 ? "#bFighter#k" : job == 120 ? "#bPage#k" : "#bSpearman#k") + "? You know you won't be able to choose a different job for the 2nd job advancement once you make your desicion here, right? Are you sure about this?");
         } else if (status == 3){
-            if (cm.haveItem(4031012))
+            if (cm.haveItem(4031012, 1))
                 cm.gainItem(4031012, -1);
 	    cm.completeQuest(100005);
             

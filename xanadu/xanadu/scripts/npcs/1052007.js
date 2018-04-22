@@ -32,10 +32,10 @@ function action(mode, type, selection) {
         	cm.dispose();
         	return;
         } else if (selection == 1) {
-            if (cm.haveItem(4031036) || cm.haveItem(4031037) || cm.haveItem(4031038)) {
+            if (cm.haveItem(4031036, 1) || cm.haveItem(4031037, 1) || cm.haveItem(4031038, 1)) {
                 text += " You will be brought in immediately. Which ticket you would like to use?#b";
                 for (var i = 0; i < 3; i++) {
-	                if (cm.haveItem(4031036 + i)) {
+	                if (cm.haveItem(4031036 + i, 1)) {
 	                    text += "\r\n#b#L" + (i + 1) + "##t" + (4031036 + i) +"#";
 	        		}
 	            }
@@ -47,7 +47,7 @@ function action(mode, type, selection) {
             	return;
             }
         } else if (selection == 2) {
-        	if (!cm.haveItem(4031711) && cm.getPlayer().getMapId() == 103000100) {
+        	if (!cm.haveItem(4031711, 1) && cm.getPlayer().getMapId() == 103000100) {
 	    		cm.sendOk("It seems you don't have a ticket! You can buy one from Bell.");
 	    		cm.dispose();
 	    		return;
@@ -72,7 +72,7 @@ function action(mode, type, selection) {
             }
     	}
         
-	if (cm.haveItem(4031711)) {
+	if (cm.haveItem(4031711, 1)) {
             if(em.getProperty("entry") == "false") {
                 cm.sendNext("We will begin boarding 1 minute before the takeoff. Please be patient and wait for a few minutes. Be aware that the subway will take off right on time, and we stop receiving tickets 1 minute before that, so please make sure to be here on time.");
             }

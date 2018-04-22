@@ -40,7 +40,7 @@ function action(mode, type, selection) {
         status++;
         if (status == 1) {
             if (selection == 0) {
-                if (cm.haveItem(4031035)) {
+                if (cm.haveItem(4031035, 1)) {
                     cm.sendNext("Get that letter, jump over obstacles with your pet, and take that letter to my brother Trainer Frod. Give him the letter and something good is going to happen to your pet.");
                     cm.dispose();
                 } else

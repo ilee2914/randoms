@@ -124,7 +124,7 @@ function action(mode, type, selection) {
 	else if (status == 4 && mode == 1) {
 		var pass = true;
 
-                if(!cm.canHold(item)) {
+                if(!cm.canHold(item, 1)) {
                     cm.sendOk("Check your inventory for a free slot first.");
                     cm.dispose();
                     return;
@@ -148,7 +148,7 @@ function action(mode, type, selection) {
 					for(var i = 0; pass && i < mats.length; i++)
 					{
 						if (matQty[i] * qty == 1)	{
-							if (!cm.haveItem(mats[i]))
+							if (!cm.haveItem(mats[i], 1))
 							{
 								pass = false;
 							}

@@ -90,16 +90,16 @@ function action(mode, type, selection) {
                     cm.dispose();
                 }
             } else if(selection == 1) {
-                if (cm.haveItem(4031061) && !cm.haveItem(4031062))
+                if (cm.haveItem(4031061, 1) && !cm.haveItem(4031062, 1))
                     cm.sendYesNo("Would you like to attempt the #bBreath of Lava#k?  If you fail, there is a very real chance you will die.");
                 else {
-                    if (cm.haveItem(4031062)) cm.sendNext("You've already got the #bBreath of Lava#k, you don't need to do this stage.");
+                    if (cm.haveItem(4031062, 1)) cm.sendNext("You've already got the #bBreath of Lava#k, you don't need to do this stage.");
                     else cm.sendNext("Please complete the earlier trials first.");
                     
                     cm.dispose();
                 }
             } else {
-                if(cm.haveItem(4031061) && cm.haveItem(4031062)) {
+                if(cm.haveItem(4031061, 1) && cm.haveItem(4031062, 1)) {
                     if(!cm.haveItem(4000082, 30)) {
                         cm.sendOk("You have completed the trials, however there's still the need of #b30 #t4000082##k to forge the #t4001017#.");
                     } else {

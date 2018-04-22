@@ -44,7 +44,7 @@ function action(mode, type, selection) {
                 if(status == 0) {
                         if(cm.isQuestStarted(3929)) {
                             if(cm.getQuestProgress(3929, 2) != 1) {
-                                if(cm.haveItem(4031580)) {
+                                if(cm.haveItem(4031580, 1)) {
                                     cm.gainItem(4031580, -1);
                                     cm.setQuestProgress(3929, 2, 1);
                                 }

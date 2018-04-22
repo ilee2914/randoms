@@ -49,7 +49,7 @@ function action(mode, type, selection) {
             status--;
         
         if (status == 1) {
-            if (!cm.haveItem(5152037)) {
+            if (!cm.haveItem(5152037, 1)) {
                 cm.sendOk("Hmm ... it looks like you don't have the coupon specifically for this place. Sorry to say this, but without the coupon, there's no plastic surgery for you...");
                 cm.dispose();
                 return;

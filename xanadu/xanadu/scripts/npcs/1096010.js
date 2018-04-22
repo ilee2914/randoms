@@ -1,7 +1,7 @@
 function start() {
 	if (cm.isQuestStarted(2566)) {
-		if (!cm.haveItem(4032985)) {
-			if (cm.canHold(4032985)) {
+		if (!cm.haveItem(4032985, 1)) {
+			if (cm.canHold(4032985, 1)) {
 				cm.gainItem(4032985, true);
 				cm.earnTitle("You found the Ignition Device. Bring it to Cutter.");				
 			}

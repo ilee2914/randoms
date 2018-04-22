@@ -82,7 +82,7 @@ function action(mode, type, selection) {
         else if (status == 2){
             cm.dispose();
             if (beauty == 1){
-                if (cm.haveItem(5152042)){
+                if (cm.haveItem(5152042, 1)){
                     cm.gainItem(5152042, -1);
                     cm.setFace(colors[Math.floor(Math.random() * colors.length)]);
                     cm.sendOk("Enjoy your new and improved cosmetic lenses!");
@@ -91,7 +91,7 @@ function action(mode, type, selection) {
                 }
             }
             if (beauty == 2){
-                if (cm.haveItem(5152041)){
+                if (cm.haveItem(5152041, 1)){
                     cm.gainItem(5152041, -1);
                     cm.setFace(colors[selection]);
                     cm.sendOk("Enjoy your new and improved cosmetic lenses!");

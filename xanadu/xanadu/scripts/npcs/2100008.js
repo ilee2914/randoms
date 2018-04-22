@@ -47,7 +47,7 @@ function action(mode, type, selection) {
 			}
 		else if (status == 1){
 			cm.dispose();
-			if (cm.haveItem(5152030) == true){
+			if (cm.haveItem(5152030, 1) == true){
 				cm.gainItem(5152030, -1);
 				cm.setFace(facenew[selection]);
 				cm.sendOk("Enjoy your new and improved face!");

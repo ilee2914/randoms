@@ -37,7 +37,7 @@ function action(mode, type, selection) {
         else
             status--;
         if (status == 0 && mode == 1) {
-			if(cm.haveItem(2430026)) {
+			if(cm.haveItem(2430026, 1)) {
 				cm.sendYesNo("I can change your name for you if you would like?", 1);
 			} else {
 				cm.dispose();

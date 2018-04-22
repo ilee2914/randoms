@@ -139,7 +139,7 @@ function action(mode, type, selection) {
                                 if(cm.isEventLeader()) {
                                         var numpasses = eim.getPlayerCount() - 1;     // minus leader
 
-                                        if(cm.hasItem(4001008, numpasses)) {
+                                        if(cm.haveItem(4001008, numpasses)) {
                                                 cm.sendNext("You gathered up " + numpasses + " passes! Congratulations on clearing the stage! I'll make the portal that sends you to the next stage. There's a time limit on getting there, so please hurry. Best of luck to you all!");
                                                 clearStage(stage, eim, curMap);
                                                 eim.gridClear();

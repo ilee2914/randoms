@@ -44,7 +44,7 @@ function action(mode, type, selection){
 			cm.sendNextPrev("It won't be easy to tell at a glance between a calf and a cow. Those calves may only be a month or two old, but they have already grown to the size of their mother. They even look alike...even I get confused at times! Good luck!");
 		}
 		else if (status == 2){
-			if (cm.canHold(4031847)){
+			if (cm.canHold(4031847, 1)){
 				cm.gainItem(4031847, 1);
 				cm.warp(912000100, 0);
 			}

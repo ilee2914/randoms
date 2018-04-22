@@ -75,8 +75,11 @@ public:
 	int get_face();
 	void set_hair(int id);
 	int get_hair();
-	void set_map(int mapid);
+	void warp(int mapid);
+	void set_map(int mapid, int portal = 0);
 	Map *get_map();
+	Map *get_map_by_id(int id);
+	short get_player_count(int id);
 	signed char get_spawn_point();
 	int get_chair();
 	std::string get_chalk_board();
@@ -114,6 +117,7 @@ public:
 	int get_mesos();
 	void set_level(unsigned char level);
 	unsigned char get_level();
+	void reset_stats();
 	void set_job(short job);
 	short get_job();
 	void set_str(short str);
@@ -156,11 +160,9 @@ public:
 	short get_item_amount(int itemid);
 	bool give_item(int itemid, short amount);
 	void remove_item(int itemid, short amount);
-	bool have_item(int itemid);
-	bool has_item(int id, int amound);
-	bool gain_item(int, short);
+	bool has_item(int id, int amount);
+	bool gain_item(int, short);	//checks to add or remove
 	bool can_hold(int, int);
-	bool can_hold_one(int);
 	// messenger
 	signed char get_messenger_position();
 	void set_messenger_position(signed char position);
@@ -183,7 +185,11 @@ public:
 	Key &get_key(int pos);
 	// quests
 	void give_quest(int quest_id);
-	void complete_quest(int quest_id, int npc_id);
+	short get_quest_status(int quest_id);
+	bool is_quest_started(int quest_id);
+	bool is_quest_completed(int quest_id);
+	void complete_quest(int quest_id);
+	void complete_quest_id(int quest_id, int npc_id);
 	void remove_quest(int quest_id);
 	void initialize_player_quests(int quest_id, bool isCompleted, int mob_id, int amount);
 	void rewards_data(int quest_id, bool start);

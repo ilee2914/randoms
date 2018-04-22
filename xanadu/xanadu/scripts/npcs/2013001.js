@@ -98,7 +98,7 @@ function action(mode, type, selection) {
             case 920010300: //storage
                 if(eim.getIntProperty("statusStg2") != 1) {
                     if(cm.getMap().countMonsters() == 0 && cm.getMap().countItems() == 0) {
-                        if(cm.canHold(4001045)) {
+                        if(cm.canHold(4001045, 1)) {
                             cm.sendOk("Oh, I've found the 2nd Piece of Statue. Here, take it.");
                             cm.gainItem(4001045, 1);
                             eim.giveEventPlayersExp(3500);

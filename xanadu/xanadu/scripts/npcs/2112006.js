@@ -108,7 +108,7 @@ function action(mode, type, selection) {
                         } else if(status == 1) {
                                 cm.sendNext("Now, please receive this gift as an act of acceptation for our gratitude.");
                         } else if(status == 2) {
-                                if(cm.canHold(4001159)) {
+                                if(cm.canHold(4001159, 1)) {
                                         cm.gainItem(4001159, 1);
                                         
                                         if(eim.getIntProperty("normalClear") == 1) cm.warp(926100600);

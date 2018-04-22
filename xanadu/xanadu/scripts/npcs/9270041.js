@@ -53,7 +53,7 @@ function action(mode, type, selection) {
 		oldSelection = selection;
 	}else if(status == 1){
 		if(oldSelection == 0){
-			if (cm.getPlayer().getMeso() > 4999 && !cm.getPlayer().haveItem(4031731)) {
+			if (cm.getPlayer().getMeso() > 4999 && !cm.getPlayer().haveItem(4031731, 1)) {
                                 if(cm.canHold(4031731, 1)) {
                                         cm.gainMeso(-5000);
                                         cm.gainItem(4031731);

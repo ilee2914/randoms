@@ -96,7 +96,7 @@ function action(mode, type, selection) {
             if (mats instanceof Array) {
                 for (var i = 0; complete && i < mats.length; i++) {
                     if (matQty[i] * qty == 1) {
-                        complete = cm.haveItem(mats[i]);
+                        complete = cm.haveItem(mats[i], 1);
                     } else {
                         complete = cm.haveItem(mats[i], matQty[i] * qty);
                     }

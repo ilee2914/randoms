@@ -71,9 +71,9 @@ function action(mode, type, selection) {
             itemSet = (Math.floor(Math.random() * reward.length));
             prizeItem = reward[itemSet][0];
             prizeQuantity = reward[itemSet][1];
-            if (!cm.canHold(prizeItem)){
+            if (!cm.canHold(prizeItem, 1)){
                 cm.sendNext("I can't give you the reward if your equip, use, or etc. inventory is full. Please go take a look right now.");
-            } else if (cm.hasItem(requiredItem, 100)){   // check they have >= 100 in Inventory
+            } else if (cm.haveItem(requiredItem, 100)){   // check they have >= 100 in Inventory
                 cm.gainItem(requiredItem,-100);   
                 cm.gainItem(prizeItem,prizeQuantity);
                 cm.sendOk("Hmmm ... if not for this minor scratch ... sigh. I'm afraid I can only deem this a standard-quality item. Well, here's \r\n#t"+ prizeItem +"# for you.");

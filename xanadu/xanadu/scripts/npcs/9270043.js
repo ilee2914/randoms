@@ -25,11 +25,11 @@ var ids = [2000004,2020012,2000005,2030007,2022027,2040001,2041002, 2040805, 204
 var status = 0;
 
 function start() {
-    if (cm.haveItem(5451000)) {
+    if (cm.haveItem(5451000, 1)) {
         cm.gainItem(5451000, -1);
         cm.processGachapon(ids, true);
         cm.dispose();
-    } else if (cm.haveItem(5220000))
+    } else if (cm.haveItem(5220000, 1))
         cm.sendYesNo("You may use Gachapon. Would you like to use your Gachapon ticket?");
     else {
         cm.sendSimple("Welcome to the " + cm.getPlayer().getMap().getMapName() + " Gachapon. How may I help you?\r\n\r\n#L0#What is Gachapon?#l\r\n#L1#Where can you buy Gachapon tickets?#l");
@@ -37,7 +37,7 @@ function start() {
 }
 
 function action(mode, type, selection){
-    if (mode == 1 && cm.haveItem(5220000)) {
+    if (mode == 1 && cm.haveItem(5220000, 1)) {
         cm.processGachapon(ids, false);
         cm.dispose();
     } else {

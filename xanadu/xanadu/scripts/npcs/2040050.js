@@ -92,7 +92,7 @@ function action(mode, type, selection) {
 			if(!cm.haveItem(reqitem[i][0],reqitem[i][1]))
 				access = false;
 		}
-		if(access == false || !cm.canHold(makeitem) || cm.getMeso() < cost) {
+		if(access == false || !cm.canHold(makeitem, 1) || cm.getMeso() < cost) {
 			cm.sendNext("Please check and see if you have all the items needed, or if your etc. inventory is full or not");
 		} else {
 			cm.sendOk("Here, take the 5 pieces of #b#t"+makeitem+"##k. Even I have to admit, this is a masterpiece. Alright, if you need my help down the road, by all means come back and talk to me!");
