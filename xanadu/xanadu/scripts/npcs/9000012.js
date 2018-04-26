@@ -50,7 +50,7 @@ function action(mode, type, selection) {
                 cm.sendOk("You don't have enough mesos or you don't have any space in your inventory.");
                 cm.dispose();
                 } else {
-                cm.gainItem(1322005);
+                cm.gainItem(1322005, 1);
 		cm.gainMeso(-1);
                 cm.dispose();
                 }

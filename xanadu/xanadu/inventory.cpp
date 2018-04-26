@@ -308,7 +308,6 @@ bool Inventory::can_hold_helper(std::shared_ptr<Item> item) {
 	ItemData *data = ItemDataProvider::get_instance()->get_item_data(item->get_item_id());
 
 	if (!data) {
-		delete data;
 		return false;
 	}
 
@@ -316,14 +315,12 @@ bool Inventory::can_hold_helper(std::shared_ptr<Item> item) {
 
 	for (signed char i = 1; i <= slots_; ++i) {
 		if (items_.find(i) == items_.end() || !items_[i]) {
-			delete data;
 			return true;
 		} else {
 			if (items_[i]->get_item_id() == item->get_item_id()
 				&& !item->is_star()
 				&& items_[i]->get_amount() < max_per_slot) {
 				if (item->get_amount() + items_[i]->get_amount() <= max_per_slot) {
-					delete data;
 					return true;
 				} else {
 					short change = (max_per_slot - items_[i]->get_amount());
@@ -333,7 +330,6 @@ bool Inventory::can_hold_helper(std::shared_ptr<Item> item) {
 		}
 	}
 
-	delete data;
 	return false;
 
 

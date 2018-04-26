@@ -12,9 +12,8 @@
 
 void Player::give_quest(int quest_id) {
 	QuestData *data = QuestDataProvider::get_instance()->get_quest_data(quest_id);
-	if (!data) {
-		return;
-	}
+
+	
 	if (quests_in_progress_.find(quest_id) != quests_in_progress_.end()) {
 		return;
 	}
@@ -22,9 +21,24 @@ void Player::give_quest(int quest_id) {
 		return;
 	}
 
-	std::shared_ptr<Quest> quest(new Quest(quest_id, false));
+	if (!data) {
+		std::shared_ptr<Quest> quest(new Quest(quest_id, false, true));
+		quests_in_progress_[quest_id] = quest;
+		signed char mode = 1;
+		if (quest->is_completed()) {
+			mode = 2;
+		}
+		{
+			PacketCreator packet;
+			packet.UpdateQuestInfo(mode, quest.get());
+			send_packet(&packet);
+		}
+		return;
+	}
+	std::shared_ptr<Quest> quest(new Quest(quest_id, false, false));
+	
 	quests_in_progress_[quest_id] = quest;
-
+	
 	// mode values:
 	// 0 = forfeit, 1 = update, 2 = completed
 	signed char mode = 1;
@@ -52,21 +66,43 @@ bool Player::is_quest_completed(int id) {
 }
 
 short Player::get_quest_status(int quest_id) {
-	if (quests_in_progress_[quest_id]) return 1;
-	if (completed_quests_[quest_id]) return 2;
+	if (quests_in_progress_.find(quest_id) != quests_in_progress_.end()) return 1;
+	if (completed_quests_.find(quest_id) != completed_quests_.end()) return 2;
 	return 0;
 }
 
 void Player::complete_quest_id(int quest_id, int npc_id) {
 	QuestData *data = QuestDataProvider::get_instance()->get_quest_data(quest_id);
-	if (!data) {
-		return;
-	}
+
 	if (quests_in_progress_.find(quest_id) == quests_in_progress_.end()) {
 		return;
 	}
-
+	
 	std::shared_ptr<Quest> quest = quests_in_progress_[quest_id];
+	if (!data) {
+		completed_quests_[quest_id] = quest;
+		quests_in_progress_.erase(quest_id);
+		quest->set_completed();
+
+		// mode values:
+		// 0 = forfeit, 1 = update, 2 = completed
+		signed char mode = 1;
+		if (quest->is_completed()) {
+			mode = 2;
+		}
+		{
+			PacketCreator packet;
+			packet.UpdateQuestInfo(mode, quest.get());
+			send_packet(&packet);
+		}
+		{
+			PacketCreator packet;
+			packet.UpdateQuest(quest.get(), npc_id);
+			send_packet(&packet);
+		}
+		return;
+	}
+
 	// check if the monster requirements to complete the quest are met
 	auto killed_monsters = quest->get_killed_mobs2();
 	auto required_monsters = data->get_required_mobs();
@@ -134,8 +170,8 @@ void Player::remove_quest(int quest_id) {
 	quests_in_progress_.erase(quest_id);
 }
 
-void Player::initialize_player_quests(int quest_id, bool is_completed, int mob_id, int amount) {
-	std::shared_ptr<Quest> quest(new Quest(quest_id, is_completed));
+void Player::initialize_player_quests(int quest_id, bool is_completed, bool is_custom, int mob_id, int amount) {
+	std::shared_ptr<Quest> quest(new Quest(quest_id, is_completed, is_custom));
 	if (is_completed) {
 		completed_quests_[quest_id] = quest;
 	} else {

@@ -728,6 +728,15 @@ void Player::handle_use_chat() {
 			}
 		}
 
+		else if (command == "quest") {
+			std::cout << get_quests_in_progress()->size() << std::endl;
+			std::cout << get_completed_quests()->size() << std::endl;
+		}
+
+		else if (command == "save") {
+			save();
+		}
+
 	} else {
 		{
 			PacketCreator packet;

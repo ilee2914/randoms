@@ -169,7 +169,7 @@ function action(mode, type, selection) {
 			var itemid = 4001325;
 			if (cm.getPlayer().getLevel() >= 60) itemid = 4001325;
 			if (cm.canHold(itemid, 1)) {
-				cm.gainItem(itemid);
+				cm.gainItem(itemid, 1);
 				cm.warp(926010000);
 			} else 
 				cm.showInfoText("You must have at least 1 empty slot in your Etc window to receive the reward.");

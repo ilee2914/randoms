@@ -56,7 +56,7 @@ function action(mode, type, selection) {
 			if (cm.getPlayer().getMeso() > 4999 && !cm.getPlayer().haveItem(4031731, 1)) {
                                 if(cm.canHold(4031731, 1)) {
                                         cm.gainMeso(-5000);
-                                        cm.gainItem(4031731);
+                                        cm.gainItem(4031731, 1);
                                         cm.sendOk("Thank you for choosing Wizet Airline! Enjoy your flight!");
                                         cm.dispose();
                                 }

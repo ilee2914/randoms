@@ -160,6 +160,7 @@ public:
 	short get_item_amount(int itemid);
 	bool give_item(int itemid, short amount);
 	void remove_item(int itemid, short amount);
+	void remove_all(int itemid);
 	bool has_item(int id, int amount);
 	bool gain_item(int, short);	//checks to add or remove
 	bool can_hold(int, int);
@@ -191,7 +192,7 @@ public:
 	void complete_quest(int quest_id);
 	void complete_quest_id(int quest_id, int npc_id);
 	void remove_quest(int quest_id);
-	void initialize_player_quests(int quest_id, bool isCompleted, int mob_id, int amount);
+	void initialize_player_quests(int quest_id, bool is_completed, bool is_custom, int mob_id, int amount);
 	void rewards_data(int quest_id, bool start);
 	std::unordered_map<int, std::shared_ptr<Quest>> *get_quests_in_progress();
 	std::unordered_map<int, std::shared_ptr<Quest>> *get_completed_quests();

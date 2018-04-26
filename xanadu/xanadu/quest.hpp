@@ -5,12 +5,11 @@
 #include <string>
 #include <unordered_map>
 
-class Quest
-{
+class Quest {
 public:
 
 	// constructor
-	Quest(int id, bool completed);
+	Quest(int id, bool completed, bool custom);
 
 	// default constructor
 	Quest() = delete;
@@ -33,6 +32,7 @@ public:
 	bool add_killed_mob(int id, int amount);
 	void set_completed();
 	bool is_completed();
+	bool is_custom();
 	int get_id();
 	long long get_completion_time();
 	std::string get_killed_mobs1();
@@ -42,5 +42,6 @@ private:
 
 	bool completed_;
 	int id_;
+	bool custom_;
 	std::unordered_map<int, int> killed_mobs_;
 };

@@ -47,7 +47,6 @@ void Player::handle_npc_chat() {
 	int type = read<signed char>();		//type
 	int what = read<signed char>();		//mode
 	std::cout << (int)what << " " << (int)type << " " << npc_->selected_ << std::endl;
-
 	switch (type) {
 	case 0:
 	case 1: // Yes/No
@@ -82,9 +81,6 @@ void Player::handle_npc_chat() {
 			return;
 		}
 		break;
-	default:
-		npc_->set_state(1000);
-		return;
 	}
 	send_npc(what, type, npc_->selected_);
 }

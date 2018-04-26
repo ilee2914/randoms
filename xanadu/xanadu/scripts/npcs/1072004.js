@@ -53,7 +53,7 @@ function action(mode, type, selection) {
                         cm.removeAll(4031013);
                         cm.completeQuest(100004);
                         cm.startQuest(100005);
-                        cm.gainItem(4031012);
+                        cm.gainItem(4031012, 1);
                     }
                     
                     cm.warp(102020300, 2);

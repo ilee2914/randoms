@@ -248,7 +248,11 @@ Player::~Player() {
 }
 
 void Player::send_packet(PacketCreator *packet) {
-	session_->send_packet(packet);
+	try {
+		session_->send_packet(packet);
+	} catch (std::exception& x) {
+		std::cout << x.what() << std::endl;
+	}
 }
 
 void Player::disconnect() {
@@ -368,9 +372,11 @@ void Player::handle_packet_in_game() {
 			handle_buddy_list_action();
 			break;
 		case receive_headers::kHANDLE_NPC:
+			std::cout << "a" << std::endl;
 			handle_request_npc();
 			break;
 		case receive_headers::kNPC_CHAT:
+			std::cout << "b" << std::endl;
 			handle_npc_chat();
 			break;
 		case receive_headers::kNPC_SHOP:
@@ -1072,14 +1078,15 @@ void Player::player_connect() {
 		for (; cols > 0; --cols) {
 			int quest_id = rs["quest_id"];
 			bool is_completed = (rs["is_complete"] == 1);
+			bool is_custom = rs["is_custom"];
 			int mob_id = rs["killed_mob"];
 			int amount = rs["amount"];
 
 			QuestData *data = QuestDataProvider::get_instance()->get_quest_data(quest_id);
 
-			if (data) {
-				initialize_player_quests(quest_id, is_completed, mob_id, amount);
-			}
+			
+			initialize_player_quests(quest_id, is_completed, is_custom, mob_id, amount);
+			
 
 			rs.moveNext();
 		}
@@ -1913,6 +1920,11 @@ void Player::remove_item(int item_id, short amount) {
 	}
 }
 
+void Player::remove_all(int item_id) {
+	Inventory *inventory = get_inventory(tools::get_inventory_id_from_item_id(item_id));
+	inventory->remove_item(item_id, 32646);
+}
+
 void Player::save_account() {
 	World *world = World::get_instance();
 	Poco::Data::Session &mysql_session = world->get_mysql_session();
@@ -2149,13 +2161,16 @@ void Player::save_quests() {
 	bool firstrun = true;
 	for (auto &it : completed_quests_) {
 		Quest *quest = it.second.get();
-		if (firstrun) {
-			statement2 << "INSERT INTO quests (player_id, quest_id, is_complete) VALUES";
-			firstrun = false;
-		} else {
-			statement2 << ",";
+		if (quest) {
+			if (firstrun) {
+				statement2 << "INSERT INTO quests (player_id, quest_id, is_complete, is_custom) VALUES";
+				firstrun = false;
+			} else {
+				statement2 << ",";
+			}
+		
+			statement2 << "(" << id_ << ", " << quest->get_id() << ", 1, " << quest->is_custom() << ")";
 		}
-		statement2 << "(" << id_ << ", " << quest->get_id() << ", 1" << ")";
 	}
 	if (!firstrun) {
 		statement2.execute();
@@ -2166,19 +2181,19 @@ void Player::save_quests() {
 		Quest *quest = it.second.get();
 		if (quest) {
 			if (firstrun) {
-				statement3 << "INSERT INTO quests (player_id, quest_id, is_complete, killed_mob, amount) VALUES";
+				statement3 << "INSERT INTO quests (player_id, quest_id, is_complete, is_custom, killed_mob, amount) VALUES";
 				firstrun = false;
 			} else {
 				statement3 << ",";
 			}
 			auto killed_mobs = quest->get_killed_mobs2();
 			if (killed_mobs->size() == 0) {
-				statement3 << "(" << id_ << ", " << quest->get_id() << ", 0, 0, 0)";
+				statement3 << "(" << id_ << ", " << quest->get_id() << ", 0, " << quest->is_custom() << ", 0, 0)";
 			}
 			for (auto &it2 : *killed_mobs) {
 				int mob_id = it2.first;
 				int count = it2.second;
-				statement3 << "(" << id_ << ", " << quest->get_id() << ", 0, " << mob_id << ", " << count << ")";
+				statement3 << "(" << id_ << ", " << quest->get_id() << ", 0, " << quest->is_custom() << ", " << mob_id << ", " << count << ")";
 				break; // todo: allow entering multiple killed mobs
 			}
 		}
@@ -2770,6 +2785,6 @@ void Player::disposeChat() {
 }
 
 void Player::dispose() {
-	duk_destroy_heap(ctx);
+	//duk_destroy_heap(ctx);
 	endChat = false;
 }

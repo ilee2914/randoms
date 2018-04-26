@@ -107,8 +107,8 @@ function action(mode, type, selection) {
                 cm.sendSimple("Alright, when you have made your decision, click on [I'll choose my occupation] at the bottom.#b\r\n#L0#Please explain to me what being the Assassin is all about.\r\n#L1#Please explain to me what being the Bandit is all about.\r\n#L3#I'll choose my occupation!");
             else {
                 cm.sendNext("Good decision. You look strong, but I need to see if you really are strong enough to pass the test, it's not a difficult test, so you'll do just fine. Here, take my letter first... make sure you don't lose it!");
-		if(!cm.isQuestStarted(100009)) cm.startQuest(100009);
-	    }
+			if(!cm.isQuestStarted(100009)) cm.startQuest(100009);
+			}
         } else if (status == 1){
             if (!cm.haveItem(4031012, 1)){
                 if (cm.canHold(4031011, 1)){

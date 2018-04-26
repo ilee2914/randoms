@@ -29,8 +29,10 @@ const int as_ETC = kInventoryConstantsTypesEtc;
 const int as_CASH = kInventoryConstantsTypesCash;
 
 void Player::npc_script_handler(int mode, int type, int selection) {
-	// Handles file loading
-	if (!ctx || mode + type + selection == -1) {
+	if (mode == 0 && type > 0) {
+		return;
+	}
+	if (!ctx || mode == 0) {
 		duk_destroy_heap(ctx);
 		int npc_id = npc_->id_;
 
@@ -97,9 +99,11 @@ void Player::npc_script_handler(int mode, int type, int selection) {
 		dukglue_register_method(ctx, &Player::get_item_amount, "itemQuantity");
 		dukglue_register_method(ctx, &Player::gain_item, "gainItem");			//one
 		dukglue_register_method(ctx, &Player::has_item, "haveItem");
+		dukglue_register_method(ctx, &Player::remove_all, "removeAll");
 		dukglue_register_method(ctx, &Player::can_hold, "canHold");
 
 		dukglue_register_method(ctx, &Player::give_quest, "startQuest");
+		dukglue_register_method(ctx, &Player::give_quest, "forceStartQuest");
 		dukglue_register_method(ctx, &Player::is_quest_started, "isQuestStarted");
 		dukglue_register_method(ctx, &Player::is_quest_completed, "isQuestCompleted");
 		dukglue_register_method(ctx, &Player::get_quest_status, "getQuestStatus");

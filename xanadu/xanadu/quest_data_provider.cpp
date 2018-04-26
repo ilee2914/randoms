@@ -11,25 +11,21 @@
 
 QuestDataProvider *QuestDataProvider::singleton_ = nullptr;
 
-QuestDataProvider *QuestDataProvider::get_instance()
-{
-	if (!singleton_)
-	{
+QuestDataProvider *QuestDataProvider::get_instance() {
+	if (!singleton_) {
 		singleton_ = new QuestDataProvider();
 	}
 
 	return singleton_;
 }
 
-void QuestDataProvider::load_data()
-{
+void QuestDataProvider::load_data() {
 	// Quest.wz
 
 	WZMain *wz_reader = World::get_instance()->wz_reader_;
 	WZNode node1 = wz_reader->base_["Quest"]["QuestInfo"];
 
-	for (auto it1 : node1)
-	{
+	for (auto it1 : node1) {
 		std::string valuename1 = it1.name();
 		int quest_id = std::stoi(valuename1);
 		QuestData *quest = new QuestData(quest_id);
@@ -40,36 +36,30 @@ void QuestDataProvider::load_data()
 
 	WZNode node2 = wz_reader->base_["Quest"]["Act"];
 
-	for (auto it2 : node2)
-	{
+	for (auto it2 : node2) {
 		std::string valuename1 = it2.name();
 		int quest_id = std::stoi(valuename1);
 		QuestData *quest = quests_[quest_id];
 
-		if (!quest)
-		{
+		if (!quest) {
 			quest = new QuestData(quest_id);
 			quests_[quest_id] = quest;
 		}
 
 		WZNode node31 = wz_reader->base_["Quest"]["Act"][valuename1.c_str()];
 
-		for (auto it4 : node31)
-		{
+		for (auto it4 : node31) {
 			std::string valuename2 = it4.name();
 
 			WZNode node32 = wz_reader->base_["Quest"]["Act"][valuename1.c_str()][valuename2.c_str()];
 
-			for (auto it5 : node32)
-			{
+			for (auto it5 : node32) {
 				std::string valuename3 = it5.name();
 
-				if (valuename3 == "item")
-				{
+				if (valuename3 == "item") {
 					WZNode node33 = wz_reader->base_["Quest"]["Act"][valuename1.c_str()][valuename2.c_str()]["item"];
 
-					for (auto it6 : node33)
-					{
+					for (auto it6 : node33) {
 						std::string valuename4 = it6.name();
 
 						QuestRewardData *rew = new QuestRewardData();
@@ -84,33 +74,28 @@ void QuestDataProvider::load_data()
 
 						WZNode node34 = wz_reader->base_["Quest"]["Act"][valuename1.c_str()][valuename2.c_str()]["item"][valuename4.c_str()];
 
-						for (auto it7 : node34)
-						{
+						for (auto it7 : node34) {
 
 							std::string valuename5 = it7.name();
 
-							if (valuename5 == "id")
-							{
+							if (valuename5 == "id") {
 								rew->id = it7.get_int_value();
 							}
 
-							if (valuename5 == "count")
-							{
+							if (valuename5 == "count") {
 								rew->count = it7.get_int_value();
 							}
 
-							if (rew->id != 0 && rew->count != 0)
-							{
+							if (rew->id != 0 && rew->count != 0) {
 								rew->item = true;
 							}
 						}
-						
+
 						quest->add_reward(rew);
 					}
 				}
 
-				else if (valuename3 == "exp")
-				{
+				else if (valuename3 == "exp") {
 					QuestRewardData *rew = new QuestRewardData();
 
 					rew->start = false;
@@ -127,8 +112,7 @@ void QuestDataProvider::load_data()
 					quest->add_reward(rew);
 				}
 
-				else if (valuename3 == "money")
-				{
+				else if (valuename3 == "money") {
 					QuestRewardData *rew = new QuestRewardData();
 
 					rew->start = false;
@@ -145,8 +129,7 @@ void QuestDataProvider::load_data()
 					quest->add_reward(rew);
 				}
 
-				else if (valuename3 == "pop")
-				{
+				else if (valuename3 == "pop") {
 					QuestRewardData *rew = new QuestRewardData();
 
 					rew->start = false;
@@ -172,40 +155,34 @@ void QuestDataProvider::load_data()
 				rew->start = start;
 			}*/
 
-	// Check.img / Requests
+			// Check.img / Requests
 
 	WZNode node3 = wz_reader->base_["Quest"]["Check"];
 
-	for (auto it3 : node3)
-	{
+	for (auto it3 : node3) {
 		std::string valuename1 = it3.name();
 		int quest_id = std::stoi(valuename1);
 		QuestData *quest = quests_[quest_id];
 
-		if (!quest)
-		{
+		if (!quest) {
 			quest = new QuestData(quest_id);
 			quests_[quest_id] = quest;
 		}
 
 		WZNode node31 = wz_reader->base_["Quest"]["Check"][valuename1.c_str()];
 
-		for (auto it4 : node31)
-		{
+		for (auto it4 : node31) {
 			std::string valuename2 = it4.name();
 
 			WZNode node32 = wz_reader->base_["Quest"]["Check"][valuename1.c_str()][valuename2.c_str()];
 
-			for (auto it5 : node32)
-			{
+			for (auto it5 : node32) {
 				std::string valuename3 = it5.name();
 
-				if (valuename3 == "item")
-				{
+				if (valuename3 == "item") {
 					WZNode node33 = wz_reader->base_["Quest"]["Check"][valuename1.c_str()][valuename2.c_str()]["item"];
 
-					for (auto it6 : node33)
-					{
+					for (auto it6 : node33) {
 						std::string valuename4 = it6.name();
 
 						WZNode node34 = wz_reader->base_["Quest"]["Check"][valuename1.c_str()][valuename2.c_str()]["item"][valuename4.c_str()];
@@ -213,34 +190,28 @@ void QuestDataProvider::load_data()
 						int object_id = 0;
 						int amount = 0;
 
-						for (auto it7 : node34)
-						{
+						for (auto it7 : node34) {
 							std::string valuename5 = it7.name();
 
-							if (valuename5 == "id")
-							{
+							if (valuename5 == "id") {
 								object_id = it7.get_int_value();
 							}
 
-							if (valuename5 == "count")
-							{
+							if (valuename5 == "count") {
 								amount = it7.get_int_value();
 							}
 						}
 
-						if (object_id != 0 && amount != 0)
-						{
+						if (object_id != 0 && amount != 0) {
 							quest->add_item_requirement(object_id, amount);
 						}
 					}
 				}
 
-				else if (valuename3 == "mob")
-				{
+				else if (valuename3 == "mob") {
 					WZNode node33 = wz_reader->base_["Quest"]["Check"][valuename1.c_str()][valuename2.c_str()]["mob"];
 
-					for (auto it6 : node33)
-					{
+					for (auto it6 : node33) {
 						std::string valuename4 = it6.name();
 
 						WZNode node34 = wz_reader->base_["Quest"]["Check"][valuename1.c_str()][valuename2.c_str()]["mob"][valuename4.c_str()];
@@ -248,23 +219,19 @@ void QuestDataProvider::load_data()
 						int object_id = 0;
 						int amount = 0;
 
-						for (auto it7 : node34)
-						{
+						for (auto it7 : node34) {
 							std::string valuename5 = it7.name();
 
-							if (valuename5 == "id")
-							{
+							if (valuename5 == "id") {
 								object_id = it7.get_int_value();
 							}
 
-							if (valuename5 == "count")
-							{
+							if (valuename5 == "count") {
 								amount = it7.get_int_value();
 							}
 						}
 
-						if (object_id != 0 && amount != 0)
-						{
+						if (object_id != 0 && amount != 0) {
 							quest->add_monster_requirement(object_id, amount);
 						}
 					}
@@ -274,17 +241,15 @@ void QuestDataProvider::load_data()
 	}
 }
 
-QuestData *QuestDataProvider::get_quest_data(int quest_id)
-{
-	if (quests_.find(quest_id) == quests_.end())
-	{
+QuestData *QuestDataProvider::get_quest_data(int quest_id) {
+	if (quests_.find(quest_id) == quests_.end()) {
+		std::cout << "quest data for " << quest_id << " doesnt exist" << std::endl;
 		return nullptr;
 	}
 
 	return quests_[quest_id];
 }
 
-std::unordered_map<int, QuestData *> *QuestDataProvider::get_data()
-{
+std::unordered_map<int, QuestData *> *QuestDataProvider::get_data() {
 	return &quests_;
 }

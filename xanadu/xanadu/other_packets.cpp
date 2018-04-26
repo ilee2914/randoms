@@ -48,8 +48,7 @@
 // 6 = increase guild points
 // 9 = System Message
 
-void PacketCreator::GainItem(int itemid, short amount)
-{
+void PacketCreator::GainItem(int itemid, short amount) {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
 	write<signed char>(0); // mode: 0 = drop pickup, 1 = quest message, 3 = increase exp, 4 = increase fame, 5 = increase mesos, there are also much other types
 	write<signed char>(0); // mode2 for drop pickup: -1 = can't pickup, 0 = item, 1 = mesos
@@ -57,8 +56,7 @@ void PacketCreator::GainItem(int itemid, short amount)
 	write<int>(amount);
 }
 
-void PacketCreator::GainMesos(int amount)
-{
+void PacketCreator::GainMesos(int amount) {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
 	write<signed char>(0); // mode: 0 = drop pickup, 1 = quest message, 3 = increase exp, 4 = increase fame, 5 = increase mesos, there are also much other types
 	write<signed char>(1); // mode2 for drop pickup: -1 = can't pickup, 0 = item, 1 = mesos
@@ -72,22 +70,19 @@ void PacketCreator::GainMesos(int amount)
 * 0xFF = "You can't get anymore items."
 * 0xFE = "This item is unavailable for the pick-up."
 */
-void PacketCreator::CantGetAnymoreItems()
-{
+void PacketCreator::CantGetAnymoreItems() {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
 	write<signed char>(0); // mode: 0 = drop pickup, 1 = quest message, 3 = increase exp, 4 = increase fame, 5 = increase mesos, there are also much other types
 	write<unsigned char>(0xFF); // mode2 for drop pickup: -1 = can't pickup, 0 = item, 1 = mesos
 }
 
-void PacketCreator::UpdateQuestInfo(signed char mode, Quest *quest)
-{
+void PacketCreator::UpdateQuestInfo(signed char mode, Quest *quest) {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
 	write<signed char>(1); // mode: 0 = drop pickup, 1 = quest message, 3 = increase exp, 4 = increase fame, 5 = increase mesos, there are also much other types
 	write<short>(quest->get_id());
 	write<signed char>(mode); // 0 = forfeit, 1 = update, 2 = completed
 
-	switch (mode)
-	{
+	switch (mode) {
 	case 0:
 		write<signed char>(0);
 		break;
@@ -100,8 +95,7 @@ void PacketCreator::UpdateQuestInfo(signed char mode, Quest *quest)
 	}
 }
 
-void PacketCreator::GainExp(int exp, bool in_chat, bool white, int party_bonus)
-{
+void PacketCreator::GainExp(int exp, bool in_chat, bool white, int party_bonus) {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
 	write<signed char>(3); // mode: 0 = drop pickup, 1 = quest message, 3 = increase exp, 4 = increase fame, 5 = increase mesos, there are also much other types
 	write<bool>(white); // white or yellow
@@ -111,8 +105,7 @@ void PacketCreator::GainExp(int exp, bool in_chat, bool white, int party_bonus)
 	write<signed char>(0);
 	write<signed char>(0);
 	write<int>(0); // Bonus Wedding EXP (+value)
-	if (in_chat)
-	{
+	if (in_chat) {
 		write<signed char>(0);
 	}
 	write<signed char>(0); // 0 = enable Bonus EXP for PARTY (+value), 1 = enable Bonus Event Party EXP (+value) x0
@@ -122,22 +115,19 @@ void PacketCreator::GainExp(int exp, bool in_chat, bool white, int party_bonus)
 	write<int>(0); // Rainbow Week Bonus EXP (+value)
 }
 
-void PacketCreator::FameGainChat(int amount)
-{
+void PacketCreator::FameGainChat(int amount) {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
 	write<signed char>(4); // mode: 0 = drop pickup, 1 = quest message, 3 = increase exp, 4 = increase fame, 5 = increase mesos, there are also much other types
 	write<int>(amount);
 }
 
-void PacketCreator::MesosGainChat(int amount)
-{
+void PacketCreator::MesosGainChat(int amount) {
 	write<short>(send_headers::kSHOW_STATUS_INFO);
 	write<signed char>(5); // mode: 0 = drop pickup, 1 = quest message, 3 = increase exp, 4 = increase fame, 5 = increase mesos, there are also much other types
 	write<int>(amount);
 }
 
-void PacketCreator::ShowAvatarMega(Player *player, unsigned char ear, int item_id, std::string message, std::string message2, std::string message3, std::string message4)
-{
+void PacketCreator::ShowAvatarMega(Player *player, unsigned char ear, int item_id, std::string message, std::string message2, std::string message3, std::string message4) {
 	write<short>(send_headers::kSHOW_AVATAR_MEGA);
 	write<int>(item_id);
 	write<std::string>(player->get_name());
@@ -150,23 +140,20 @@ void PacketCreator::ShowAvatarMega(Player *player, unsigned char ear, int item_i
 	AddCharLook(player, true);
 }
 
-void PacketCreator::HandleCloseChalkboard(int player_id)
-{
+void PacketCreator::HandleCloseChalkboard(int player_id) {
 	write<short>(send_headers::kCHALKBOARD);
 	write<int>(player_id);
 	write<signed char>(0); // mode: 0 = close, 1 = create
 }
 
-void PacketCreator::UseChalkBoard(int player_id, const std::string &message)
-{
+void PacketCreator::UseChalkBoard(int player_id, const std::string &message) {
 	write<short>(send_headers::kCHALKBOARD);
 	write<int>(player_id);
 	write<signed char>(1); // mode: 0 = close, 1 = create
 	write<std::string>(message);
 }
 
-void PacketCreator::UseScroll(int player_id, bool success, bool cursed, bool legendary_spirit)
-{
+void PacketCreator::UseScroll(int player_id, bool success, bool cursed, bool legendary_spirit) {
 	write<short>(send_headers::kSHOW_SCROLL_EFFECT);
 	write<int>(player_id);
 	write<signed char>(success ? 1 : 0);
@@ -175,34 +162,29 @@ void PacketCreator::UseScroll(int player_id, bool success, bool cursed, bool leg
 	write<signed char>(0);
 }
 
-void PacketCreator::UseItemEffect(int player_id, int item_id)
-{
+void PacketCreator::UseItemEffect(int player_id, int item_id) {
 	write<short>(send_headers::kSHOW_ITEM_EFFECT);
 	write<int>(player_id);
 	write<int>(item_id);
 }
 
-void PacketCreator::ShowChair(int player_id, int item_id)
-{
+void PacketCreator::ShowChair(int player_id, int item_id) {
 	write<short>(send_headers::kSHOW_CHAIR);
 	write<int>(player_id);
 	write<int>(item_id);
 }
 
-void PacketCreator::CancelChair()
-{
+void PacketCreator::CancelChair() {
 	write<short>(send_headers::kCANCEL_CHAIR);
 	write<signed char>(0);
 }
 
-void PacketCreator::HiredMerchantBox()
-{
+void PacketCreator::HiredMerchantBox() {
 	write<short>(send_headers::kREQUEST_HIRED_MERCHANT);
 	write<signed char>(7); // action
 }
 
-void PacketCreator::ShowPlayer(Player *player)
-{
+void PacketCreator::ShowPlayer(Player *player) {
 	write<short>(send_headers::kSPAWN_PLAYER);
 	write<int>(player->get_id());
 	write<unsigned char>(player->get_level());
@@ -212,16 +194,13 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	Guild *guild = player->get_guild();
 
-	if (guild)
-	{
+	if (guild) {
 		write<std::string>(guild->get_name());
 		write<short>(guild->get_logo_background());
 		write<signed char>(guild->get_logo_background_color());
 		write<short>(guild->get_logo());
 		write<signed char>(guild->get_logo_color());
-	}
-	else
-	{
+	} else {
 		write<std::string>("");
 		write<short>(0);
 		write<signed char>(0);
@@ -237,22 +216,19 @@ void PacketCreator::ShowPlayer(Player *player)
 	long long buff_mask_pos_2 = 0;
 	signed char buff_value = 0;
 
-	if (player->is_buff_stat_active(buffstat_constants::kCombo))
-	{
+	if (player->is_buff_stat_active(buffstat_constants::kCombo)) {
 		buff_mask_pos_2 |= buffstat_constants::kCombo;
 		buff_value = player->get_crusader_combo_value();
 	}
 
-	if (player->is_buff_stat_active(buffstat_constants::kShadowPartner))
-	{
+	if (player->is_buff_stat_active(buffstat_constants::kShadowPartner)) {
 		int skill_id = 4111002;
 		// 4211008
 		// 14111000
 		buff_mask_pos_2 |= buffstat_constants::kShadowPartner;
 	}
 
-	if (player->is_buff_stat_active(buffstat_constants::kDarksight))
-	{
+	if (player->is_buff_stat_active(buffstat_constants::kDarksight)) {
 		buff_mask_pos_2 |= buffstat_constants::kDarksight;
 	}
 
@@ -273,8 +249,7 @@ void PacketCreator::ShowPlayer(Player *player)
 	// not sure atm if multiple or all are sent
 	// or masked then
 
-	if (buff_value != 0)
-	{
+	if (buff_value != 0) {
 		write<signed char>(buff_value);
 
 		// morph has another byte?
@@ -310,13 +285,10 @@ void PacketCreator::ShowPlayer(Player *player)
 	write<short>(0); // dynamic
 
 					 // 4. (index 3) is ridevehicle = mount info
-	if (player->get_mount_item_id() != 0)
-	{
+	if (player->get_mount_item_id() != 0) {
 		write<int>(player->get_mount_item_id());
 		write<int>(player->get_mount_skill_id());
-	}
-	else
-	{
+	} else {
 		write<int>(0);
 		write<int>(0);
 	}
@@ -365,15 +337,13 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	// pet info
 
-	enum
-	{
+	enum {
 		kEndPetInfo = 0,
 		kStartPetInfo = 1
 	};
 
 	auto pets = player->get_pets();
-	for (auto &pet : *pets)
-	{
+	for (auto &pet : *pets) {
 		write<signed char>(kStartPetInfo);
 		write<int>(pet->get_item_id());
 		write<std::string>(pet->get_name());
@@ -400,8 +370,7 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	write<bool>(has_minigame); // bool or miniroomtype?
 
-	if (has_minigame)
-	{
+	if (has_minigame) {
 		write<int>(0); // map object id
 		write<std::string>("hello"); // description text
 		write<signed char>(0); // specific if game if private?
@@ -420,8 +389,7 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	write<bool>(has_chalkboard);
 
-	if (has_chalkboard)
-	{
+	if (has_chalkboard) {
 		write<std::string>(chalkboard_text);
 	}
 
@@ -433,8 +401,7 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	write<bool>(has_couple_ring); // couple ring
 
-	if (has_couple_ring)
-	{
+	if (has_couple_ring) {
 		// to-do write couple ring data
 		// structure:
 		// 8 bytes long long - ring id
@@ -446,8 +413,7 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	write<bool>(has_friendship_ring); // friendship ring
 
-	if (has_friendship_ring)
-	{
+	if (has_friendship_ring) {
 		// to-do write friendship ring data
 		// structure:
 		// 8 bytes long long - ring id
@@ -459,8 +425,7 @@ void PacketCreator::ShowPlayer(Player *player)
 
 	write<bool>(has_marriage_ring); // marriage ring
 
-	if (has_marriage_ring)
-	{
+	if (has_marriage_ring) {
 		// to-do write marriage ring data
 		// structure:
 		// 4 bytes int - character id
@@ -473,22 +438,20 @@ void PacketCreator::ShowPlayer(Player *player)
 	bool has_new_year_info = false;
 	write<bool>(has_new_year_info);
 
-	if (has_new_year_info)
-	{
+	if (has_new_year_info) {
 		// to-do write new year info data
 		// structure:
 		// 4 bytes int - amount/size
 		// loop based on amount/size determined in the 4 bytes before, with the following data:
 		// 4 bytes int - SN 
 	}
-	
+
 	write<signed char>(0); // berserk skill darkforce effect - 1 or 0 probably (skillid: 1320006, job: dark knight - which is an explorer and warrior)
 	write<signed char>(0);
 	write<signed char>(0); // carnival party quest team for some fields maybe?
 }
 
-void PacketCreator::RemovePlayer(Player *player)
-{
+void PacketCreator::RemovePlayer(Player *player) {
 	write<short>(send_headers::kREMOVE_PLAYER_FROM_MAP);
 	write<int>(player->get_id());
 }
@@ -514,15 +477,13 @@ void PacketCreator::tremble_map_effect(signed char type, int delay)
 // except for 5 (boss hp), they follow the same structure
 // name specifies the effect to be shown
 
-void PacketCreator::MapEffect(signed char mode, std::string name)
-{
+void PacketCreator::MapEffect(signed char mode, std::string name) {
 	write<short>(send_headers::kMAP_EFFECT);
 	write<signed char>(mode);
 	write<std::string>(name);
 }
 
-void PacketCreator::ShowBossHp(int mob_id, int hp, int max_hp, signed char color, signed char background_color)
-{
+void PacketCreator::ShowBossHp(int mob_id, int hp, int max_hp, signed char color, signed char background_color) {
 	write<short>(send_headers::kMAP_EFFECT);
 	write<signed char>(5); // mode that specifies the type of effect: 2 = object, 3 = effect, 4 = sound, 5 = boss hp, 6 = map music
 	write<int>(mob_id);
@@ -532,17 +493,14 @@ void PacketCreator::ShowBossHp(int mob_id, int hp, int max_hp, signed char color
 	write<signed char>(background_color);
 }
 
-void PacketCreator::ShowTimer(int seconds)
-{
+void PacketCreator::ShowTimer(int seconds) {
 	write<short>(send_headers::kCLOCK);
 	write<signed char>(2);
 	write<int>(seconds);
 }
 
-void PacketCreator::PlayerAttack(signed char attack_type, PlayerAttackInfo &attack)
-{
-	switch (attack_type)
-	{
+void PacketCreator::PlayerAttack(signed char attack_type, PlayerAttackInfo &attack) {
+	switch (attack_type) {
 	case attack_type_constants::kCloseRange:
 		write<short>(send_headers::kCLOSE_RANGE_ATTACK);
 		break;
@@ -562,8 +520,7 @@ void PacketCreator::PlayerAttack(signed char attack_type, PlayerAttackInfo &atta
 	write<signed char>(0x5B); // player level
 	write<signed char>(attack.skill_level_);
 
-	if (attack.skill_id_ > 0)
-	{
+	if (attack.skill_id_ > 0) {
 		write<int>(attack.skill_id_);
 	}
 
@@ -574,8 +531,7 @@ void PacketCreator::PlayerAttack(signed char attack_type, PlayerAttackInfo &atta
 	write<signed char>(10); // mastery
 	write<int>(attack.item_id_);
 
-	for (auto &it : attack.damages_)
-	{
+	for (auto &it : attack.damages_) {
 		int mob_object_id = it.first;
 
 		write<int>(mob_object_id);
@@ -583,32 +539,27 @@ void PacketCreator::PlayerAttack(signed char attack_type, PlayerAttackInfo &atta
 
 		auto &damage = attack.damages_[mob_object_id];
 
-		for (auto &damage : damage)
-		{
+		for (auto &damage : damage) {
 			write<int>(damage);
 		}
 	}
 
-	if (attack_type == attack_type_constants::kMagic)
-	{
+	if (attack_type == attack_type_constants::kMagic) {
 		// mage Big Bang skills
 		if (attack.skill_id_ == 2121001 ||
 			attack.skill_id_ == 2221001 ||
-			attack.skill_id_ == 2321001)
-		{
+			attack.skill_id_ == 2321001) {
 			write<int>(attack.charge_);
 		}
 	}
 
-	if (attack_type == attack_type_constants::kRanged)
-	{
+	if (attack_type == attack_type_constants::kRanged) {
 		write<short>(0); // x position - of item used?
 		write<short>(0); // y position - of item used?
 	}
 }
 
-void PacketCreator::UpdateQuest(Quest *quest, int npc_id)
-{
+void PacketCreator::UpdateQuest(Quest *quest, int npc_id) {
 	write<short>(send_headers::kUPDATE_QUEST_INFO);
 	write<signed char>(10);
 	write<short>(quest->get_id());
@@ -617,8 +568,7 @@ void PacketCreator::UpdateQuest(Quest *quest, int npc_id)
 	write<signed char>(0);
 }
 
-void PacketCreator::AddCharStats(Player *player)
-{
+void PacketCreator::AddCharStats(Player *player) {
 	write<int>(player->get_id());
 	write_string(player->get_name(), 13);
 	write<signed char>(player->get_gender());
@@ -648,8 +598,7 @@ void PacketCreator::AddCharStats(Player *player)
 	write<int>(0); // Playtime
 }
 
-void PacketCreator::writeCharacterData(Player *player)
-{
+void PacketCreator::writeCharacterData(Player *player) {
 	write<long long>(-1);
 	write<signed char>(0);
 	AddCharStats(player);
@@ -658,8 +607,7 @@ void PacketCreator::writeCharacterData(Player *player)
 	bool has_linked_name = false;
 	write<bool>(has_linked_name);
 
-	if (has_linked_name)
-	{
+	if (has_linked_name) {
 		write<std::string>(""); // linked name
 	}
 
@@ -722,8 +670,7 @@ void PacketCreator::writeCharacterData(Player *player)
 	write<short>(0);
 }
 
-void PacketCreator::AddInventoryInfo(Player *player)
-{
+void PacketCreator::AddInventoryInfo(Player *player) {
 	write<int>(player->get_mesos());
 	write<signed char>(player->get_equip_slots());
 	write<signed char>(player->get_use_slots());
@@ -732,20 +679,17 @@ void PacketCreator::AddInventoryInfo(Player *player)
 	write<signed char>(player->get_cash_slots());
 	write<long long>(kZeroTime);
 
-	enum Constants
-	{
+	enum Constants {
 		kEndInventory
 	};
 
 	// equipped Inventory (no cash)
 	auto items = player->get_inventory(kInventoryConstantsTypesEquipped)->get_items();
 
-	for (auto &it : *items)
-	{
+	for (auto &it : *items) {
 		std::shared_ptr<Item> item = it.second;
 
-		if (item->get_slot() > -100)
-		{
+		if (item->get_slot() > -100) {
 			ItemInfo(item.get());
 		}
 	}
@@ -753,12 +697,10 @@ void PacketCreator::AddInventoryInfo(Player *player)
 	write<short>(kEndInventory);
 
 	// equipped inventory (only cash)
-	for (auto &it : *items)
-	{
+	for (auto &it : *items) {
 		std::shared_ptr<Item> item = it.second;
 
-		if (item->get_slot() <= -100)
-		{
+		if (item->get_slot() <= -100) {
 			ItemInfo(item.get());
 		}
 	}
@@ -768,8 +710,7 @@ void PacketCreator::AddInventoryInfo(Player *player)
 	// equip inventory
 	items = player->get_inventory(kInventoryConstantsTypesEquip)->get_items();
 
-	for (auto &it : *items)
-	{
+	for (auto &it : *items) {
 		ItemInfo(it.second.get());
 	}
 
@@ -777,8 +718,7 @@ void PacketCreator::AddInventoryInfo(Player *player)
 
 	// use inventory
 	items = player->get_inventory(kInventoryConstantsTypesUse)->get_items();
-	for (auto &it : *items)
-	{
+	for (auto &it : *items) {
 		ItemInfo(it.second.get());
 	}
 
@@ -786,8 +726,7 @@ void PacketCreator::AddInventoryInfo(Player *player)
 
 	// setup inventory
 	items = player->get_inventory(kInventoryConstantsTypesSetup)->get_items();
-	for (auto &it : *items)
-	{
+	for (auto &it : *items) {
 		ItemInfo(it.second.get());
 	}
 
@@ -795,8 +734,7 @@ void PacketCreator::AddInventoryInfo(Player *player)
 
 	// etc inventory
 	items = player->get_inventory(kInventoryConstantsTypesEtc)->get_items();
-	for (auto &it : *items)
-	{
+	for (auto &it : *items) {
 		ItemInfo(it.second.get());
 	}
 
@@ -804,22 +742,19 @@ void PacketCreator::AddInventoryInfo(Player *player)
 
 	// cash inventory
 	items = player->get_inventory(kInventoryConstantsTypesCash)->get_items();
-	for (auto &it : *items)
-	{
+	for (auto &it : *items) {
 		ItemInfo(it.second.get());
 	}
 
 	write<signed char>(kEndInventory);
 }
 
-void PacketCreator::AddSkillInfo(Player *player)
-{
+void PacketCreator::AddSkillInfo(Player *player) {
 	auto skills = player->get_skills();
 
 	write<short>(static_cast<short>(skills->size()));
 
-	for (auto it : *skills)
-	{
+	for (auto it : *skills) {
 		int skill_id = it.first;
 		Skill &skill = it.second;
 
@@ -827,32 +762,30 @@ void PacketCreator::AddSkillInfo(Player *player)
 		write<int>(skill.level_);
 		write<long long>(kNoExpirationTime);
 
-		if (tools::is_fourth_job_skill(skill_id))
-		{
+		if (tools::is_fourth_job_skill(skill_id)) {
 			write<int>(skill.master_level_);
 		}
 	}
 }
 
-void PacketCreator::AddCoolDownInfo(Player *player)
-{
+void PacketCreator::AddCoolDownInfo(Player *player) {
 	write<short>(0); // size
 
 	// (followed 1. by skillid (int)
 	// and 2. time (short))
 }
 
-void PacketCreator::AddQuestInfo(Player *player)
-{
+void PacketCreator::AddQuestInfo(Player *player) {
 	// quests in progress data
 
 	auto quests_in_progress = player->get_quests_in_progress();
 
 	write<short>(static_cast<short>(quests_in_progress->size()));
 
-	for (auto &it : *quests_in_progress)
-	{
+	for (auto &it : *quests_in_progress) {
 		Quest *quest = it.second.get();
+		if (!quest)
+			continue;
 		write<short>(quest->get_id());
 		write<std::string>(quest->get_killed_mobs1());
 	}
@@ -863,16 +796,16 @@ void PacketCreator::AddQuestInfo(Player *player)
 
 	write<short>(static_cast<short>(completed_quests->size()));
 
-	for (auto &it : *completed_quests)
-	{
+	for (auto &it : *completed_quests) {
 		Quest *quest = it.second.get();
+		if (!quest)
+			continue;
 		write<short>(quest->get_id());
 		write<long long>(quest->get_completion_time());
 	}
 }
 
-void PacketCreator::AddRingInfo()
-{
+void PacketCreator::AddRingInfo() {
 	// crush rings
 	write<short>(0); // amount
 
@@ -889,23 +822,19 @@ void PacketCreator::AddRingInfo()
 	// to-do marriage rings info
 }
 
-void PacketCreator::AddTeleportRockInfo()
-{
+void PacketCreator::AddTeleportRockInfo() {
 	int loop_counter = 0;
 	// regular rock maps
-	for (; loop_counter < 5; ++loop_counter)
-	{
+	for (; loop_counter < 5; ++loop_counter) {
 		write<int>(kNoMap);
 	}
 	// vip rock maps
-	for (loop_counter = 0; loop_counter < 10; ++loop_counter)
-	{
+	for (loop_counter = 0; loop_counter < 10; ++loop_counter) {
 		write<int>(kNoMap);
 	}
 }
 
-void PacketCreator::change_map(Player *player, bool is_connect_packet)
-{
+void PacketCreator::change_map(Player *player, bool is_connect_packet) {
 	write<short>(send_headers::kWARP_TO_MAP);
 	write<int>(player->get_channel_id());
 	write<signed char>(1);
@@ -920,13 +849,10 @@ void PacketCreator::change_map(Player *player, bool is_connect_packet)
 	// and for each message line: write string message
 	write<short>(0); // 0 = nothing, more than 0 = amount of message lines
 
-	if (is_connect_packet)
-	{
+	if (is_connect_packet) {
 		writeRngSeeds();
 		writeCharacterData(player);
-	}
-	else
-	{
+	} else {
 		write<signed char>(0);
 		write<int>(player->get_map()->get_id());
 		write<signed char>(player->get_spawn_point());
@@ -938,8 +864,7 @@ void PacketCreator::change_map(Player *player, bool is_connect_packet)
 }
 
 // random number generator seeds
-void PacketCreator::writeRngSeeds()
-{
+void PacketCreator::writeRngSeeds() {
 	constexpr const int seed1 = 36556356;
 	constexpr const int seed2 = 233868;
 	constexpr const int seed3 = 98358998;
@@ -948,8 +873,7 @@ void PacketCreator::writeRngSeeds()
 	write<int>(seed3);
 }
 
-void PacketCreator::AddCharLook(Player *player, bool megaphone)
-{
+void PacketCreator::AddCharLook(Player *player, bool megaphone) {
 	write<signed char>(player->get_gender());
 	write<signed char>(player->get_skin_color());
 	write<int>(player->get_face());
@@ -961,38 +885,29 @@ void PacketCreator::AddCharLook(Player *player, bool megaphone)
 	int cash_weapon_id = 0;
 	auto equips = player->get_inventory(kInventoryConstantsTypesEquipped)->get_items();
 
-	for (auto it : *equips)
-	{
+	for (auto it : *equips) {
 		std::shared_ptr<Item> item = it.second;
 		int item_id = item->get_item_id();
 		signed char pos = -item->get_slot();
 
 		// cash weapon
-		if (pos == 111)
-		{
+		if (pos == 111) {
 			cash_weapon_id = item_id;
 			continue;
 		}
 
-		if (pos < 100)
-		{
-			if (visible_equips.find(pos) == visible_equips.end())
-			{
+		if (pos < 100) {
+			if (visible_equips.find(pos) == visible_equips.end()) {
 				visible_equips[pos] = item_id;
-			}
-			else
-			{
+			} else {
 				invisible_equips[pos] = item_id;
 			}
-		}
-		else
-		{
+		} else {
 			// cash equips
 
 			pos -= 100;
 
-			if (visible_equips.find(pos) != visible_equips.end())
-			{
+			if (visible_equips.find(pos) != visible_equips.end()) {
 				invisible_equips[pos] = visible_equips[pos];
 			}
 
@@ -1000,15 +915,13 @@ void PacketCreator::AddCharLook(Player *player, bool megaphone)
 		}
 	}
 
-	enum
-	{
+	enum {
 		EndEquipInfo = -1
 	};
 
 	// visible equips info
 
-	for (auto &it : visible_equips)
-	{
+	for (auto &it : visible_equips) {
 		write<signed char>(it.first);
 		write<int>(it.second);
 	}
@@ -1017,8 +930,7 @@ void PacketCreator::AddCharLook(Player *player, bool megaphone)
 
 	// invisible equips info
 
-	for (auto &it : invisible_equips)
-	{
+	for (auto &it : invisible_equips) {
 		write<signed char>(it.first);
 		write<int>(it.second);
 	}
@@ -1038,8 +950,7 @@ void PacketCreator::AddCharLook(Player *player, bool megaphone)
 	}
 }
 
-void PacketCreator::UpdatePlayer(Player *player)
-{
+void PacketCreator::UpdatePlayer(Player *player) {
 	write<short>(send_headers::kUPDATE_CHAR_LOOK);
 	write<int>(player->get_id());
 	write<signed char>(1);
@@ -1051,8 +962,7 @@ void PacketCreator::UpdatePlayer(Player *player)
 
 	write<bool>(has_couple_ring); // couple ring
 
-	if (has_couple_ring)
-	{
+	if (has_couple_ring) {
 		// to-do
 	}
 
@@ -1060,8 +970,7 @@ void PacketCreator::UpdatePlayer(Player *player)
 
 	write<bool>(has_friendship_ring); // friendship ring
 
-	if (has_friendship_ring)
-	{
+	if (has_friendship_ring) {
 		// to-do
 	}
 
@@ -1069,8 +978,7 @@ void PacketCreator::UpdatePlayer(Player *player)
 
 	write<bool>(has_marriage_ring); // marriage ring
 
-	if (has_marriage_ring)
-	{
+	if (has_marriage_ring) {
 		// to-do
 	}
 
@@ -1079,21 +987,18 @@ void PacketCreator::UpdatePlayer(Player *player)
 	write<int>(player->get_chair());
 }
 
-void PacketCreator::ShowKeymap(Player *player)
-{
+void PacketCreator::ShowKeymap(Player *player) {
 	write<short>(send_headers::kKEYMAP);
 	write<signed char>(0);
 
-	for (int pos = kMinKeymapPos; pos < kMaxKeymapPos; ++pos)
-	{
+	for (int pos = kMinKeymapPos; pos < kMaxKeymapPos; ++pos) {
 		Key &key = player->get_key(pos);
 		write<signed char>(key.type);
 		write<int>(key.action);
 	}
 }
 
-void PacketCreator::ShowPlayerMovement(int player_id, short start_position_x, short start_position_y, unsigned char *buffer, int buffer_size)
-{
+void PacketCreator::ShowPlayerMovement(int player_id, short start_position_x, short start_position_y, unsigned char *buffer, int buffer_size) {
 	write<short>(send_headers::kMOVE_PLAYER);
 	write<int>(player_id);
 
@@ -1109,15 +1014,13 @@ void PacketCreator::ShowPlayerMovement(int player_id, short start_position_x, sh
 	// end of movement data
 }
 
-void PacketCreator::FaceExpression(int player_id, int face)
-{
+void PacketCreator::FaceExpression(int player_id, int face) {
 	write<short>(send_headers::kFACIAL_EXPRESSION);
 	write<int>(player_id);
 	write<int>(face);
 }
 
-void PacketCreator::ShowInfo(Player *player)
-{
+void PacketCreator::ShowInfo(Player *player) {
 	write<short>(send_headers::kCHAR_INFO);
 	write<int>(player->get_id());
 	write<signed char>(player->get_level());
@@ -1129,12 +1032,9 @@ void PacketCreator::ShowInfo(Player *player)
 
 	Guild *guild = player->get_guild();
 
-	if (guild)
-	{
+	if (guild) {
 		write<std::string>(guild->get_name());
-	}
-	else
-	{
+	} else {
 		write<std::string>("-");
 	}
 
@@ -1146,8 +1046,7 @@ void PacketCreator::ShowInfo(Player *player)
 
 	// pets info
 
-	enum Constants
-	{
+	enum Constants {
 		EndPetInfo = 0,
 		StartPetInfo = 1
 	};
@@ -1155,8 +1054,7 @@ void PacketCreator::ShowInfo(Player *player)
 	auto pets = player->get_pets();
 	signed char index = 0;
 
-	for (auto pet : *pets)
-	{
+	for (auto pet : *pets) {
 		write<signed char>(StartPetInfo);
 
 		write<int>(pet->get_item_id());
@@ -1167,20 +1065,16 @@ void PacketCreator::ShowInfo(Player *player)
 		write<short>(0);
 
 		Inventory *inventory = player->get_inventory(kInventoryConstantsTypesEquipped);
-		if (!inventory)
-		{
+		if (!inventory) {
 			return;
 		}
 
 		signed char slot = (index == 0 ? -114 : (index == 1 ? -130 : -138));
 		auto item = inventory->get_item_by_slot(slot);
 
-		if (item)
-		{
+		if (item) {
 			write<int>(item->get_item_id());
-		}
-		else
-		{
+		} else {
 			write<int>(0);
 		}
 
@@ -1194,8 +1088,7 @@ void PacketCreator::ShowInfo(Player *player)
 	// mount info
 	bool has_tamed_mob = (player->get_mount_item_id() != 0);
 	write<bool>(has_tamed_mob);
-	if (has_tamed_mob)
-	{
+	if (has_tamed_mob) {
 		write<int>(1); // level
 		write<int>(0); // exp
 		write<int>(0); // tiredness
@@ -1219,12 +1112,9 @@ void PacketCreator::ShowInfo(Player *player)
 
 	// equipped medal info
 	Inventory *inventory = player->get_inventory(kInventoryConstantsTypesEquipped);
-	if (!inventory)
-	{
+	if (!inventory) {
 		write<int>(0);
-	}
-	else
-	{
+	} else {
 		auto medal = inventory->get_item_by_slot(kItemConstantsEquippedSlotsMedal);
 		write<int>(medal ? medal->get_item_id() : 0);
 	}
@@ -1235,16 +1125,14 @@ void PacketCreator::ShowInfo(Player *player)
 
 }
 
-void PacketCreator::SendFame(std::string name, signed char type)
-{
+void PacketCreator::SendFame(std::string name, signed char type) {
 	write<short>(send_headers::kFAME);
 	write<signed char>(5);
 	write<std::string>(name);
 	write<signed char>(type);
 }
 
-void PacketCreator::SendFamee(std::string name2, signed char type, int newFame)
-{
+void PacketCreator::SendFamee(std::string name2, signed char type, int newFame) {
 	write<short>(send_headers::kFAME);
 	write<signed char>(0);
 	write<std::string>(name2);
@@ -1252,36 +1140,31 @@ void PacketCreator::SendFamee(std::string name2, signed char type, int newFame)
 	write<int>(newFame);
 }
 
-void PacketCreator::ItemGainChat(int itemid, int amount, signed char items_size)
-{
+void PacketCreator::ItemGainChat(int itemid, int amount, signed char items_size) {
 	write<short>(send_headers::kSHOW_ITEM_GAIN_INCHAT);
 	write<signed char>(3); // actions: 3 = gain item, 4 = pet level up, there are also much other types
 	write<signed char>(items_size);
 
-	for (signed char i = 0; i < items_size; ++i)
-	{
+	for (signed char i = 0; i < items_size; ++i) {
 		write<int>(itemid);
 		write<int>(amount);
 	}
 }
 
-void PacketCreator::ShowOwnPetLevelUp(signed char pet_slot)
-{
+void PacketCreator::ShowOwnPetLevelUp(signed char pet_slot) {
 	write<short>(send_headers::kSHOW_ITEM_GAIN_INCHAT);
 	write<signed char>(4); // actions: 3 = gain item, 4 = pet level up, there are also much other types
 	write<signed char>(0);
 	write<signed char>(pet_slot);
 }
 
-void PacketCreator::ShowForeignEffect(int player_id, signed char effect)
-{
+void PacketCreator::ShowForeignEffect(int player_id, signed char effect) {
 	write<short>(send_headers::kSHOW_FOREIGN_EFFECT);
 	write<int>(player_id);
 	write<signed char>(effect); // 0 = level up, 4 = pet level up (has custom structure), 8 = job change, others are (partially) buffs/skills?
 }
 
-void PacketCreator::ShowPetLevelUp(int owner_player_id, signed char pet_slot)
-{
+void PacketCreator::ShowPetLevelUp(int owner_player_id, signed char pet_slot) {
 	write<short>(send_headers::kSHOW_FOREIGN_EFFECT);
 	write<int>(owner_player_id);
 	write<signed char>(4); // 0 = level up, 4 = pet level up (has custom structure), 8 = job change, others are (partially) buffs/skills?
@@ -1289,15 +1172,11 @@ void PacketCreator::ShowPetLevelUp(int owner_player_id, signed char pet_slot)
 	write<signed char>(pet_slot);
 }
 
-void PacketCreator::ShowBuffEffect(int player_id, signed char effect_id, int skill_id, signed char skill_level)
-{
-	if (player_id > 0)
-	{
+void PacketCreator::ShowBuffEffect(int player_id, signed char effect_id, int skill_id, signed char skill_level) {
+	if (player_id > 0) {
 		write<short>(send_headers::kSHOW_FOREIGN_EFFECT);
 		write<int>(player_id);
-	}
-	else
-	{
+	} else {
 		write<short>(send_headers::kSHOW_ITEM_GAIN_INCHAT);
 	}
 
@@ -1308,16 +1187,14 @@ void PacketCreator::ShowBuffEffect(int player_id, signed char effect_id, int ski
 	write<signed char>(skill_level);
 }
 
-void PacketCreator::SendHammerData(int hammer_used)
-{
+void PacketCreator::SendHammerData(int hammer_used) {
 	write<short>(send_headers::kVICIOUS_HAMMER);
 	write<signed char>(0x39);
 	write<int>(0);
 	write<int>(hammer_used);
 }
 
-void PacketCreator::SendHammerMessage()
-{
+void PacketCreator::SendHammerMessage() {
 	write<short>(send_headers::kVICIOUS_HAMMER);
 	write<signed char>(0x3D);
 	write<int>(0);
