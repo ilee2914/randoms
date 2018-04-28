@@ -22,6 +22,7 @@ class Party;
 class PartyMember;
 class Player;
 class PlayerAttackInfo;
+class Reactor;
 class Summon;
 class ShopData;
 class Values;
@@ -278,8 +279,9 @@ public:
 	void MesosGainChat(int amount);
 	void FameGainChat(int amount);
 	// reactors
-	void SpawnReactor(int object_id, MapReactorData *reactor);
-	void DestroyReactor(int object_id, MapReactorData *reactor);
+	void SpawnReactor(Reactor *reactor);
+	void DestroyReactor(Reactor *reactor);
+	void triggerReactor(Reactor *reactor);
 	// summon
 	void SpawnSummon(Player *player, Summon *summon, bool animated);
 	void MoveSummon(int owner_player_id, int summon_object_id, short start_position_x, short start_position_y, unsigned char *buffer, int size);

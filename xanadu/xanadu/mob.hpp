@@ -7,8 +7,7 @@
 class Map;
 class Player;
 
-class Mob
-{
+class Mob {
 public:
 
 	// constructor

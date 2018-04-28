@@ -25,6 +25,7 @@
 #include "pet_data_provider.hpp"
 #include "quest_data_provider.hpp"
 #include "map_data_provider.hpp"
+#include "reactor_drops_data_provider.hpp"
 #include "server_constants.hpp"
 #include "wznode.hpp"
 #include "wzmain.hpp"
@@ -87,7 +88,7 @@ void World::initialize() {
 
 	ShopDataProvider::get_instance()->load_data();
 	MobDropsDataProvider::get_instance()->load_data();
-	// todo: reactor drops
+	ReactorDropsDataProvider::get_instance()->load_data();
 
 	// done loading custom data
 

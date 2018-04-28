@@ -373,6 +373,12 @@
     <ClCompile Include="duktape-2.2.0\src\duktape.c">
       <Filter>script engine</Filter>
     </ClCompile>
+    <ClCompile Include="reactor.cpp">
+      <Filter>receive_packet_handler</Filter>
+    </ClCompile>
+    <ClCompile Include="reactor_drops_data_provider.cpp">
+      <Filter>database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aes\aes.h">
@@ -600,9 +606,6 @@
     <ClInclude Include="map_foothold_data.hpp">
       <Filter>database</Filter>
     </ClInclude>
-    <ClInclude Include="map_reactor_data.hpp">
-      <Filter>database</Filter>
-    </ClInclude>
     <ClInclude Include="map_mob_data.hpp">
       <Filter>database</Filter>
     </ClInclude>
@@ -672,5 +675,18 @@
     <ClInclude Include="dukglue-master\include\dukglue\dukglue.h">
       <Filter>script engine</Filter>
     </ClInclude>
+    <ClInclude Include="map_reactor_data.hpp">
+      <Filter>database</Filter>
+    </ClInclude>
+    <ClInclude Include="reactor.hpp">
+      <Filter>receive_packet_handler</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="reactor_drops_data_provider.hpp">
+      <Filter>database</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="xanadu.rc" />
   </ItemGroup>
 </Project>

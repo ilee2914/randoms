@@ -170,6 +170,8 @@
     <ClCompile Include="quest_data.cpp" />
     <ClCompile Include="quest_data_provider.cpp" />
     <ClCompile Include="quest_handler.cpp" />
+    <ClCompile Include="reactor.cpp" />
+    <ClCompile Include="reactor_drops_data_provider.cpp" />
     <ClCompile Include="reactor_handler.cpp" />
     <ClCompile Include="reactor_packets.cpp" />
     <ClCompile Include="script_handler.cpp" />
@@ -286,6 +288,9 @@
     <ClInclude Include="pq_constants.hpp" />
     <ClInclude Include="quest_constants.hpp" />
     <ClInclude Include="quest_data_provider.hpp" />
+    <ClInclude Include="reactor.hpp" />
+    <ClInclude Include="reactor_drops_data_provider.hpp" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="script_handler.h" />
     <ClInclude Include="server_constants.hpp" />
     <ClInclude Include="shop_data_provider.hpp" />
@@ -315,6 +320,9 @@
     <ClInclude Include="wzimg.hpp" />
     <ClInclude Include="wzmain.hpp" />
     <ClInclude Include="wznode.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="xanadu.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -31,6 +31,7 @@
 #include "mob_data_provider.hpp"
 #include "drop_constants.hpp"
 #include "server_constants.hpp"
+#include "reactor.hpp"
 #include "pq_constants.hpp"
 
 // constructor
@@ -89,7 +90,17 @@ Map::Map(int id, Channel *channel) :
 	
 		auto reactors = data->get_reactors();
 
-		reactors_.swap(*reactors);
+		for (auto it : *reactors) {
+			short x = it->position_x;
+			short y = it->position_y;
+			int rid = it->reactor_id;
+			signed char stance = it->stance;
+			signed char state = it->state;
+
+			spawn_reactor_init(rid, x, y, stance, state);
+			
+			has_reactors_ = true;
+		}
 
 		// portals
 
@@ -161,6 +172,40 @@ Mob *Map::get_mob(int object_id) {
 	return nullptr;
 }
 
+Reactor *Map::get_reactor(int object_id) {
+	for (Reactor *r : reactors_) {
+		if (r->get_object_id() == object_id && !r->is_dead()) {
+			return r;
+		}
+	}
+
+	return nullptr;
+}
+
+void Map::hit_reactor(int object_id, Player * player) {
+	for (Reactor *r : reactors_) {
+		if (r->get_object_id() == object_id) {
+			short state = r->set_state(player);
+			if (state >= 4) {
+				cout << "destroyed" << endl;
+				r->set_is_dead(true);
+				{
+					PacketCreator packet;
+					packet.DestroyReactor(r);
+					send_packet(&packet);
+				}
+				
+			} else if (state >= 0) {
+				cout << "punching" << endl;
+				PacketCreator packet;
+				packet.triggerReactor(r);
+				send_packet(&packet);
+			}
+			return;
+		}
+	}
+}
+
 int Map::get_mob_object_id() {
 	return mob_ids_++;
 }
@@ -186,6 +231,10 @@ void Map::cleanup_timer_callback(const std::error_code &ec) {
 		timer_seconds = 8;
 	}
 
+	if (has_reactors_) {
+		check_reactors();
+	}
+
 	check_drops();
 
 	// timer
@@ -198,6 +247,16 @@ void Map::check_life() {
 	for (auto mob : mobs_) {
 		if (mob->is_dead() && mob->canRevive()) {
 			mob->reset();
+		}
+	}
+}
+
+void Map::check_reactors() {
+	for (auto *r : reactors_) {
+		if (r->is_dead()) {
+			if (r->can_revive()) {
+				r->reset();
+			}
 		}
 	}
 }
@@ -242,9 +301,9 @@ std::vector<Player *> *Map::get_players() {
 void Map::add_player(Player *player) {
 	// display reactors
 	for (auto reactor : reactors_) {
-		{
+		if (!reactor->is_dead()) {
 			PacketCreator packet;
-			packet.SpawnReactor(get_reactor_object_id(), reactor);
+			packet.SpawnReactor(reactor);
 			player->send_packet(&packet);
 		}
 	}
@@ -850,4 +909,10 @@ void Map::enable_portal(std::string portal_name) {
 
 bool Map::is_portal_enabled(std::string portal_name) {
 	return portals_status_[portal_name];
+}
+
+
+void Map::spawn_reactor_init(int rid, short x, short y, signed char stance, signed char state) {
+	Reactor *r = new Reactor(this, rid, get_reactor_object_id(),x, y, stance, state);
+	reactors_.push_back(r);
 }

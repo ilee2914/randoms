@@ -15,12 +15,13 @@ class Item;
 class DropsData;
 class Drop;
 class Npc;
+class Reactor;
 class Mob;
 class PacketCreator;
 class HiredMerchant;
 class Player;
 class MapData;
-struct MapReactorData;
+
 
 class Map {
 public:
@@ -59,9 +60,12 @@ public:
 	void send_packet(PacketCreator *packet, Player *excluded_player);
 	std::shared_ptr<Drop> get_drop(int object_id);
 	Mob *get_mob(int object_id);
+	Reactor *get_reactor(int object_id);
+	void hit_reactor(int object_id, Player *player);
 	Channel *get_channel();
 	void cleanup_timer_callback(const std::error_code &ec);
 	void check_life();
+	void check_reactors();
 	void check_drops();
 	void add_player(Player *player);
 	void remove_player(Player *player);
@@ -82,6 +86,7 @@ public:
 	void kill(Mob *mob);
 	void spawn_monster(int mob_id, short x, short y, short foothold = 0, signed char spawn_type = mob_constants::kSpawnTypesNewSpawn, bool flip = false, int mT = 0, bool original = false, int from = -1);
 	void spawn_monster_init(int mob_id, short x, short y, short foothold, int mobTime, bool flip);
+	void spawn_reactor_init(int rid, short x, short y, signed char stance, signed char state);
 	std::vector<Mob *> *get_original_mobs();
 	void enable_portal(std::string portal_name);
 	bool is_portal_enabled(std::string portal_name);
@@ -91,6 +96,7 @@ private:
 	bool cleanup_timer_running_;
 	bool bossing_;
 	bool has_monsters_;
+	bool has_reactors_;
 	int return_map_;
 	int forced_return_;
 	int drop_ids_;
@@ -102,7 +108,7 @@ private:
 	Channel *channel_;
 	std::vector<Mob *> mobs_;
 	std::vector<Player *> players_;
-	std::vector<MapReactorData *> reactors_;
+	std::vector<Reactor *> reactors_;
 	std::unordered_map<std::string, bool> portals_status_;
 	std::unordered_map<int, std::shared_ptr<Drop>> drops_;
 	std::unordered_map<int, std::shared_ptr<HiredMerchant>> hired_merchants_;
