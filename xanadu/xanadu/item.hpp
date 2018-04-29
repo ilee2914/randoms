@@ -11,7 +11,7 @@ class Item
 public:
 
 	// constructor
-	Item(int item_id, bool random_equip_stats = false);
+	Item(int item_id, bool random_equip_stats = false, int amount = 1);
 
 	// default constructor
 	Item() = delete;

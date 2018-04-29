@@ -27,6 +27,7 @@
 #include "item_data.hpp"
 #include "tools.hpp"
 #include "map_reactor_data.hpp"
+#include "reactor_drops_data_provider.hpp"
 #include "map_mob_data.hpp"
 #include "mob_data_provider.hpp"
 #include "drop_constants.hpp"
@@ -187,8 +188,8 @@ void Map::hit_reactor(int object_id, Player * player) {
 		if (r->get_object_id() == object_id) {
 			short state = r->set_state(player);
 			if (state >= 4) {
-				cout << "destroyed" << endl;
 				r->set_is_dead(true);
+				drop_from_reactor(r);
 				{
 					PacketCreator packet;
 					packet.DestroyReactor(r);
@@ -196,7 +197,6 @@ void Map::hit_reactor(int object_id, Player * player) {
 				}
 				
 			} else if (state >= 0) {
-				cout << "punching" << endl;
 				PacketCreator packet;
 				packet.triggerReactor(r);
 				send_packet(&packet);
@@ -233,6 +233,8 @@ void Map::cleanup_timer_callback(const std::error_code &ec) {
 
 	if (has_reactors_) {
 		check_reactors();
+		timer_seconds = 8;
+
 	}
 
 	check_drops();
@@ -686,29 +688,6 @@ void Map::drop_from_mob(Mob *mob, int killer_player_id) {
 	short drop_pos_x = 0;
 	short drop_pos_y = 0;
 
-	// 20% chance to drop Maple Leaf (4001126)
-	/*
-	if (tools::random_int(1, 100) <= 20) {
-		drop_pos_x = (mob->get_position_x() + 25 * ((count + count % 2) / 2) * ((count % 2) ? 1 : -1));
-		drop_pos_y = mob->get_position_y();
-		++count;
-
-		std::shared_ptr<Item> item(new Item(4001126));
-		drop_item_from_mob(drop_pos_x, drop_pos_y, mob, item, killer_player_id);
-	}*/
-
-	// drop mesos
-
-	// TODO: fix mesos from mobs
-
-	int mesos = (100 * kMesoRate);
-
-	drop_pos_x = (mob->get_position_x() + 25 * ((count + count % 2) / 2) * ((count % 2) ? 1 : -1));
-	drop_pos_y = mob->get_position_y();
-
-	drop_mesos_from_mob(drop_pos_x, drop_pos_y, mob, mesos, killer_player_id);
-	count++;
-
 	auto drops = MobDropsDataProvider::get_instance()->get_drop_data(mob->get_monster_id());
 
 	if (!drops) {
@@ -720,39 +699,75 @@ void Map::drop_from_mob(Mob *mob, int killer_player_id) {
 		int chance = drop->chance;
 		int drop_chance = (chance * kDropRate);
 		int random_value = tools::random_int(1, 999999);
-
+		cout << drop->item_id << endl;
 		if (random_value < drop_chance) {
 			drop_pos_x = (mob->get_position_x() + 25 * ((count + count % 2) / 2) * ((count % 2) ? 1 : -1));
 			drop_pos_y = mob->get_position_y();
 			++count;
 
-			std::shared_ptr<Item> item(new Item(drop->item_id, true));
+			if (drop->item_id != 0 ) {
+				int amount = tools::random_int(drop->min, drop->max);
+				std::shared_ptr<Item> item(new Item(drop->item_id, true, amount));
 
-			drop_item_from_mob(drop_pos_x, drop_pos_y, mob, item, killer_player_id);
+				drop_item(drop_pos_x, drop_pos_y, mob->get_position_x(), mob->get_position_y(), item, killer_player_id);
+			} else {
+				int mesos = tools::random_int(drop->min, drop->max) * kMesoRate;
+				drop_mesos(drop_pos_x, drop_pos_y, mob->get_position_x(), mob->get_position_y(), mesos, killer_player_id);
+			}
+			
 		}
 	}
 }
 
-void Map::drop_item_from_mob(short position_x, short position_y, Mob *mob, std::shared_ptr<Item> item, int owner) {
+void Map::drop_from_reactor(Reactor * r) {
+	int count = 0;
+	short drop_pos_x = 0;
+	short drop_pos_y = 0;
+
+	auto drops = ReactorDropsDataProvider::get_instance()->get_drop_data(r->get_reactor_id());
+
+	if (!drops) {
+		return;
+	}
+
+	for (auto it : *drops) {
+		DropData *drop = it;
+		int chance = drop->chance;
+		int drop_chance = (chance * kDropRate);
+		int random_value = tools::random_int(1, 75);
+
+		if (random_value < drop_chance || drop->questitem) {
+			drop_pos_x = (r->get_position_x() + 25 * ((count + count % 2) / 2) * ((count % 2) ? 1 : -1));
+			drop_pos_y = r->get_position_y();
+			++count;
+
+			std::shared_ptr<Item> item(new Item(drop->item_id, true));
+
+			drop_item(drop_pos_x, drop_pos_y, r->get_position_x(), r->get_position_y(), item, r->get_owner()->get_id());
+		}
+	}
+}
+
+void Map::drop_item(short position_x, short position_y, short x, short y, std::shared_ptr<Item> item, int owner) {
 	find_foothold(position_x, position_y);
 	std::shared_ptr<Drop> drop(new Drop(get_drop_object_id(), kDropPacketConstantsPickupTypesNormal, position_x, position_y, 0, owner, item));
 
 	drops_[drop->get_id()] = drop;
 	{
 		PacketCreator packet;
-		packet.ShowDrop(kDropPacketConstantsAnimationTypesDropAnimation, drop, mob->get_position_x(), mob->get_position_y());
+		packet.ShowDrop(kDropPacketConstantsAnimationTypesDropAnimation, drop, x, y);
 		send_packet(&packet);
 	}
 }
 
-void Map::drop_mesos_from_mob(short position_x, short position_y, Mob *mob, int amount, int owner) {
+void Map::drop_mesos(short position_x, short position_y, short x, short y, int amount, int owner) {
 	find_foothold(position_x, position_y);
 	std::shared_ptr<Drop> drop(new Drop(get_drop_object_id(), kDropPacketConstantsPickupTypesNormal, position_x, position_y, amount, owner, nullptr));
 
 	drops_[drop->get_id()] = drop;
 	{
 		PacketCreator packet;
-		packet.ShowDrop(kDropPacketConstantsAnimationTypesDropAnimation, drop, mob->get_position_x(), mob->get_position_y());
+		packet.ShowDrop(kDropPacketConstantsAnimationTypesDropAnimation, drop, x, y);
 		send_packet(&packet);
 	}
 }

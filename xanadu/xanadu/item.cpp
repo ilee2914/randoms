@@ -28,10 +28,10 @@ short getRandomStat(short stat) {
 
 // constructor
 
-Item::Item(int item_id, bool random_equip_stats) :
+Item::Item(int item_id, bool random_equip_stats, int amount) :
 	slot_(0),
 	flag_(kItemConstantsFlagsNone),
-	amount_(1),
+	amount_(amount),
 	item_id_(item_id),
 	name_(""),
 	// cash specific

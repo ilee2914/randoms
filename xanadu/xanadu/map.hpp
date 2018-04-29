@@ -79,8 +79,9 @@ public:
 	std::shared_ptr<HiredMerchant> get_hired_merchant(int id);
 	void add_drop(std::shared_ptr<Drop> drop);
 	void drop_from_mob(Mob *mob, int killer_id);
-	void drop_mesos_from_mob(short position_x, short position_y, Mob *mob, int amount, int owner);
-	void drop_item_from_mob(short position_x, short position_y, Mob *mob, std::shared_ptr<Item> item, int owner);
+	void drop_from_reactor(Reactor * r);
+	void drop_mesos(short position_x, short position_y, short x, short y, int amount, int owner);
+	void drop_item(short position_x, short position_y, short x, short y, std::shared_ptr<Item> item, int owner);
 	void drop_from_player(std::shared_ptr<Item> item, Player *player);
 	void loot_drop(Player *player, std::shared_ptr<Drop> drop, signed char pet_slot = -1);
 	void kill(Mob *mob);

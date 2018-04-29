@@ -19,8 +19,7 @@ Reactor::Reactor(Map *map, int reactor_id, int object_id, short position_x, shor
 }
 
 bool Reactor::can_revive() {
-	std::cout << time(nullptr) - time_dead_ << std::endl;
-	return time(nullptr) - time_dead_ >= 10;
+	return time(nullptr) - time_dead_ >= 24;
 }
 bool Reactor::is_dead() {
 	return is_dead_;

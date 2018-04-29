@@ -36,7 +36,7 @@ void MobDropsDataProvider::load_data() {
 		int mob_id = recordset1["dropperid"];
 
 		Poco::Data::Statement statement2(session);
-		statement2 << "SELECT itemid, questid, chance FROM dropdata WHERE dropperid = " << mob_id << " AND itemid != 0 "; // NOTE: exclude mesos at the moment
+		statement2 << "SELECT itemid, questid, min, max, chance FROM dropdata WHERE dropperid = " << mob_id;
 		statement2.execute();
 
 		Poco::Data::RecordSet recordset2(statement2);
@@ -46,16 +46,19 @@ void MobDropsDataProvider::load_data() {
 			// not using quest item drops at the moment so they dont drop all the time
 
 			int quest_id = recordset2["questid"];
-			if (quest_id == 0) {
-				int item_id = recordset2["itemid"];
-				int chance = recordset2["chance"];
+			int item_id = recordset2["itemid"];
+			int chance = recordset2["chance"];
+			int min = recordset2["min"];
+			int max = recordset2["max"];
 
-				DropData *drop_data = new DropData();
-				drop_data->item_id = item_id;
-				drop_data->chance = chance;
+			DropData *drop_data = new DropData();
+			drop_data->item_id = item_id;
+			drop_data->chance = chance;
+			drop_data->questitem = quest_id;
+			drop_data->min = min;
+			drop_data->max = max;
 
-				drops.push_back(drop_data);
-			}
+			drops.push_back(drop_data);
 
 			recordset2.moveNext();
 		}
