@@ -10,16 +10,14 @@
 
 // start of trading
 
-void PacketCreator::ShowTrade(Player *player, Player *partner, signed char number)
-{
+void PacketCreator::ShowTrade(Player *player, Player *partner, signed char number) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(5); // action
 	write<signed char>(3);
 	write<signed char>(2);
 	write<signed char>(number);
 
-	if (number == 1)
-	{
+	if (number == 1) {
 		write<signed char>(0);
 		AddCharLook(partner);
 		write<std::string>(partner->get_name());
@@ -31,8 +29,7 @@ void PacketCreator::ShowTrade(Player *player, Player *partner, signed char numbe
 	write<signed char>(-1);
 }
 
-void PacketCreator::InviteTrade(Player *player)
-{
+void PacketCreator::InviteTrade(Player *player) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(2); // action
 	write<signed char>(3);
@@ -40,8 +37,7 @@ void PacketCreator::InviteTrade(Player *player)
 	write<int>(0);
 }
 
-void PacketCreator::JoinTrade(Player *player)
-{
+void PacketCreator::JoinTrade(Player *player) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(4); // action
 	write<signed char>(1);
@@ -49,16 +45,14 @@ void PacketCreator::JoinTrade(Player *player)
 	write<std::string>(player->get_name());
 }
 
-void PacketCreator::TradeError(signed char side, signed char message)
-{
+void PacketCreator::TradeError(signed char side, signed char message) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(0x0A); // action
 	write<signed char>(side);
 	write<signed char>(message);
 }
 
-void PacketCreator::ShowTradeChat(signed char side, std::string &message)
-{
+void PacketCreator::ShowTradeChat(signed char side, std::string &message) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(6); // action
 	write<signed char>(8);
@@ -66,16 +60,14 @@ void PacketCreator::ShowTradeChat(signed char side, std::string &message)
 	write<std::string>(message);
 }
 
-void PacketCreator::TradeMesos(int mesos, signed char number)
-{
+void PacketCreator::TradeMesos(int mesos, signed char number) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(0x10); // action
 	write<signed char>(number);
 	write<int>(mesos);
 }
 
-void PacketCreator::TradeItem(std::shared_ptr<Item> item, signed char number)
-{
+void PacketCreator::TradeItem(std::shared_ptr<Item> item, signed char number) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(0x0F); // action
 	write<signed char>(number);
@@ -83,8 +75,7 @@ void PacketCreator::TradeItem(std::shared_ptr<Item> item, signed char number)
 	ItemInfo(item.get(), false);
 }
 
-void PacketCreator::TradeConfirm()
-{
+void PacketCreator::TradeConfirm() {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(0x11); // action
 }
@@ -93,8 +84,7 @@ void PacketCreator::TradeConfirm()
 
 // start of hired merchants
 
-void PacketCreator::GetHiredMerchant(Player *player, std::shared_ptr<HiredMerchant> merchant, bool first_time)
-{
+void PacketCreator::GetHiredMerchant(Player *player, std::shared_ptr<HiredMerchant> merchant, bool first_time) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(5); // action
 	write<signed char>(5);
@@ -104,12 +94,10 @@ void PacketCreator::GetHiredMerchant(Player *player, std::shared_ptr<HiredMercha
 	write<int>(merchant->get_item_id());
 	write<std::string>("Hired Merchant");
 
-	for (signed char slot = kHiredMerchantConstantsSlotsMin; slot <= kHiredMerchantConstantsSlotsMax; ++slot)
-	{
+	for (signed char slot = kHiredMerchantConstantsSlotsMin; slot <= kHiredMerchantConstantsSlotsMax; ++slot) {
 		Player *visitor = merchant->get_visitor(slot - 1);
 
-		if (visitor)
-		{
+		if (visitor) {
 			write<signed char>(slot);
 			AddCharLook(visitor);
 			write<std::string>(visitor->get_name());
@@ -122,8 +110,7 @@ void PacketCreator::GetHiredMerchant(Player *player, std::shared_ptr<HiredMercha
 
 	write<std::string>(merchant->get_owner_name());
 
-	if (merchant->is_owner(player->get_id()))
-	{
+	if (merchant->is_owner(player->get_id())) {
 		write<int>(0); // time left
 		write<bool>(first_time);
 
@@ -145,13 +132,11 @@ void PacketCreator::GetHiredMerchant(Player *player, std::shared_ptr<HiredMercha
 	write<int>(player->get_mesos());
 	write<signed char>(static_cast<unsigned char>(merchant->get_num_items()));
 
-	if (merchant->get_num_items() == 0)
-	{
+	if (merchant->get_num_items() == 0) {
 		write<signed char>(0);
 	}
 
-	for (size_t i = 0; i < merchant->get_num_items(); ++i)
-	{
+	for (size_t i = 0; i < merchant->get_num_items(); ++i) {
 		std::shared_ptr<HiredMerchantItem> sellItem = merchant->get_item(static_cast<short>(i));
 
 		write<short>(sellItem->get_bundles());
@@ -161,15 +146,13 @@ void PacketCreator::GetHiredMerchant(Player *player, std::shared_ptr<HiredMercha
 	}
 }
 
-void PacketCreator::UpdateHiredMerchant(HiredMerchant *hired_merchant)
-{
+void PacketCreator::UpdateHiredMerchant(HiredMerchant *hired_merchant) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(0x19); // action
 	write<int>(hired_merchant->get_merchant_mesos());
 	write<signed char>(static_cast<unsigned char>(hired_merchant->get_num_items()));
 
-	for (int i = 0; i < hired_merchant->get_num_items(); i++)
-	{
+	for (int i = 0; i < hired_merchant->get_num_items(); i++) {
 		std::shared_ptr<HiredMerchantItem> sellItem = hired_merchant->get_item(static_cast<short>(i));
 
 		write<short>(sellItem->get_bundles());
@@ -179,8 +162,7 @@ void PacketCreator::UpdateHiredMerchant(HiredMerchant *hired_merchant)
 	}
 }
 
-void PacketCreator::HiredMerchantChat(signed char slot, std::string &message)
-{
+void PacketCreator::HiredMerchantChat(signed char slot, std::string &message) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(6); // action
 	write<signed char>(8);
@@ -188,15 +170,13 @@ void PacketCreator::HiredMerchantChat(signed char slot, std::string &message)
 	write<std::string>(message);
 }
 
-void PacketCreator::HiredMerchantVisitorLeave(signed char slot)
-{
+void PacketCreator::HiredMerchantVisitorLeave(signed char slot) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(0x0A); // action
 	write<signed char>(slot);
 }
 
-void PacketCreator::HiredMerchantVisitorAdd(Player *player, signed char slot)
-{
+void PacketCreator::HiredMerchantVisitorAdd(Player *player, signed char slot) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(4); // action
 	write<signed char>(slot);
@@ -207,15 +187,13 @@ void PacketCreator::HiredMerchantVisitorAdd(Player *player, signed char slot)
 // mode:
 // 0 = items and mesos successfully retrieved
 // 1 = go to fredrick for items and mesos
-void PacketCreator::CloseMerchantStoreResponse()
-{
+void PacketCreator::CloseMerchantStoreResponse() {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(0x2A); // action
 	write<signed char>(1); // mode
 }
 
-void PacketCreator::MerchantStoreMaintenanceResponse(int merchant_id)
-{
+void PacketCreator::MerchantStoreMaintenanceResponse(int merchant_id) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(21); // action
 	write<signed char>(10);
@@ -225,8 +203,7 @@ void PacketCreator::MerchantStoreMaintenanceResponse(int merchant_id)
 	write<signed char>(0);
 }
 
-void PacketCreator::SpawnHiredMerchant(std::shared_ptr<HiredMerchant> merchant)
-{
+void PacketCreator::SpawnHiredMerchant(std::shared_ptr<HiredMerchant> merchant) {
 	write<short>(send_headers::kSPAWN_HIRED_MERCHANT);
 	write<int>(merchant->get_owner_id());
 	write<int>(merchant->get_item_id());
@@ -242,22 +219,19 @@ void PacketCreator::SpawnHiredMerchant(std::shared_ptr<HiredMerchant> merchant)
 	write<signed char>(4);
 }
 
-void PacketCreator::DestroyHiredMerchant(int id)
-{
+void PacketCreator::DestroyHiredMerchant(int id) {
 	write<short>(send_headers::kDESTROY_HIRED_MERCHANT);
 	write<int>(id);
 }
 
-void PacketCreator::LeaveHiredMerchant(int slot, int status2)
-{
+void PacketCreator::LeaveHiredMerchant(int slot, int status2) {
 	write<short>(send_headers::kPLAYER_INTERACTION);
 	write<signed char>(0x0A); // action
 	write<signed char>(static_cast<signed char>(slot));
 	write<signed char>(static_cast<signed char>(status2));
 }
 
-void PacketCreator::PlayerShopError(signed char type)
-{
+void PacketCreator::PlayerShopError(signed char type) {
 	// 01 = You don't have enough in stock
 	// 02 = You do not have enough mesos
 	// 03 = The price of item is too high for the trade
@@ -273,8 +247,7 @@ void PacketCreator::PlayerShopError(signed char type)
 	write<signed char>(type);
 }
 
-void PacketCreator::PlayerShopMessage(signed char message)
-{
+void PacketCreator::PlayerShopMessage(signed char message) {
 	// 02 = Shop full
 	// 18 = Shop maintenance
 

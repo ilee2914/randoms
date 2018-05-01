@@ -29,7 +29,8 @@ const int as_ETC = kInventoryConstantsTypesEtc;
 const int as_CASH = kInventoryConstantsTypesCash;
 
 void Player::npc_script_handler(int mode, int type, int selection) {
-	if (mode == 0 && type > 0) {
+	if (mode == 0 && type > 0 || endChat) {
+		dispose();
 		return;
 	}
 	if (!ctx || mode == 0) {
@@ -113,7 +114,6 @@ void Player::npc_script_handler(int mode, int type, int selection) {
 		dukglue_register_global(ctx, this, "cm");
 	}
 
-	//cout << mode << " " << type << " " << selection << endl;
 	try {
 		if (mode == 0) {
 			if (duk_get_global_string(ctx, "start")) {

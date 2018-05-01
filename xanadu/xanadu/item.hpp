@@ -6,8 +6,7 @@
 
 class Player;
 
-class Item
-{
+class Item {
 public:
 
 	// constructor

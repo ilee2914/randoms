@@ -6,8 +6,7 @@
 
 #include "buffvalue.hpp"
 
-class Values
-{
+class Values {
 public:
 
 	// default constructor
@@ -18,7 +17,7 @@ public:
 
 	// move constructor
 	Values(Values &&other) = delete;
-	
+
 	// destructor
 	~Values() = default;
 

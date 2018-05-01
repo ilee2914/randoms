@@ -97,6 +97,7 @@ public:
 	Inventory *get_inventory(signed char id);
 	std::shared_ptr<HiredMerchant> get_hired_merchant();
 	void set_hired_merchant(std::shared_ptr<HiredMerchant> merchant);
+	void close_merchant();
 
 	void save();
 	void save_account();

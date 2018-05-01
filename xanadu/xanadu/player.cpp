@@ -372,11 +372,9 @@ void Player::handle_packet_in_game() {
 			handle_buddy_list_action();
 			break;
 		case receive_headers::kHANDLE_NPC:
-			std::cout << "a" << std::endl;
 			handle_request_npc();
 			break;
 		case receive_headers::kNPC_CHAT:
-			std::cout << "b" << std::endl;
 			handle_npc_chat();
 			break;
 		case receive_headers::kNPC_SHOP:
@@ -858,11 +856,11 @@ void Player::player_connect() {
 			rs.moveNext();
 		}
 	}
-
+	
 	{
 		// merchant storage items
 		Poco::Data::Statement statement(mysql_session);
-		statement << "SELECT item_id, pos, amount FROM merchant_storage_items WHERE player_id = " << id_;
+		statement << "SELECT item_id, pos, amount, flags FROM merchant_storage_items WHERE player_id = " << id_;
 		size_t cols = statement.execute();
 
 		Poco::Data::RecordSet rs(statement);
@@ -872,22 +870,19 @@ void Player::player_connect() {
 			short amount = rs["amount"];
 			signed char slot = rs["pos"];
 			short flags = rs["flags"];
-
-			std::shared_ptr<Item> item(new Item(item_id));
-			item->set_amount(amount);
-			item->set_slot(slot);
-			item->set_flag(flags);
-
-			ItemData *data = ItemDataProvider::get_instance()->get_item_data(item->get_item_id());
+			ItemData *data = ItemDataProvider::get_instance()->get_item_data(item_id);
 
 			if (data) {
+				std::shared_ptr<Item> item(new Item(item_id));
+				item->set_amount(amount);
+				item->set_slot(slot);
+				item->set_flag(flags);
 				merchant_storage_items_[static_cast<signed char>(merchant_storage_items_.size())] = item;
 			}
-
 			rs.moveNext();
 		}
 	}
-
+	
 	{
 		// merchant storage equips
 		Poco::Data::Statement statement(mysql_session);
@@ -2787,4 +2782,9 @@ void Player::disposeChat() {
 void Player::dispose() {
 	//duk_destroy_heap(ctx);
 	endChat = false;
+	{
+		PacketCreator packet;
+		packet.EnableAction();
+		send_packet(&packet);
+	}
 }

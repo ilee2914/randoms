@@ -460,9 +460,9 @@ void Player::handle_item_transportation() {
 	}
 	case 0x26: // Remove item from Merchant
 	{
-		skip_bytes(1);
+		//skip_bytes(2);
 		short slot = read<short>();
-
+		std::cout << slot << std::endl;
 		if (merchant_ && merchant_->is_owner(id_) && merchant_->get_item(slot)) {
 			merchant_->return_item(slot, this);
 			merchant_->remove_item(slot);
@@ -477,7 +477,9 @@ void Player::handle_item_transportation() {
 	}
 	case 0x27: // End of maintenance (owner goes out of store)
 	{
-		{
+		if (merchant_->get_num_items() == 0) {
+			close_merchant();
+		} else {
 			PacketCreator packet;
 			packet.EnableAction();
 			send_packet(&packet);
@@ -496,47 +498,52 @@ void Player::handle_item_transportation() {
 	}
 	case 0x29: // Close Merchant
 	{
-		if (merchant_ && merchant_->is_owner(id_)) {
-			if (map_->get_hired_merchant(merchant_->get_id())) {
-				map_->remove_hired_merchant(merchant_->get_id());
-				{
-					PacketCreator packet;
-					packet.DestroyHiredMerchant(id_);
-					map_->send_packet(&packet);
-				}
-			}
-
-			// give mesos to fredrick
-			merchant_storage_mesos_ += merchant_->get_merchant_mesos();
-
-			// give items to fredrick
-			int counter = 0;
-			auto items = merchant_->get_items();
-
-			for (auto it : *items) {
-				auto merchant_item = it.second;
-
-				if (merchant_item->get_bundles() > 0) {
-					merchant_storage_items_[counter] = merchant_item->get_item();
-					merchant_storage_items_[counter]->set_amount(merchant_item->get_quantity());
-					++counter;
-				}
-			}
-			{
-				PacketCreator packet;
-				packet.EnableAction();
-				send_packet(&packet);
-			}
-			{
-				PacketCreator packet;
-				packet.CloseMerchantStoreResponse();
-				send_packet(&packet);
-			}
-		}
-
-		merchant_.reset();
+		close_merchant();
 
 		break;
 	}
 	}
+}
+
+
+void Player::close_merchant() {
+	if (merchant_ && merchant_->is_owner(id_)) {
+		if (map_->get_hired_merchant(merchant_->get_id())) {
+			map_->remove_hired_merchant(merchant_->get_id());
+			{
+				PacketCreator packet;
+				packet.DestroyHiredMerchant(id_);
+				map_->send_packet(&packet);
+			}
+		}
+
+		// give mesos to fredrick
+		merchant_storage_mesos_ += merchant_->get_merchant_mesos();
+
+		// give items to fredrick
+		int counter = 0;
+		auto items = merchant_->get_items();
+
+		for (auto it : *items) {
+			auto merchant_item = it.second;
+
+			if (merchant_item->get_bundles() > 0) {
+				merchant_storage_items_[counter] = merchant_item->get_item();
+				merchant_storage_items_[counter]->set_amount(merchant_item->get_quantity()*merchant_item->get_bundles());
+				++counter;
+			}
+		}
+		{
+			PacketCreator packet;
+			packet.EnableAction();
+			send_packet(&packet);
+		}
+		{
+			PacketCreator packet;
+			packet.CloseMerchantStoreResponse();
+			send_packet(&packet);
+		}
+	}
+
+	merchant_.reset();
 }

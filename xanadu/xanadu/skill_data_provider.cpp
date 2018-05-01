@@ -12,23 +12,19 @@
 
 SkillDataProvider *SkillDataProvider::singleton_ = nullptr;
 
-SkillDataProvider *SkillDataProvider::get_instance()
-{
-	if (!singleton_)
-	{
+SkillDataProvider *SkillDataProvider::get_instance() {
+	if (!singleton_) {
 		singleton_ = new SkillDataProvider();
 	}
 
 	return singleton_;
 }
 
-void SkillDataProvider::load_data()
-{
+void SkillDataProvider::load_data() {
 	WZMain *wz_reader = World::get_instance()->wz_reader_;
 	WZNode node1 = wz_reader->base_["Skill"];
 
-	for (auto it1 : node1)
-	{
+	for (auto it1 : node1) {
 		std::string valuename1 = it1.name();
 
 		int job_id = -1;
@@ -37,20 +33,17 @@ void SkillDataProvider::load_data()
 		// which is not needed here, so the exception which is thrown when trying to
 		// get the job id is handled locally here to continue processing the loop
 
-		try
-		{
+		try {
 			job_id = std::stoi(valuename1);
 		}
 
-		catch (...)
-		{
+		catch (...) {
 			continue;
 		}
 
 		WZNode node2 = wz_reader->base_["Skill"][valuename1.c_str()]["skill"];
 
-		for (auto it2 : node2)
-		{
+		for (auto it2 : node2) {
 			std::string valuename2 = it2.name();
 
 			int skill_id = std::stoi(valuename2);
@@ -59,14 +52,12 @@ void SkillDataProvider::load_data()
 
 			WZNode node3 = wz_reader->base_["Skill"][valuename1.c_str()]["skill"][valuename2.c_str()]["level"];
 
-			for (auto it3 : node3)
-			{
+			for (auto it3 : node3) {
 				std::string valuename3 = it3.name();
 
 				int level = std::stoi(valuename3);
 
-				if (level > 30)
-				{
+				if (level > 30) {
 					continue;
 				}
 
@@ -77,136 +68,109 @@ void SkillDataProvider::load_data()
 
 				WZNode node4 = wz_reader->base_["Skill"][valuename1.c_str()]["skill"][valuename2.c_str()]["level"][valuename3.c_str()];
 
-				for (auto it4 : node4)
-				{
+				for (auto it4 : node4) {
 					std::string valuename4 = it4.name();
 
-					if (valuename4 == "time")
-					{
+					if (valuename4 == "time") {
 						level_data->time = it4.get_int_value();
 						level_data->time *= 1000; // WHY IS THIS NEEDED? TODO FIX
 					}
 
-					if (valuename4 == "cooltime")
-					{
+					if (valuename4 == "cooltime") {
 						level_data->cooldown_time = it4.get_int_value();
 					}
 
-					if (valuename4 == "hpCon")
-					{
+					if (valuename4 == "hpCon") {
 						level_data->hp_cost = it4.get_int_value();
 					}
 
-					if (valuename4 == "mpCon")
-					{
+					if (valuename4 == "mpCon") {
 						level_data->mp_cost = it4.get_int_value();
 					}
 
-					if (valuename4 == "hp")
-					{
+					if (valuename4 == "hp") {
 						level_data->hp_percent = it4.get_int_value();
 					}
 
-					if (valuename4 == "prop")
-					{
+					if (valuename4 == "prop") {
 						level_data->prop = it4.get_int_value();
 					}
 
-					if (valuename4 == "pad")
-					{
+					if (valuename4 == "pad") {
 						level_data->weapon_atk = it4.get_int_value();
 					}
 
-					if (valuename4 == "pdd")
-					{
+					if (valuename4 == "pdd") {
 						level_data->weapon_def = it4.get_int_value();
 					}
 
-					if (valuename4 == "mad")
-					{
+					if (valuename4 == "mad") {
 						level_data->magic_atk = it4.get_int_value();
 					}
 
-					if (valuename4 == "mdd")
-					{
+					if (valuename4 == "mdd") {
 						level_data->magic_def = it4.get_int_value();
 					}
 
-					if (valuename4 == "acc")
-					{
+					if (valuename4 == "acc") {
 						level_data->accuracy = it4.get_int_value();
 					}
 
-					if (valuename4 == "eva")
-					{
+					if (valuename4 == "eva") {
 						level_data->avoid = it4.get_int_value();
 					}
 
-					if (valuename4 == "speed")
-					{
+					if (valuename4 == "speed") {
 						level_data->speed = it4.get_int_value();
 					}
 
-					if (valuename4 == "jump")
-					{
+					if (valuename4 == "jump") {
 						level_data->jump = it4.get_int_value();
 					}
 
-					if (valuename4 == "itemCon")
-					{
+					if (valuename4 == "itemCon") {
 						level_data->required_item_id = it4.get_int_value();
 					}
 
-					if (valuename4 == "itemConNo")
-					{
+					if (valuename4 == "itemConNo") {
 						level_data->required_item_count = it4.get_int_value();
 					}
 
-					if (valuename4 == "x")
-					{
+					if (valuename4 == "x") {
 						level_data->x = it4.get_int_value();
 					}
 
-					if (valuename4 == "y")
-					{
+					if (valuename4 == "y") {
 						level_data->y = it4.get_int_value();
 					}
 
-					if (valuename4 == "rb")
-					{
+					if (valuename4 == "rb") {
 						WZNode node5 = wz_reader->base_["Skill"][valuename1.c_str()]["skill"][valuename2.c_str()]["level"][valuename3.c_str()][valuename4.c_str()];
 
-						for (auto it5 : node5)
-						{
+						for (auto it5 : node5) {
 							std::string valuename5 = it5.name();
 
-							if (valuename5 == "x")
-							{
+							if (valuename5 == "x") {
 								level_data->rbx = it5.get_int_value();
 							}
 
-							if (valuename5 == "y")
-							{
+							if (valuename5 == "y") {
 								level_data->rby = it5.get_int_value();
 							}
 						}
 					}
 
-					if (valuename4 == "lt")
-					{
+					if (valuename4 == "lt") {
 						WZNode node5 = wz_reader->base_["Skill"][valuename1.c_str()]["skill"][valuename2.c_str()]["level"][valuename3.c_str()][valuename4.c_str()];
 
-						for (auto it5 : node5)
-						{
+						for (auto it5 : node5) {
 							std::string valuename5 = it5.name();
 
-							if (valuename5 == "x")
-							{
+							if (valuename5 == "x") {
 								level_data->ltx = it5.get_int_value();
 							}
 
-							if (valuename5 == "y")
-							{
+							if (valuename5 == "y") {
 								level_data->lty = it5.get_int_value();
 							}
 						}
@@ -221,17 +185,14 @@ void SkillDataProvider::load_data()
 	}
 }
 
-SkillData *SkillDataProvider::get_skill_data(int skill_id)
-{
-	if (skills_.find(skill_id) == skills_.end())
-	{
+SkillData *SkillDataProvider::get_skill_data(int skill_id) {
+	if (skills_.find(skill_id) == skills_.end()) {
 		return nullptr;
 	}
 
 	return skills_[skill_id];
 }
 
-std::unordered_map<int, SkillData *> *SkillDataProvider::get_data()
-{
+std::unordered_map<int, SkillData *> *SkillDataProvider::get_data() {
 	return &skills_;
 }

@@ -7,229 +7,132 @@
 #include "map_portal_data.hpp"
 #include "map_data_provider.hpp"
 #include "map_data.hpp"
+#include <iostream>
 
-void Player::handle_use_scripted_portal()
-{
+void Player::handle_use_scripted_portal() {
 	skip_bytes(1);
 	std::string portal_name = read<std::string>();
-
+	
 	MapData *data = MapDataProvider::get_instance()->get_map_data_by_id(map_->get_id());
 	MapPortalData *portal = data->get_portal(portal_name);
-	if (!portal)
-	{
+	if (!portal) {
 		return;
 	}
 
 	std::string script_name = portal->get_script();
-
+	
 	if (script_name == "hontale_morph") // Horntail entrance map
 	{
 		// this script is called too often by the client -> do nothing
 		return;
-	}
-	else if (script_name == "advice00")
-	{
+	} else if (script_name == "enterMagiclibrar") {
+		set_map(101000003);
+	} else if (script_name == "advice00") {
 		// beginner maps
 		return;
-	}
-	else if (script_name == "alian_in")
-	{
+	} else if (script_name == "alian_in") {
 		set_map(600010300);
-	}
-	else if (script_name == "alian_out_1")
-	{
+	} else if (script_name == "alian_out_1") {
 		set_map(600010200);
-	}
-	else if (script_name == "EnterSWmer")
-	{
+	} else if (script_name == "EnterSWmer") {
 		set_map(105000000);
-	}
-	else if (script_name == "gotoNext1")
-	{
+	} else if (script_name == "gotoNext1") {
 		set_map(211060300);
-	}
-	else if (script_name == "gotoNext2_1")
-	{
+	} else if (script_name == "gotoNext2_1") {
 		set_map(211060500);
-	}
-	else if (script_name == "gotoNext3_1")
-	{
+	} else if (script_name == "gotoNext3_1") {
 		set_map(211060700);
-	}
-	else if (script_name == "gotoNext4")
-	{
+	} else if (script_name == "gotoNext4") {
 		set_map(211060800);
-	}
-	else if (script_name == "halloween_enter")
-	{
+	} else if (script_name == "halloween_enter") {
 		set_map(682000100);
-	}
-	else if (script_name == "in_guild")
-	{
+	} else if (script_name == "in_guild") {
 		set_map(200000301);
-	}
-	else if (script_name == "out_guild")
-	{
+	} else if (script_name == "out_guild") {
 		set_map(200000300);
-	}
-	else if (script_name == "LudiElevator_in")
-	{
-		if (map_->get_id() == 222020200)
-		{
+	} else if (script_name == "LudiElevator_in") {
+		if (map_->get_id() == 222020200) {
 			set_map(222020100);
-		}
-		else if (map_->get_id() == 222020100)
-		{
+		} else if (map_->get_id() == 222020100) {
 			set_map(222020200);
 		}
-	}
-	else if (script_name == "market00")
-	{
+	} else if (script_name == "market00") {
 		set_map(100000000);
-	}
-	else if (script_name == "market01")
-	{
+	} else if (script_name == "market01") {
 		set_map(910000000);
-	}
-	else if (script_name == "market02")
-	{
+	} else if (script_name == "market02") {
 		set_map(910000000);
-	}
-	else if (script_name == "market03")
-	{
+	} else if (script_name == "market03") {
 		set_map(910000000);
-	}
-	else if (script_name == "market04")
-	{
+	} else if (script_name == "market04") {
 		set_map(910000000);
-	}
-	else if (script_name == "market05")
-	{
+	} else if (script_name == "market05") {
 		set_map(910000000);
-	}
-	else if (script_name == "market06")
-	{
+	} else if (script_name == "market06") {
 		set_map(910000000);
-	}
-	else if (script_name == "market07")
-	{
+	} else if (script_name == "market07") {
 		set_map(910000000);
-	}
-	else if (script_name == "market08")
-	{
+	} else if (script_name == "market08") {
 		set_map(910000000);
-	}
-	else if (script_name == "market09")
-	{
+	} else if (script_name == "market09") {
 		set_map(910000000);
-	}
-	else if (script_name == "market10")
-	{
+	} else if (script_name == "market10") {
 		set_map(910000000);
-	}
-	else if (script_name == "market11")
-	{
+	} else if (script_name == "market11") {
 		set_map(910000000);
-	}
-	else if (script_name == "market12")
-	{
+	} else if (script_name == "market12") {
 		set_map(910000000);
-	}
-	else if (script_name == "market13")
-	{
+	} else if (script_name == "market13") {
 		set_map(910000000);
-	}
-	else if (script_name == "market14")
-	{
+	} else if (script_name == "market14") {
 		set_map(910000000);
-	}
-	else if (script_name == "market15")
-	{
+	} else if (script_name == "market15") {
 		set_map(910000000);
-	}
-	else if (script_name == "market16")
-	{
+	} else if (script_name == "market16") {
 		set_map(910000000);
-	}
-	else if (script_name == "market17")
-	{
+	} else if (script_name == "market17") {
 		set_map(910000000);
-	}
-	else if (script_name == "market18")
-	{
+	} else if (script_name == "market18") {
 		set_map(910000000);
-	}
-	else if (script_name == "market19")
-	{
+	} else if (script_name == "market19") {
 		set_map(910000000);
-	}
-	else if (script_name == "market20")
-	{
+	} else if (script_name == "market20") {
 		set_map(910000000);
-	}
-	else if (script_name == "market21")
-	{
+	} else if (script_name == "market21") {
 		set_map(910000000);
-	}
-	else if (script_name == "market22")
-	{
+	} else if (script_name == "market22") {
 		set_map(910000000);
-	}
-	else if (script_name == "market23")
-	{
+	} else if (script_name == "market23") {
 		set_map(910000000);
-	}
-	else if (script_name == "subway_in2")
-	{
+	} else if (script_name == "subway_in2") {
 		set_map(103020100);
-	}
-	else if (script_name == "Zakumgo") // The Cave of Trial III - The Door to Zakum
-	{
+	} else if (script_name == "Zakumgo") { // The Cave of Trial III - The Door to Zakum
 		set_map(211042300);
-	}
-	else if (script_name == "Zakum05") // The Door to Zakum - Entrance to Zakum Altar
-	{
+	} else if (script_name == "Zakum05") { // The Door to Zakum - Entrance to Zakum Altar
 		set_map(211042400);
-	}
-	else if (script_name == "Populatus00") // Papulatus Entrance
-	{
+	} else if (script_name == "Populatus00") { // Papulatus Entrance
 		set_map(220080001);
-	}
-	else if (script_name == "bigban")
-	{
+	} else if (script_name == "bigban") {
 		set_map(600020000);
-	}
-	else if (script_name == "Pianus")
-	{
+	} else if (script_name == "Pianus") {
 		set_map(230040420);
-	}
-	else if (script_name == "enterAchter")
-	{
+	} else if (script_name == "enterAchter") {
 		set_map(100000201);
-	}
-	else if (script_name == "outArchterMap")
-	{
+	} else if (script_name == "outArchterMap") {
 		set_map(100000000);
-	}
-	else if (script_name == "dracoout")
-	{
+	} else if (script_name == "dracoout") {
 		set_map(240000100);
-	}
-	else if (script_name == "enterBlackMine")
-	{
+	} else if (script_name == "enterBlackMine") {
 		set_map(310040200);
-	}
-	else
-	{
+	} else {
 		// no handler for the portal script name
-	
+
 		// log the information
 		char destination[100] = "logs//\0";
 		strcat(destination, "script_engine.txt");
 
 		FILE *file = fopen(destination, "a");
-		if (file != nullptr)
-		{
+		if (file != nullptr) {
 			char text[100] = "";
 			sprintf(text, "scripted portal: %s missing in map: %d", script_name.c_str(), map_->get_id());
 			fprintf(file, "%s", text);

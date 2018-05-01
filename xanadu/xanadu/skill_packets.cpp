@@ -116,10 +116,10 @@ void PacketCreator::SpawnMist(int object_id, int owner_character_id, int skill_i
 	write<int>(skill_id);
 	write<signed char>(skill_level);
 	write<short>(8); // skill delay
-	write<int>(mist_position_x); // left position
-	write<int>(mist_position_y); // bottom position
-	write<int>(mist_position_x + mist_position_width); // left position
-	write<int>(mist_position_y + mist_position_height); // upper position
+	write<int>(mist_position_x - 150); // left position
+	write<int>(mist_position_y - 150); // bottom position
+	write<int>(mist_position_x + 150); // left position
+	write<int>(mist_position_y + 150); // upper position
 	write<int>(0);
 }
 

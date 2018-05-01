@@ -6,8 +6,7 @@
 
 #include "item.hpp"
 
-class HiredMerchantItem
-{
+class HiredMerchantItem {
 public:
 
 	// constructor

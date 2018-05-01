@@ -12,7 +12,6 @@ Quest::Quest(int id, bool completed, bool custom = false) :
 	completed_(completed),
 	id_(id),
 	custom_(custom) {
-	std::cout << "Calling quest contructor" << std::endl;
 }
 
 bool Quest::add_killed_mob(int id, int amount) {

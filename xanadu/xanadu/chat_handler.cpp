@@ -668,11 +668,9 @@ void Player::handle_use_chat() {
 				packet.ShowMessage("A staff member will get to you as soon as possible.", 0);
 				send_packet(&packet);
 			}
-		}
-		else if (command == "dispose") {
+		} else if (command == "dispose") {
 			duk_destroy_heap(ctx);
-		}
-		else if (command == "fm") {
+		} else if (command == "fm") {
 			set_map(910000000);
 		}
 

@@ -11,8 +11,7 @@
 #include "buffstat_constants.hpp"
 #include "constants.hpp"
 
-void Player::handle_use_attack(signed char attack_type)
-{
+void Player::handle_use_attack(signed char attack_type) {
 	PlayerAttackInfo attack;
 
 	attack.item_id_ = 0;
@@ -23,24 +22,28 @@ void Player::handle_use_attack(signed char attack_type)
 
 	attack.skill_id_ = read<int>();
 
-	if (attack.skill_id_ > 0)
-	{
-		if (skills_.find(attack.skill_id_) != skills_.end())
-		{
+	if (attack.skill_id_ > 0) {
+		if (skills_.find(attack.skill_id_) != skills_.end()) {
 			attack.skill_level_ = skills_[attack.skill_id_].level_;
-		}
-		else
-		{
+		} else {
 			attack.skill_level_ = 1;
 		}
-	}
-	else
-	{
+	} else {
 		attack.skill_level_ = 0;
 	}
 
-	switch (attack.skill_id_)
-	{
+	if (attack.skill_id_ == 2111003) {
+		// poison mist skill test
+		int object_id = 1;
+		int skill_id = 2111003;
+
+		PacketCreator packet;
+		packet.SpawnMist(object_id, id_, skill_id, position_x_, position_y_, 0, 0, attack.skill_level_);
+		send_packet(&packet);
+		return;
+	}
+
+	switch (attack.skill_id_) {
 	case 2121001: // Big Bang
 	case 2221001: // Big Bang
 	case 2321001: // Big Bang
@@ -57,8 +60,7 @@ void Player::handle_use_attack(signed char attack_type)
 	attack.stance_ = read<signed char>();
 
 	// meso explosion
-	if (attack.skill_id_ == 4211006)
-	{
+	if (attack.skill_id_ == 4211006) {
 		// TODO
 	}
 
@@ -68,14 +70,12 @@ void Player::handle_use_attack(signed char attack_type)
 
 	short star_slot = 0;
 
-	if (attack_type == attack_type_constants::kRanged)
-	{
+	if (attack_type == attack_type_constants::kRanged) {
 		star_slot = read<short>();
 		skip_bytes(2); // could be cash star slot?
 		skip_bytes(1);
 
-		switch (attack.skill_id_)
-		{
+		switch (attack.skill_id_) {
 		case 3121004: // Hurricane
 		case 3221001: // Pierce
 		case 5221004: // Rapid Fire
@@ -89,16 +89,14 @@ void Player::handle_use_attack(signed char attack_type)
 	signed char targets = (attack.info_byte_ >> 4 & 0xF);
 	signed char hits = (attack.info_byte_ & 0xF);
 
-	for (signed char i = 0; i < targets; ++i)
-	{
+	for (signed char i = 0; i < targets; ++i) {
 		mob_object_id = read<int>();
 		skip_bytes(14);
 
 		int total_damage = 0;
 		std::vector<int> damages;
 
-		for (signed char j = 0; j < hits; ++j)
-		{
+		for (signed char j = 0; j < hits; ++j) {
 			int damage = read<int>();
 
 			if (attack.skill_id_ == 3221007) // Snipe
@@ -112,17 +110,14 @@ void Player::handle_use_attack(signed char attack_type)
 
 		// warning system
 
-		if (total_damage > 50000 && !get_is_gm() && level_ < 120)
-		{
+		if (total_damage > 50000 && !get_is_gm() && level_ < 120) {
 			std::string text = "[WARNING] player: " + name_ + " made damage : " + std::to_string(total_damage) + " with skill : " + std::to_string(attack.skill_id_);
 
 			auto players = World::get_instance()->get_players();
 
-			for (auto &it : *players)
-			{
+			for (auto &it : *players) {
 				Player *player = it.second;
-				if (player->get_is_gm())
-				{
+				if (player->get_is_gm()) {
 					{
 						PacketCreator packet;
 						packet.ShowMessage(text, 6);
@@ -134,14 +129,12 @@ void Player::handle_use_attack(signed char attack_type)
 
 		Mob *mob = map_->get_mob(mob_object_id);
 
-		if (mob && !mob->is_dead())
-		{
+		if (mob && !mob->is_dead()) {
 			// mage mp eater
 
 			int mp_eater = 0;
 
-			switch (job_)
-			{
+			switch (job_) {
 			case 210:
 			case 211:
 			case 212:
@@ -159,19 +152,15 @@ void Player::handle_use_attack(signed char attack_type)
 				break;
 			}
 
-			if (mp_eater != 0 && !mob->is_boss() && mob->get_mp())
-			{
-				if (skills_.find(mp_eater) != skills_.end())
-				{
+			if (mp_eater != 0 && !mob->is_boss() && mob->get_mp()) {
+				if (skills_.find(mp_eater) != skills_.end()) {
 					auto & skill = skills_[mp_eater];
 					int level = skill.level_;
 
-					if (level)
-					{
+					if (level) {
 						int emp = mob->get_max_mp() * (20 + level) / 100;
 
-						if (emp > mob->get_mp())
-						{
+						if (emp > mob->get_mp()) {
 							emp = mob->get_mp();
 						}
 
@@ -187,27 +176,23 @@ void Player::handle_use_attack(signed char attack_type)
 		attack.damages_[mob_object_id] = damages;
 
 		// rapid fire check
-		if (attack.skill_id_ != 5221004)
-		{
+		if (attack.skill_id_ != 5221004) {
 			skip_bytes(4);
 		}
 	}
 
 	// ranged only
 
-	if (star_slot > 0)
-	{
+	if (star_slot > 0) {
 		Inventory *inventory = get_inventory(kInventoryConstantsTypesUse);
 
-		if (!inventory)
-		{
+		if (!inventory) {
 			return;
 		}
 
 		std::shared_ptr<Item> item = inventory->get_item_by_slot(static_cast<signed char>(star_slot));
 
-		if (item)
-		{
+		if (item) {
 			attack.item_id_ = item->get_item_id();
 
 			if (!is_buff_stat_active(buffstat_constants::kSoulArrow) && // Soul Arrow
@@ -218,8 +203,7 @@ void Player::handle_use_attack(signed char attack_type)
 		}
 	}
 
-	switch (attack.skill_id_)
-	{
+	switch (attack.skill_id_) {
 	case 21120007: // Combo Barrier
 	case 21100005: // Combo Drain
 	case 21120006: // Combo Tempest
@@ -236,16 +220,12 @@ void Player::handle_use_attack(signed char attack_type)
 
 	// handle energy charge
 
-	if (skills_.find(5110001) != skills_.end())
-	{
-		for (signed char i = 0; i < hits; ++i)
-		{
-			if (energy_bar_ < 10000)
-			{
+	if (skills_.find(5110001) != skills_.end()) {
+		for (signed char i = 0; i < hits; ++i) {
+			if (energy_bar_ < 10000) {
 				energy_bar_ += 102;
 			}
-			if (energy_bar_ > 10000)
-			{
+			if (energy_bar_ > 10000) {
 				energy_bar_ = 10000;
 			}
 			{
@@ -258,15 +238,13 @@ void Player::handle_use_attack(signed char attack_type)
 
 	// handle combo
 
-	if (is_buff_stat_active(buffstat_constants::kCombo) && targets > 0)
-	{
+	if (is_buff_stat_active(buffstat_constants::kCombo) && targets > 0) {
 		signed char max_orb_count = 6;
 		int combo_skill_id = 1111002;
 		int advanced_combo_skill_id = 1120003;
 		int combo_time = 1000 * 100;
 
-		switch (job_)
-		{
+		switch (job_) {
 		case 1110:
 		case 1111:
 		case 1112:
@@ -275,13 +253,11 @@ void Player::handle_use_attack(signed char attack_type)
 			break;
 		}
 
-		if (skills_.find(advanced_combo_skill_id) != skills_.end())
-		{
+		if (skills_.find(advanced_combo_skill_id) != skills_.end()) {
 			max_orb_count = 11;
 		}
 
-		switch (attack.skill_id_)
-		{
+		switch (attack.skill_id_) {
 		case 1111003:
 			crusader_combo_value_ -= 2;
 			break;
@@ -290,8 +266,7 @@ void Player::handle_use_attack(signed char attack_type)
 			break;
 		}
 
-		if (attack.skill_id_ == 1111003 || attack.skill_id_ == 1111005)
-		{
+		if (attack.skill_id_ == 1111003 || attack.skill_id_ == 1111005) {
 			Values m;
 			auto vals = m.get_values();
 			vals->push_back(Value(buffstat_constants::kCombo, crusader_combo_value_));
@@ -307,8 +282,7 @@ void Player::handle_use_attack(signed char attack_type)
 			}
 		}
 
-		if (crusader_combo_value_ < max_orb_count)
-		{
+		if (crusader_combo_value_ < max_orb_count) {
 			crusader_combo_value_ += 1;
 
 			Values m;
@@ -327,15 +301,13 @@ void Player::handle_use_attack(signed char attack_type)
 		}
 	}
 
-	if (attack.skill_id_ > 0)
-	{
+	if (attack.skill_id_ > 0) {
 		apply_attack_skill_costs(attack.skill_id_, attack.skill_level_);
 	}
 
 	// nothing to send if there are no other players in the map
 
-	if (map_->get_players()->size() > 1)
-	{
+	if (map_->get_players()->size() > 1) {
 		{
 			PacketCreator packet;
 			packet.PlayerAttack(attack_type, attack);
@@ -345,14 +317,12 @@ void Player::handle_use_attack(signed char attack_type)
 
 	mob_object_id = 0;
 
-	for (auto &it : attack.damages_)
-	{
+	for (auto &it : attack.damages_) {
 		mob_object_id = it.first;
 
 		Mob *mob = map_->get_mob(mob_object_id);
 
-		if (mob && !mob->is_dead() && mob->get_hp() == 0)
-		{
+		if (mob && !mob->is_dead() && mob->get_hp() == 0) {
 			map_->kill(mob);
 		}
 	}

@@ -5,23 +5,19 @@
 #include "world.hpp"
 #include "packetcreator.hpp"
 
-void Player::handle_faming()
-{
+void Player::handle_faming() {
 	int target_player_id = read<int>();
-	if (target_player_id == id_)
-	{
+	if (target_player_id == id_) {
 		return;
 	}
 
 	World *world = World::get_instance();
 	Player *target_player = world->GetPlayerById(target_player_id);
-	if (!target_player)
-	{
+	if (!target_player) {
 		return;
 	}
 
-	if (world->can_fame(id_))
-	{
+	if (world->can_fame(id_)) {
 		signed char type = (read<signed char>() == 1 ? 1 : -1); // increase if type = 1, otherwise decrease
 		target_player->set_fame(target_player->get_fame() + type);
 		{

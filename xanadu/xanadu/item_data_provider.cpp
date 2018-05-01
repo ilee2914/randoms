@@ -11,31 +11,26 @@
 
 ItemDataProvider *ItemDataProvider::singleton_ = nullptr;
 
-ItemDataProvider *ItemDataProvider::get_instance()
-{
-	if (!singleton_)
-	{
+ItemDataProvider *ItemDataProvider::get_instance() {
+	if (!singleton_) {
 		singleton_ = new ItemDataProvider();
 	}
 
 	return singleton_;
 }
 
-void ItemDataProvider::load_data()
-{
+void ItemDataProvider::load_data() {
 	// Item.wz -> Cash / Consume / Etc / Install
 
 	WZMain *wz_reader = World::get_instance()->wz_reader_;
 	WZNode node1 = wz_reader->base_["Item"]["Cash"];
 
-	for (auto it1 : node1)
-	{
+	for (auto it1 : node1) {
 		std::string valuename1 = it1.name();
 
 		WZNode node11 = wz_reader->base_["Item"]["Cash"][valuename1.c_str()];
 
-		for (auto it11 : node11)
-		{
+		for (auto it11 : node11) {
 			std::string valuename11 = it11.name();
 
 			ItemData *item = (ItemData*)malloc(sizeof(ItemData));
@@ -52,14 +47,12 @@ void ItemDataProvider::load_data()
 
 	WZNode node2 = wz_reader->base_["Item"]["Consume"];
 
-	for (auto it2 : node2)
-	{
+	for (auto it2 : node2) {
 		std::string valuename2 = it2.name();
 
 		WZNode node21 = wz_reader->base_["Item"]["Consume"][valuename2.c_str()];
 
-		for (auto it21 : node21)
-		{
+		for (auto it21 : node21) {
 			std::string valuename21 = it21.name();
 
 			ItemData *item = (ItemData*)malloc(sizeof(ItemData));
@@ -71,22 +64,18 @@ void ItemDataProvider::load_data()
 
 			WZNode node22 = wz_reader->base_["Item"]["Consume"][valuename2.c_str()][valuename21.c_str()]["info"];
 
-			for (auto it22 : node22)
-			{
+			for (auto it22 : node22) {
 				std::string valuename22 = it22.name();
 
-				if (valuename22 == "slotMax")
-				{
+				if (valuename22 == "slotMax") {
 					item->max_per_slot = it22.get_int_value();
 				}
 
-				else if (valuename22 == "price")
-				{
+				else if (valuename22 == "price") {
 					item->price = it22.get_int_value();
 				}
 
-				else if (valuename22 == "tradeBlock")
-				{
+				else if (valuename22 == "tradeBlock") {
 					item->trade_able = it22.get_int_value() != 0;
 				}
 			}
@@ -95,77 +84,62 @@ void ItemDataProvider::load_data()
 
 			WZNode node23 = wz_reader->base_["Item"]["Consume"][valuename2.c_str()][valuename21.c_str()]["spec"];
 
-			for (auto it23 : node23)
-			{
+			for (auto it23 : node23) {
 				std::string valuename23 = it23.name();
 
-				if (valuename23 == "hpR")
-				{
+				if (valuename23 == "hpR") {
 					item->hpr = it23.get_int_value();
 				}
 
-				else if (valuename23 == "mpR")
-				{
+				else if (valuename23 == "mpR") {
 					item->mpr = it23.get_int_value();
 				}
 
-				else if (valuename23 == "time")
-				{
+				else if (valuename23 == "time") {
 					item->time = it23.get_int_value();
 				}
 
-				else if (valuename23 == "hp")
-				{
+				else if (valuename23 == "hp") {
 					item->hhp = it23.get_int_value();
 				}
 
-				else if (valuename23 == "mp")
-				{
+				else if (valuename23 == "mp") {
 					item->hmp = it23.get_int_value();
 				}
 
-				else if (valuename23 == "acc")
-				{
+				else if (valuename23 == "acc") {
 					item->acc = it23.get_int_value();
 				}
 
-				else if (valuename23 == "eva")
-				{
+				else if (valuename23 == "eva") {
 					item->avo = it23.get_int_value();
 				}
 
-				else if (valuename23 == "speed")
-				{
+				else if (valuename23 == "speed") {
 					item->speed = it23.get_int_value();
 				}
 
-				else if (valuename23 == "jump")
-				{
+				else if (valuename23 == "jump") {
 					item->jump = it23.get_int_value();
 				}
 
-				else if (valuename23 == "pdd")
-				{
+				else if (valuename23 == "pdd") {
 					item->wdef = it23.get_int_value();
 				}
 
-				else if (valuename23 == "mdd")
-				{
+				else if (valuename23 == "mdd") {
 					item->mdef = it23.get_int_value();
 				}
 
-				else if (valuename23 == "pad")
-				{
+				else if (valuename23 == "pad") {
 					item->watk = it23.get_int_value();
 				}
 
-				else if (valuename23 == "mad")
-				{
+				else if (valuename23 == "mad") {
 					item->matk = it23.get_int_value();
 				}
 
-				else if (valuename23 == "moveTo")
-				{
+				else if (valuename23 == "moveTo") {
 					item->move_to = it23.get_int_value();
 				}
 			}
@@ -174,92 +148,74 @@ void ItemDataProvider::load_data()
 
 			WZNode node24 = wz_reader->base_["Item"]["Consume"][valuename2.c_str()][valuename21.c_str()]["info"];
 
-			for (auto it24 : node24)
-			{
+			for (auto it24 : node24) {
 				std::string valuename24 = it24.name();
 
-				if (valuename24 == "success")
-				{
+				if (valuename24 == "success") {
 					item->success = it24.get_int_value();
 				}
 
-				else if (valuename24 == "cursed")
-				{
+				else if (valuename24 == "cursed") {
 					item->cursed = it24.get_int_value();
 				}
 
-				else if (valuename24 == "recover")
-				{
+				else if (valuename24 == "recover") {
 					item->recover = it24.get_int_value() != 0;
 				}
 
-				else if (valuename24 == "incJump")
-				{
+				else if (valuename24 == "incJump") {
 					item->jump = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incSpeed")
-				{
+				else if (valuename24 == "incSpeed") {
 					item->speed = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incSTR")
-				{
+				else if (valuename24 == "incSTR") {
 					item->str = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incDEX")
-				{
+				else if (valuename24 == "incDEX") {
 					item->dex = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incINT")
-				{
+				else if (valuename24 == "incINT") {
 					item->intt = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incLUK")
-				{
+				else if (valuename24 == "incLUK") {
 					item->luk = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incMHP")
-				{
+				else if (valuename24 == "incMHP") {
 					item->hp = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incMMP")
-				{
+				else if (valuename24 == "incMMP") {
 					item->mp = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incEVA")
-				{
+				else if (valuename24 == "incEVA") {
 					item->avo = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incACC")
-				{
+				else if (valuename24 == "incACC") {
 					item->acc = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incPAD")
-				{
+				else if (valuename24 == "incPAD") {
 					item->watk = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incMAD")
-				{
+				else if (valuename24 == "incMAD") {
 					item->matk = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incPDD")
-				{
+				else if (valuename24 == "incPDD") {
 					item->wdef = it24.get_int_value();
 				}
 
-				else if (valuename24 == "incMDD")
-				{
+				else if (valuename24 == "incMDD") {
 					item->mdef = it24.get_int_value();
 				}
 			}
@@ -270,14 +226,12 @@ void ItemDataProvider::load_data()
 
 	WZNode node3 = wz_reader->base_["Item"]["Etc"];
 
-	for (auto it3 : node3)
-	{
+	for (auto it3 : node3) {
 		std::string valuename3 = it3.name();
 
 		WZNode node31 = wz_reader->base_["Item"]["Etc"][valuename3.c_str()];
 
-		for (auto it31 : node31)
-		{
+		for (auto it31 : node31) {
 			std::string valuename31 = it31.name();
 
 			ItemData *item = (ItemData*)malloc(sizeof(ItemData));
@@ -289,22 +243,18 @@ void ItemDataProvider::load_data()
 
 			WZNode node32 = wz_reader->base_["Item"]["Etc"][valuename3.c_str()][valuename31.c_str()]["info"];
 
-			for (auto it32 : node32)
-			{
+			for (auto it32 : node32) {
 				std::string valuename32 = it32.name();
 
-				if (valuename32 == "slotMax")
-				{
+				if (valuename32 == "slotMax") {
 					item->max_per_slot = it32.get_int_value();
 				}
 
-				else if (valuename32 == "price")
-				{
+				else if (valuename32 == "price") {
 					item->price = it32.get_int_value();
 				}
 
-				else if (valuename32 == "tradeBlock")
-				{
+				else if (valuename32 == "tradeBlock") {
 					item->trade_able = it32.get_int_value() != 0;
 				}
 			}
@@ -315,14 +265,12 @@ void ItemDataProvider::load_data()
 
 	WZNode node4 = wz_reader->base_["Item"]["Install"];
 
-	for (auto it4 : node4)
-	{
+	for (auto it4 : node4) {
 		std::string valuename4 = it4.name();
 
 		WZNode node41 = wz_reader->base_["Item"]["Install"][valuename4.c_str()];
 
-		for (auto it41 : node41)
-		{
+		for (auto it41 : node41) {
 			std::string valuename41 = it41.name();
 
 			ItemData *item = (ItemData*)malloc(sizeof(ItemData));
@@ -334,22 +282,18 @@ void ItemDataProvider::load_data()
 
 			WZNode node42 = wz_reader->base_["Item"]["Install"][valuename4.c_str()][valuename41.c_str()]["info"];
 
-			for (auto it42 : node42)
-			{
+			for (auto it42 : node42) {
 				std::string valuename42 = it42.name();
 
-				if (valuename42 == "slotMax")
-				{
+				if (valuename42 == "slotMax") {
 					item->max_per_slot = it42.get_int_value();
 				}
 
-				else if (valuename42 == "price")
-				{
+				else if (valuename42 == "price") {
 					item->price = it42.get_int_value();
 				}
 
-				else if (valuename42 == "tradeBlock")
-				{
+				else if (valuename42 == "tradeBlock") {
 					item->trade_able = it42.get_int_value() != 0;
 				}
 			}
@@ -359,22 +303,18 @@ void ItemDataProvider::load_data()
 	}
 }
 
-ItemData *ItemDataProvider::get_item_data(int item_id)
-{
-	if (items_.find(item_id) == items_.end())
-	{
+ItemData *ItemDataProvider::get_item_data(int item_id) {
+	if (items_.find(item_id) == items_.end()) {
 		return nullptr;
 	}
 
 	return items_[item_id];
 }
 
-std::unordered_map<int, ItemData *> *ItemDataProvider::get_data()
-{
+std::unordered_map<int, ItemData *> *ItemDataProvider::get_data() {
 	return &items_;
 }
 
-void ItemDataProvider::add_item(ItemData *data)
-{
+void ItemDataProvider::add_item(ItemData *data) {
 	items_[data->id] = data;
 }

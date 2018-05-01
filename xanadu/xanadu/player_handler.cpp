@@ -26,36 +26,30 @@
 #include "buffstat_constants.hpp"
 #include "constants.hpp"
 
-void Player::handle_face_expression()
-{
+void Player::handle_face_expression() {
 	// nothing to handle if there are no other players in the map
-	if (map_->get_players()->size() == 1)
-	{
+	if (map_->get_players()->size() == 1) {
 		return;
 	}
 
 	// 1-7 are the standard emotes, above numbers are the cash emotes
 	int emote = read<int>();
 
-	if (emote < 1)
-	{
+	if (emote < 1) {
 		return;
 	}
 
 	// if it is a cash emote, check if the player has the cash item
-	if (emote > 7)
-	{
+	if (emote > 7) {
 		Inventory *inventory = get_inventory(kInventoryConstantsTypesCash);
 
-		if (!inventory)
-		{
+		if (!inventory) {
 			return;
 		}
 
 		int emote_id = (5159992 + emote);
 
-		if (inventory->get_item_amount(emote_id) == 0)
-		{
+		if (inventory->get_item_amount(emote_id) == 0) {
 			return;
 		}
 	}
@@ -66,38 +60,31 @@ void Player::handle_face_expression()
 	}
 }
 
-void Player::handle_hp_mp_recovering()
-{
+void Player::handle_hp_mp_recovering() {
 	skip_bytes(8);
 
 	short heal_hp = read<short>();
-	if (heal_hp > 0)
-	{
+	if (heal_hp > 0) {
 		set_hp(hp_ + heal_hp);
 	}
 
 	short heal_mp = read<short>();
-	if (heal_mp > 0)
-	{
+	if (heal_mp > 0) {
 		set_mp(mp_ + heal_mp);
 	}
 }
 
-void Player::handle_key_map_changes()
-{
+void Player::handle_key_map_changes() {
 	int mode = read<int>();
 
-	if (mode == 0)
-	{
+	if (mode == 0) {
 		int changes = read<int>();
 
-		if (changes > kMaxKeymapPos)
-		{
+		if (changes > kMaxKeymapPos) {
 			return;
 		}
 
-		for (int i = 0; i < changes; ++i)
-		{
+		for (int i = 0; i < changes; ++i) {
 			int pos = read<int>();
 			signed char type = read<signed char>();
 			int action = read<int>();
@@ -111,76 +98,59 @@ void Player::handle_key_map_changes()
 	}
 }
 
-void Player::handle_player_hit()
-{
+void Player::handle_player_hit() {
 	skip_bytes(6);
 
 	int damage = read<int>();
-	if (damage < 1)
-	{
+	if (damage < 1) {
 		return;
 	}
 
-	if (is_buff_stat_active(buffstat_constants::kMagicGuard))
-	{
+	if (is_buff_stat_active(buffstat_constants::kMagicGuard)) {
 		int mp_damage = static_cast<int>((damage * get_buff_value(buffstat_constants::kMagicGuard)) / 100.0);
 		int hp_damage = (damage - mp_damage);
 
-		if (mp_damage >= mp_)
-		{
+		if (mp_damage >= mp_) {
 			add_hp(-(hp_damage + (mp_damage - mp_)));
 			set_mp(0);
-		}
-		else
-		{
+		} else {
 			add_hp(-hp_damage);
 			add_mp(-mp_damage);
 		}
-	}
-	else
-	{
+	} else {
 		add_hp(-damage);
 	}
 }
 
-void Player::handle_change_map()
-{
+void Player::handle_change_map() {
 	skip_bytes(1);
 	int type = read<int>();
 
-	if (type == 0 && hp_ == 0) // death
-	{
+	if (type == 0 && hp_ == 0) {
 		set_hp(50);
 
-		if (map_->get_id() == 270050100 || map_->get_id() == 211070100)
-		{
+		if (map_->get_id() == 270050100 || map_->get_id() == 211070100) {
 			change_map(map_);
-		}
-		else
-		{
+		} else {
 			set_map(map_->get_return_map());
 		}
 	}
 
-	else if (type == -1) // normal portal
-	{
+	else if (type == -1) { // normal portal
 		std::string portal_name = read<std::string>();
 
 		MapData *data = MapDataProvider::get_instance()->get_map_data_by_id(map_->get_id());
 		MapPortalData *portal = data->get_portal(portal_name);
-		if (!portal)
-		{
+		if (!portal) {
 			return;
 		}
 
 		Map *tomap = World::get_instance()->GetChannel(channel_id_)->get_map(portal->get_to_map_id());
-		if (!tomap)
-		{
+		if (!tomap) {
 			return;
 		}
 
-		if (portal->get_type() == 5 && !map_->is_portal_enabled(portal->get_from_protal()))
-		{
+		if (portal->get_type() == 5 && !map_->is_portal_enabled(portal->get_from_protal())) {
 			{
 				PacketCreator packet;
 				packet.ShowMessage("You cannot enter this portal yet.", 0);
@@ -199,8 +169,7 @@ void Player::handle_change_map()
 
 		signed char new_spawnpoint = 0;
 
-		if (tportal)
-		{
+		if (tportal) {
 			position_x_ = tportal->get_x();
 			position_y_ = tportal->get_y();
 			new_spawnpoint = tportal->get_id();
@@ -210,46 +179,37 @@ void Player::handle_change_map()
 	}
 }
 
-void Player::handle_change_channel()
-{
+void Player::handle_change_channel() {
 	// check if the target channel is valid
 	signed char new_channel_id = read<signed char>();
-	if (!World::get_instance()->GetChannel(new_channel_id))
-	{
+	if (!World::get_instance()->GetChannel(new_channel_id)) {
 		return;
 	}
 	channel_id_ = new_channel_id;
 	set_map(map_->get_id());
 }
 
-void Player::handle_get_player_info()
-{
+void Player::handle_get_player_info() {
 	skip_bytes(4);
 	int target_player_id = read<int>();
 	Player *target_player = World::get_instance()->GetPlayerById(target_player_id);
 	{
 		PacketCreator packet;
-		if (target_player)
-		{
+		if (target_player) {
 			packet.ShowInfo(target_player);
-		}
-		else
-		{
+		} else {
 			packet.EnableAction();
 		}
 		send_packet(&packet);
 	}
 }
 
-void Player::handle_hired_merchant_request()
-{
-	if (merchant_)
-	{
+void Player::handle_hired_merchant_request() {
+	if (merchant_) {
 		return;
 	}
 
-	if (!map_->can_open_store(this))
-	{
+	if (!map_->can_open_store(this)) {
 		return;
 	}
 	{
@@ -259,8 +219,7 @@ void Player::handle_hired_merchant_request()
 	}
 }
 
-void Player::handle_use_hammer()
-{
+void Player::handle_use_hammer() {
 	PacketCreator packet;
 	packet.SendHammerMessage();
 	send_packet(&packet);

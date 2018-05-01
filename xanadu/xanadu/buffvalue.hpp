@@ -2,8 +2,7 @@
 
 #pragma once
 
-class Value
-{
+class Value {
 public:
 
 	// constructor
@@ -17,7 +16,7 @@ public:
 
 	// move constructor
 	Value(Value &&other) = default;
-	
+
 	// destructor
 	~Value() = default;
 

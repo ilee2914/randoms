@@ -25,17 +25,14 @@
 std::unordered_map<int, Effect *> Effect::item_effects_;
 std::unordered_map<int, std::unordered_map<signed char, Effect *>> Effect::skill_effects_;
 
-Effect *Effect::get_item_effect(int id)
-{
-	if (item_effects_.find(id) != item_effects_.end())
-	{
+Effect *Effect::get_item_effect(int id) {
+	if (item_effects_.find(id) != item_effects_.end()) {
 		return item_effects_[id];
 	}
 
 	ItemData *item = ItemDataProvider::get_instance()->get_item_data(id);
 
-	if (!item)
-	{
+	if (!item) {
 		return nullptr;
 	}
 
@@ -44,24 +41,20 @@ Effect *Effect::get_item_effect(int id)
 	return eb;
 }
 
-Effect *Effect::get_skill_effect(int id, signed char level)
-{
-	if (skill_effects_.find(id) != skill_effects_.end() && skill_effects_[id].find(level) != skill_effects_[id].end())
-	{
+Effect *Effect::get_skill_effect(int id, signed char level) {
+	if (skill_effects_.find(id) != skill_effects_.end() && skill_effects_[id].find(level) != skill_effects_[id].end()) {
 		return skill_effects_[id][level];
 	}
 
 	SkillData *skill = SkillDataProvider::get_instance()->get_skill_data(id);
 
-	if (!skill)
-	{
+	if (!skill) {
 		return nullptr;
 	}
 
 	SkillLevelData *seffect = skill->get_skill_level(level);
 
-	if (!seffect)
-	{
+	if (!seffect) {
 		return nullptr;
 	}
 
@@ -74,40 +67,31 @@ Effect::Effect(int id, ItemData *data) :
 	level_(0),
 	id_(-id),
 	skill_data_(nullptr),
-	item_data_(data)
-{
+	item_data_(data) {
 	auto values = values_.get_values();
 
-	if (data->watk != 0)
-	{
+	if (data->watk != 0) {
 		values->push_back(Value(buffstat_constants::kWatk, data->watk));
 	}
-	if (data->wdef != 0)
-	{
+	if (data->wdef != 0) {
 		values->push_back(Value(buffstat_constants::kWdef, data->wdef));
 	}
-	if (data->matk != 0)
-	{
+	if (data->matk != 0) {
 		values->push_back(Value(buffstat_constants::kMatk, data->matk));
 	}
-	if (data->mdef != 0)
-	{
+	if (data->mdef != 0) {
 		values->push_back(Value(buffstat_constants::kMdef, data->mdef));
 	}
-	if (data->acc != 0)
-	{
+	if (data->acc != 0) {
 		values->push_back(Value(buffstat_constants::kAcc, data->acc));
 	}
-	if (data->avo != 0)
-	{
+	if (data->avo != 0) {
 		values->push_back(Value(buffstat_constants::kAvoid, data->avo));
 	}
-	if (data->speed != 0)
-	{
+	if (data->speed != 0) {
 		values->push_back(Value(buffstat_constants::kSpeed, data->speed));
 	}
-	if (data->jump != 0)
-	{
+	if (data->jump != 0) {
 		values->push_back(Value(buffstat_constants::kJump, data->jump));
 	}
 }
@@ -116,44 +100,34 @@ Effect::Effect(int id, SkillLevelData *data) :
 	level_(data->id),
 	id_(id),
 	skill_data_(data),
-	item_data_(nullptr)
-{
+	item_data_(nullptr) {
 	auto values = values_.get_values();
-	if (data->weapon_atk != 0)
-	{
+	if (data->weapon_atk != 0) {
 		values->push_back(Value(buffstat_constants::kWatk, data->weapon_atk));
 	}
-	if (data->weapon_def != 0)
-	{
+	if (data->weapon_def != 0) {
 		values->push_back(Value(buffstat_constants::kWdef, data->weapon_def));
 	}
-	if (data->magic_atk != 0)
-	{
+	if (data->magic_atk != 0) {
 		values->push_back(Value(buffstat_constants::kMatk, data->magic_atk));
 	}
-	if (data->magic_def != 0)
-	{
+	if (data->magic_def != 0) {
 		values->push_back(Value(buffstat_constants::kMdef, data->magic_def));
 	}
-	if (data->accuracy != 0)
-	{
+	if (data->accuracy != 0) {
 		values->push_back(Value(buffstat_constants::kAcc, data->accuracy));
 	}
-	if (data->avoid != 0)
-	{
+	if (data->avoid != 0) {
 		values->push_back(Value(buffstat_constants::kAvoid, data->avoid));
 	}
-	if (data->speed != 0)
-	{
+	if (data->speed != 0) {
 		values->push_back(Value(buffstat_constants::kSpeed, data->speed));
 	}
-	if (data->jump != 0)
-	{
+	if (data->jump != 0) {
 		values->push_back(Value(buffstat_constants::kJump, data->jump));
 	}
 
-	switch (id)
-	{
+	switch (id) {
 	case 2001002: // Mage Magic Guard
 		values->push_back(Value(buffstat_constants::kMagicGuard, skill_data_->x));
 		break;
@@ -248,9 +222,9 @@ Effect::Effect(int id, SkillLevelData *data) :
 	case 5321010: // Pirate's Spirit
 		values->push_back(Value(buffstat_constants::kStance, skill_data_->prop));
 		break;
-	//case 5110001: // Energy Charge
-	//	values->push_back(Value(buffstat_constants_position_2::kEnergyCharge, 0, 2));
-	//	break;
+		//case 5110001: // Energy Charge
+		//	values->push_back(Value(buffstat_constants_position_2::kEnergyCharge, 0, 2));
+		//	break;
 	case 1004: // Monster Rider
 	case 5221006: // Battle Ship
 		values->push_back(Value(buffstat_constants_position_2::kMonsterRiding, id_, 2));
@@ -273,26 +247,21 @@ Effect::Effect(int id, SkillLevelData *data) :
 	}
 }
 
-int Effect::get_id()
-{
+int Effect::get_id() {
 	return id_;
 }
 
-Values *Effect::get_values()
-{
+Values *Effect::get_values() {
 	return &values_;
 }
 
-void handle_stop_cooldown(int player_id, int skill_id, const std::error_code &ec)
-{
-	if (ec)
-	{
+void handle_stop_cooldown(int player_id, int skill_id, const std::error_code &ec) {
+	if (ec) {
 		return;
 	}
 
 	Player *player = World::get_instance()->GetPlayerById(player_id);
-	if (!player)
-	{
+	if (!player) {
 		return;
 	}
 
@@ -300,8 +269,7 @@ void handle_stop_cooldown(int player_id, int skill_id, const std::error_code &ec
 	timer::Id timer_id(timer::kTimerTypesCoolDownTimer, skill_id);
 
 	auto timers = player->get_timers();
-	if (timers->find(timer_id) != timers->end())
-	{
+	if (timers->find(timer_id) != timers->end()) {
 		timers->erase(timer_id);
 	}
 	{
@@ -311,18 +279,14 @@ void handle_stop_cooldown(int player_id, int skill_id, const std::error_code &ec
 	}
 }
 
-void Effect::use_attack_skill(Player *player)
-{
-	if (skill_data_->hp_cost > 0)
-	{
+void Effect::use_attack_skill(Player *player) {
+	if (skill_data_->hp_cost > 0) {
 		player->add_hp(-skill_data_->hp_cost);
 	}
-	if (skill_data_->mp_cost > 0)
-	{
+	if (skill_data_->mp_cost > 0) {
 		player->add_mp(-skill_data_->mp_cost);
 	}
-	if (skill_data_->cooldown_time > 0)
-	{
+	if (skill_data_->cooldown_time > 0) {
 		{
 			PacketCreator packet;
 			packet.SendCooldown(id_, skill_data_->cooldown_time);
@@ -338,33 +302,27 @@ void Effect::use_attack_skill(Player *player)
 	}
 }
 
-void handle_stop_buff(int player_id, int buff_id, const std::error_code &ec)
-{
-	if (ec)
-	{
+void handle_stop_buff(int player_id, int buff_id, const std::error_code &ec) {
+	if (ec) {
 		return;
 	}
 
 	Player *player = World::get_instance()->GetPlayerById(player_id);
-	if (!player)
-	{
+	if (!player) {
 		return;
 	}
 	player->cancel_buff(buff_id, true);
 }
 
-void Effect::use_skill(Player *player)
-{
+void Effect::use_skill(Player *player) {
 	{
 		PacketCreator packet;
 		packet.ShowBuffEffect(player->get_id(), 1, id_, level_);
 		player->get_map()->send_packet(&packet, player);
 	}
-	if (id_ == 1121010)
-	{
+	if (id_ == 1121010) {
 		int combo_skill_id = 1111002;
-		switch (player->get_job())
-		{
+		switch (player->get_job()) {
 		case 1110:
 		case 1111:
 		case 1112:
@@ -389,37 +347,29 @@ void Effect::use_skill(Player *player)
 		}
 	}
 
-	if (skill_data_->hp_cost > 0)
-	{
+	if (skill_data_->hp_cost > 0) {
 		player->add_hp(-skill_data_->hp_cost);
 	}
 
-	if (skill_data_->mp_cost > 0)
-	{
+	if (skill_data_->mp_cost > 0) {
 		player->add_mp(-skill_data_->mp_cost);
 	}
 
-	if (skill_data_->required_item_id > 0)
-	{
+	if (skill_data_->required_item_id > 0) {
 		player->remove_item(skill_data_->required_item_id, skill_data_->required_item_count);
 	}
 
-	if (skill_data_->ltx != 0 && skill_data_->rbx != 0 && player->get_party())
-	{
+	if (skill_data_->ltx != 0 && skill_data_->rbx != 0 && player->get_party()) {
 		auto players = player->get_party()->get_players();
-		for (auto it : *players)
-		{
+		for (auto it : *players) {
 			Player *target_player = it.second;
 
-			if (target_player != player && target_player->get_map() == player->get_map())
-			{
+			if (target_player != player && target_player->get_map() == player->get_map()) {
 				if (target_player->get_position_x() > player->get_position_x() + skill_data_->ltx &&
 					target_player->get_position_y() > player->get_position_y() + skill_data_->lty &&
 					target_player->get_position_x() < player->get_position_x() + skill_data_->rbx &&
-					target_player->get_position_y() < player->get_position_y() + skill_data_->rby)
-				{
-					if (target_player->get_hp() > 0)
-					{
+					target_player->get_position_y() < player->get_position_y() + skill_data_->rby) {
+					if (target_player->get_hp() > 0) {
 						{
 							PacketCreator packet;
 							packet.ShowBuffEffect(target_player->get_id(), 2, id_, level_);
@@ -439,8 +389,7 @@ void Effect::use_skill(Player *player)
 						}
 
 						bool is_buff = (skill_data_->time > 0 && values_.get_values()->size() > 0);
-						if (is_buff)
-						{
+						if (is_buff) {
 							target_player->add_buff(this);
 
 							{
@@ -461,27 +410,23 @@ void Effect::use_skill(Player *player)
 		}
 	}
 
-	if (tools::is_monster_riding(id_))
-	{
+	if (tools::is_monster_riding(id_)) {
 		skill_data_->time = 2100000000;
 		int mount_id = 0;
 
 		if (id_ == 1004) // 1004 is the monster rider skill id
 		{
 			if (player->get_inventory(kInventoryConstantsTypesEquipped)->get_item_by_slot(kItemConstantsEquippedSlotsTamingMobSaddle)
-				&& player->get_inventory(kInventoryConstantsTypesEquipped)->get_item_by_slot(kItemConstantsEquippedSlotsTamingMob))
-			{
+				&& player->get_inventory(kInventoryConstantsTypesEquipped)->get_item_by_slot(kItemConstantsEquippedSlotsTamingMob)) {
 				mount_id = player->get_inventory(kInventoryConstantsTypesEquipped)->get_item_by_slot(kItemConstantsEquippedSlotsTamingMob)->get_item_id();
 			}
 
-			if (mount_id == 0)
-			{
+			if (mount_id == 0) {
 				return;
 			}
 		}
 
-		if (id_ == 5221006)
-		{
+		if (id_ == 5221006) {
 			mount_id = 1932000;
 		}
 
@@ -489,8 +434,7 @@ void Effect::use_skill(Player *player)
 		player->set_mount_skill_id(id_);
 	}
 
-	if (skill_data_->cooldown_time > 0)
-	{
+	if (skill_data_->cooldown_time > 0) {
 		{
 			PacketCreator packet;
 			packet.SendCooldown(id_, skill_data_->cooldown_time);
@@ -514,25 +458,19 @@ void Effect::use_skill(Player *player)
 
 	bool is_buff = (skill_data_->time > 0 && values_.get_values()->size() > 0);
 
-	if (is_buff)
-	{
+	if (is_buff) {
 		player->add_buff(this);
 		{
 			PacketCreator packet;
-			if (tools::is_monster_riding(id_))
-			{
+			if (tools::is_monster_riding(id_)) {
 				packet.ShowPlayerBuff(&values_, player->get_mount_item_id(), id_);
-			}
-			else if (id_ == 5001005 || id_ == 15001003) // dash
+			} else if (id_ == 5001005 || id_ == 15001003) // dash
 			{
 				packet.GiveDashOrInfusionBuff(&values_, id_, skill_data_->time / 1000, true);
-			}
-			else if (id_ == 5121009 || id_ == 5221010 || id_ == 15111005) // speed infusion
+			} else if (id_ == 5121009 || id_ == 5221010 || id_ == 15111005) // speed infusion
 			{
 				packet.GiveDashOrInfusionBuff(&values_, id_, skill_data_->time / 1000, false);
-			}
-			else
-			{
+			} else {
 				packet.ShowPlayerBuff(&values_, id_, skill_data_->time);
 			}
 			player->send_packet(&packet);
@@ -548,65 +486,49 @@ void Effect::use_skill(Player *player)
 		Values m;
 		auto vals = m.get_values();
 
-		if (values_.get_value_by_stat(buffstat_constants::kDarksight) != 0)
-		{
+		if (values_.get_value_by_stat(buffstat_constants::kDarksight) != 0) {
 			vals->push_back(Value(buffstat_constants::kDarksight, 1));
 		}
-		if (values_.get_value_by_stat(buffstat_constants::kShadowPartner) != 0)
-		{
+		if (values_.get_value_by_stat(buffstat_constants::kShadowPartner) != 0) {
 			vals->push_back(Value(buffstat_constants::kShadowPartner, 1));
 		}
-		if (values_.get_value_by_stat(buffstat_constants_position_2::kMonsterRiding) != 0)
-		{
+		if (values_.get_value_by_stat(buffstat_constants_position_2::kMonsterRiding) != 0) {
 			vals->push_back(Value(buffstat_constants_position_2::kMonsterRiding, 0, 2));
 		}
-		if (values_.get_value_by_stat(buffstat_constants::kMorph) != 0)
-		{
+		if (values_.get_value_by_stat(buffstat_constants::kMorph) != 0) {
 			int test = 0;
 			int test_id = 1000;
-			if (test_id % 10 == 0)
-			{
-				 test = test_id + static_cast<int>(player->get_gender());
-			}
-			else
-			{
+			if (test_id % 10 == 0) {
+				test = test_id + static_cast<int>(player->get_gender());
+			} else {
 				test = test_id + 100 * static_cast<int>(player->get_gender());
 			}
 
 			vals->push_back(Value(buffstat_constants::kMorph, test));
 		}
-		if (values_.get_value_by_stat(buffstat_constants_position_2::kSpeedInfusion) != 0)
-		{
+		if (values_.get_value_by_stat(buffstat_constants_position_2::kSpeedInfusion) != 0) {
 			vals->push_back(Value(buffstat_constants_position_2::kSpeedInfusion, -1, 2));
 		}
-		if (values_.get_value_by_stat(buffstat_constants_position_2::kDashJump) != 0)
-		{
+		if (values_.get_value_by_stat(buffstat_constants_position_2::kDashJump) != 0) {
 			vals->push_back(Value(buffstat_constants_position_2::kDashJump, 1, 2));
 		}
-		if (values_.get_value_by_stat(buffstat_constants_position_2::kDashSpeed) != 0)
-		{
+		if (values_.get_value_by_stat(buffstat_constants_position_2::kDashSpeed) != 0) {
 			vals->push_back(Value(buffstat_constants_position_2::kDashSpeed, 1, 2));
 		}
-		if (vals->size() > 0)
-		{
+		if (vals->size() > 0) {
 			PacketCreator packet;
-			if (tools::is_monster_riding(id_))
-			{
+			if (tools::is_monster_riding(id_)) {
 				packet.ShowMonsterRiding(player->get_id(), player->get_mount_item_id(), id_);
 				player->get_map()->send_packet(&packet, player);
-			}
-			else if (id_ == 5001005 || id_ == 15001003) // dash
+			} else if (id_ == 5001005 || id_ == 15001003) // dash
 			{
 				packet.ShowForeignDashOrInfusionBuff(player->get_id(), &m, id_, skill_data_->time / 1000, true);
 				player->get_map()->send_packet(&packet);
-			}
-			else if (id_ == 5121009 || id_ == 5221010 || id_ == 15111005) // speed infusion
+			} else if (id_ == 5121009 || id_ == 5221010 || id_ == 15111005) // speed infusion
 			{
 				packet.ShowForeignDashOrInfusionBuff(player->get_id(), &m, id_, skill_data_->time, false);
 				player->get_map()->send_packet(&packet);
-			}
-			else
-			{
+			} else {
 				packet.ShowMapBuff(player->get_id(), &m);
 				player->get_map()->send_packet(&packet);
 			}
@@ -614,30 +536,24 @@ void Effect::use_skill(Player *player)
 	}
 }
 
-void Effect::use_item(Player *player)
-{
-	if (item_data_->hhp > 0 && player->get_hp() > 0)
-	{
+void Effect::use_item(Player *player) {
+	if (item_data_->hhp > 0 && player->get_hp() > 0) {
 		player->add_hp(item_data_->hhp);
 	}
 
-	if (item_data_->hmp > 0)
-	{
+	if (item_data_->hmp > 0) {
 		player->add_mp(item_data_->hmp);
 	}
 
-	if (item_data_->hpr > 0)
-	{
+	if (item_data_->hpr > 0) {
 		player->add_hp(item_data_->hpr * player->get_max_hp() / 100);
 	}
 
-	if (item_data_->mpr > 0)
-	{
+	if (item_data_->mpr > 0) {
 		player->add_mp(item_data_->mpr * player->get_max_mp() / 100);
 	}
 
-	if (item_data_->time > 0 && values_.get_values()->size() > 0)
-	{
+	if (item_data_->time > 0 && values_.get_values()->size() > 0) {
 		player->add_buff(this);
 		{
 			PacketCreator packet;

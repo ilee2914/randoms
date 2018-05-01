@@ -234,7 +234,6 @@ void Map::cleanup_timer_callback(const std::error_code &ec) {
 	if (has_reactors_) {
 		check_reactors();
 		timer_seconds = 8;
-
 	}
 
 	check_drops();
@@ -699,7 +698,7 @@ void Map::drop_from_mob(Mob *mob, int killer_player_id) {
 		int chance = drop->chance;
 		int drop_chance = (chance * kDropRate);
 		int random_value = tools::random_int(1, 999999);
-		cout << drop->item_id << endl;
+
 		if (random_value < drop_chance) {
 			drop_pos_x = (mob->get_position_x() + 25 * ((count + count % 2) / 2) * ((count % 2) ? 1 : -1));
 			drop_pos_y = mob->get_position_y();

@@ -243,7 +243,6 @@ void QuestDataProvider::load_data() {
 
 QuestData *QuestDataProvider::get_quest_data(int quest_id) {
 	if (quests_.find(quest_id) == quests_.end()) {
-		std::cout << "quest data for " << quest_id << " doesnt exist" << std::endl;
 		return nullptr;
 	}
 

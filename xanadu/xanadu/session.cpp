@@ -20,33 +20,28 @@ Session::Session() :
 	player_(new Player(this)),
 	receive_buffer_(new unsigned char[kInitialPacketBufferSize]()),
 	iv_recv_(new unsigned char[kIvBufferSize]()),
-	iv_send_(new unsigned char[kIvBufferSize]())
-{
+	iv_send_(new unsigned char[kIvBufferSize]()) {
 }
 
 // destructor
 
-Session::~Session()
-{
+Session::~Session() {
 	delete player_;
 	delete[] iv_recv_;
 	delete[] iv_send_;
 }
 
-asio::ip::tcp::socket &Session::get_socket()
-{
+asio::ip::tcp::socket &Session::get_socket() {
 	return socket_;
 }
 
-unsigned char *Session::get_receive_buffer()
-{
+unsigned char *Session::get_receive_buffer() {
 	return receive_buffer_.get();
 }
 
 // initializes the session
 
-void Session::initialize()
-{
+void Session::initialize() {
 	// set the no delay option for the socket
 	asio::ip::tcp::no_delay option(true);
 	socket_.set_option(option);
@@ -74,15 +69,12 @@ void Session::initialize()
 	start_read_header();
 }
 
-void Session::disconnect()
-{
+void Session::disconnect() {
 	socket_.close();
 }
 
-void Session::send_packet(PacketCreator *packet)
-{
-	if (!socket_.is_open())
-	{
+void Session::send_packet(PacketCreator *packet) {
+	if (!socket_.is_open()) {
 		disconnect();
 		return;
 	}
@@ -110,8 +102,7 @@ void Session::send_packet(PacketCreator *packet)
 			shared_from_this(), std::placeholders::_1, std::placeholders::_2, send_buffer));
 }
 
-void Session::start_read_header()
-{
+void Session::start_read_header() {
 	receive_buffer_.reset(new unsigned char[4]());
 
 	// start an async read operation to receive the header of the next packet
@@ -121,16 +112,13 @@ void Session::start_read_header()
 			shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 }
 
-void Session::read_header_handler(const std::error_code &ec, std::size_t bytes_transferred)
-{
-	if (!ec)
-	{
+void Session::read_header_handler(const std::error_code &ec, std::size_t bytes_transferred) {
+	if (!ec) {
 		// get the packet length from the header buffer
 		unsigned short packet_length = crypto::get_packet_length(receive_buffer_.get());
 
 		// a packet must consist of 2 bytes atleast
-		if (packet_length < 2)
-		{
+		if (packet_length < 2) {
 			disconnect();
 			return;
 		}
@@ -143,17 +131,13 @@ void Session::read_header_handler(const std::error_code &ec, std::size_t bytes_t
 			asio::buffer(receive_buffer_.get(), packet_length),
 			std::bind(&Session::read_body_handler,
 				shared_from_this(), std::placeholders::_1, std::placeholders::_2));
-	}
-	else
-	{
+	} else {
 		disconnect();
 	}
 }
 
-void Session::read_body_handler(const std::error_code &ec, std::size_t bytes_transferred)
-{
-	if (!ec)
-	{
+void Session::read_body_handler(const std::error_code &ec, std::size_t bytes_transferred) {
+	if (!ec) {
 		// get the packet length
 		unsigned short bytes_amount = static_cast<unsigned short>(bytes_transferred);
 
@@ -165,15 +149,12 @@ void Session::read_body_handler(const std::error_code &ec, std::size_t bytes_tra
 
 		// start an async read operation to receive the header of the next packet
 		start_read_header();
-	}
-	else
-	{
+	} else {
 		disconnect();
 	}
 }
 
-void Session::send_handler(const std::error_code &ec, std::size_t bytes_transferred, unsigned char *send_buffer)
-{
+void Session::send_handler(const std::error_code &ec, std::size_t bytes_transferred, unsigned char *send_buffer) {
 	// free the memory allocated for the send buffer
 	delete[] send_buffer;
 }
