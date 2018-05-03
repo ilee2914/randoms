@@ -2,7 +2,11 @@
 x64/
 enc_temp_folder/
 *.wz/
-dukglue-master
-duktape-2.2.0
-scriptstdstring
+xanadu/dukglue-master
+xanadu/duktape-2.2.0
+xanadu/scriptstdstring
+xanadu/scriptarray
+ids/
+information/
+Debug/
 AS_DEBUG

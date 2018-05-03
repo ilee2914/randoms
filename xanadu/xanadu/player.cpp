@@ -769,6 +769,7 @@ void Player::player_connect() {
 		storage_mesos_ = rs["storage_mesos"];
 		nx_cash_credit_ = rs["nxcash_credit"];
 		storage_slots_ = 36;
+		handle_update_cash_shop();
 	}
 
 	{
@@ -856,6 +857,98 @@ void Player::player_connect() {
 			rs.moveNext();
 		}
 	}
+
+	{
+		// storage equips
+		Poco::Data::Statement statement(mysql_session);
+		statement << "SELECT * FROM cash_storage_equips WHERE user_id = " << user_id_;
+		size_t cols = statement.execute();
+
+		Poco::Data::RecordSet rs(statement);
+
+		for (; cols > 0; --cols) {
+			int item_id = rs["equip_id"];
+			EquipData *data = EquipDataProvider::get_instance()->get_item_data(item_id);
+
+			if (data) {
+				std::shared_ptr<Item> equip(new Item(item_id));
+
+				equip->set_slot(rs["pos"]);
+				equip->set_free_slots(rs["slots"]);
+				equip->set_used_scrolls(rs["used_scrolls"]);
+				equip->set_str(rs["str"]);
+				equip->set_dex(rs["dex"]);
+				equip->set_int(rs["iint"]);
+				equip->set_luk(rs["luk"]);
+				equip->set_hp(rs["hp"]);
+				equip->set_mp(rs["mp"]);
+				equip->set_weapon_attack(rs["weapon_attack"]);
+				equip->set_magic_attack(rs["magic_attack"]);
+				equip->set_weapon_defense(rs["weapon_def"]);
+				equip->set_magic_defense(rs["magic_def"]);
+				equip->set_acc(rs["accuracy"]);
+				equip->set_avoid(rs["avoid"]);
+				equip->set_hand(rs["hand"]);
+				equip->set_speed(rs["speed"]);
+				equip->set_jump(rs["jump"]);
+				equip->set_flag(rs["flags"]);
+				equip->set_unique_id(rs["unique_id_sn"]);
+
+			
+				signed char i;
+
+				for (i = 0; i < cashshop_storage_items_.size(); ++i) {
+					if (cashshop_storage_items_[i]->get_inventory_id() > equip->get_inventory_id()) {
+						break;
+					}
+				}
+
+				cashshop_storage_items_.insert(cashshop_storage_items_.begin() + i, equip);
+			}
+
+			rs.moveNext();
+		}
+	}
+
+	{
+		// storage items
+		Poco::Data::Statement statement(mysql_session);
+		statement << "SELECT item_id, pos, amount, flags, unique_id_sn FROM cash_storage_items WHERE user_id = " << user_id_;
+		size_t cols = statement.execute();
+
+		Poco::Data::RecordSet rs(statement);
+
+		for (; cols > 0; --cols) {
+			int item_id = rs["item_id"];
+			ItemData *data = ItemDataProvider::get_instance()->get_item_data(item_id);
+
+			if (data) {
+				short amount = rs["amount"];
+				signed char slot = rs["pos"];
+				short flags = rs["flags"];
+				long long uid = rs["unique_id_sn"];
+
+				std::shared_ptr<Item> item(new Item(item_id));
+				item->set_amount(amount);
+				item->set_slot(slot);
+				item->set_flag(flags);
+				item->set_unique_id(uid);
+
+			
+				signed char i;
+				for (i = 0; i < cashshop_storage_items_.size(); ++i) {
+					if (cashshop_storage_items_[i]->get_inventory_id() > item->get_inventory_id()) {
+						break;
+					}
+				}
+				cashshop_storage_items_.insert(cashshop_storage_items_.begin() + i, item);
+			}
+
+			rs.moveNext();
+		}
+	}
+
+
 	
 	{
 		// merchant storage items
@@ -2305,6 +2398,90 @@ void Player::save_storage_items() {
 	}
 }
 
+void Player::save_cash_storage_equips() {
+	World *world = World::get_instance();
+	Poco::Data::Session &mysql_session = world->get_mysql_session();
+	Poco::Data::Statement statement1(mysql_session);
+
+	statement1 << "DELETE FROM cash_storage_equips WHERE user_id = " << user_id_;
+	statement1.execute();
+
+	Poco::Data::Statement statement2(mysql_session);
+	bool firstrun = true;
+	for (auto equip : cashshop_storage_items_) {
+		if (equip->get_inventory_id() != kInventoryConstantsTypesEquip) {
+			continue;
+		}
+		if (firstrun) {
+			statement2 << "INSERT INTO cash_storage_equips (equip_id, user_id, pos, slots, used_scrolls, str, dex, iint, luk, hp, mp, weapon_attack, magic_attack, weapon_def, magic_def, accuracy, avoid, hand, speed, jump, flags, unique_id_sn) VALUES";
+			firstrun = false;
+		} else {
+			statement2 << ",";
+		}
+		statement2 << "("
+			<< equip->get_item_id() << ","
+			<< user_id_ << ","
+			<< static_cast<int>(equip->get_slot()) << ","
+			<< static_cast<int>(equip->get_free_slots()) << ","
+			<< static_cast<int>(equip->get_used_scrolls()) << ","
+			<< static_cast<int>(equip->get_str()) << ","
+			<< static_cast<int>(equip->get_dex()) << ","
+			<< static_cast<int>(equip->get_int()) << ","
+			<< static_cast<int>(equip->get_luk()) << ","
+			<< static_cast<int>(equip->get_hp()) << ","
+			<< static_cast<int>(equip->get_mp()) << ","
+			<< static_cast<int>(equip->get_weapon_attack()) << ","
+			<< static_cast<int>(equip->get_magic_attack()) << ","
+			<< static_cast<int>(equip->get_weapon_defense()) << ","
+			<< static_cast<int>(equip->get_magic_defense()) << ","
+			<< static_cast<int>(equip->get_acc()) << ","
+			<< static_cast<int>(equip->get_avoid()) << ","
+			<< static_cast<int>(equip->get_hand()) << ","
+			<< static_cast<int>(equip->get_speed()) << ","
+			<< static_cast<int>(equip->get_jump()) << ","
+			<< static_cast<int>(equip->get_flag()) << ","
+			<< static_cast<long long>(equip->get_unique_id())
+			<< ")";
+	}
+	if (!firstrun) {
+		statement2.execute();
+	}
+}
+
+void Player::save_cash_storage_items() {
+	World *world = World::get_instance();
+	Poco::Data::Session &mysql_session = world->get_mysql_session();
+	Poco::Data::Statement statement1(mysql_session);
+
+	statement1 << "DELETE FROM cash_storage_items WHERE user_id = " << user_id_;
+	statement1.execute();
+
+	Poco::Data::Statement statement2(mysql_session);
+	bool firstrun = true;
+	for (auto item : cashshop_storage_items_) {
+		if (item->get_inventory_id() == kInventoryConstantsTypesEquip || item->get_inventory_id() != kInventoryConstantsTypesCash) {
+			continue;
+		}
+		if (firstrun) {
+			statement2 << "INSERT INTO cash_storage_items (item_id, user_id, pos, amount, flags, unique_id_sn) VALUES";
+			firstrun = false;
+		} else {
+			statement2 << ",";
+		}
+		statement2 << "("
+			<< item->get_item_id() << ","
+			<< user_id_ << ","
+			<< static_cast<int>(item->get_slot()) << ","
+			<< static_cast<int>(item->get_amount()) << ","
+			<< static_cast<int>(item->get_flag()) << ","
+			<< static_cast<long long>(item->get_unique_id())
+			<< ")";
+	}
+	std::cout << statement2.toString() << std::endl;
+	if (!firstrun) {
+		statement2.execute();
+	}
+}
 void Player::save_merchant_storage_equips() {
 	World *world = World::get_instance();
 	Poco::Data::Session &mysql_session = world->get_mysql_session();
@@ -2360,6 +2537,10 @@ void Player::save_merchant_storage_items() {
 	Poco::Data::Session &mysql_session = world->get_mysql_session();
 	Poco::Data::Statement statement1(mysql_session);
 
+	if (merchant_ != nullptr && !merchant_->is_open() && merchant_->get_num_items() > 0) {
+		close_merchant();
+	}
+
 	statement1 << "DELETE FROM merchant_storage_items WHERE player_id = " << id_;
 	statement1.execute();
 
@@ -2401,6 +2582,8 @@ void Player::save() {
 	save_buddylist();
 	save_storage_equips();
 	save_storage_items();
+	save_cash_storage_equips();
+	save_cash_storage_items();
 	save_merchant_storage_equips();
 	save_merchant_storage_items();
 }

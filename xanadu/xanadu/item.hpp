@@ -49,6 +49,7 @@ public:
 	int get_commodity_id_sn();
 	void set_commodity_id_sn(int commodity_id_sn);
 	long long get_unique_id();
+	void set_unique_id(long long x);
 	// pet specific
 	signed char get_stance();
 	signed char get_pet_level();

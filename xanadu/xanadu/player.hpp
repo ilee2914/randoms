@@ -111,6 +111,8 @@ public:
 	void save_buddylist();
 	void save_storage_equips();
 	void save_storage_items();
+	void save_cash_storage_items();
+	void save_cash_storage_equips();
 	void save_merchant_storage_equips();
 	void save_merchant_storage_items();
 

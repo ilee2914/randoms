@@ -195,16 +195,18 @@ void Player::handle_cash_shop_action() {
 	case CashShopReceivePacketActions::kRetrieveCashItem:
 	{
 		long long cash_item_unique_id_sn = read<long long>();
-
+		int i = 0;
 		for (auto it : cashshop_storage_items_) {
-			if (it->get_unique_id() == cash_item_unique_id_sn) {
+			if (it != nullptr && it->get_unique_id() == cash_item_unique_id_sn) {
 
 				Inventory *inventory = get_inventory(it->get_inventory_id());
 
 				if (!inventory) {
-					continue;
+					break;
 				}
-
+				if (!inventory->can_hold(it->get_item_id(), it->get_amount())) {
+					break;
+				}
 				if (!inventory->add_item_find_slot(it)) {
 					// to-do send the cashshop error packet instead of those packets down there
 					{
@@ -217,18 +219,27 @@ void Player::handle_cash_shop_action() {
 						packet.EnableAction();
 						send_packet(&packet);
 					}
-
 					continue;
+				}
+				cashshop_storage_items_.erase(cashshop_storage_items_.begin()+i);
+				{
+					PacketCreator packet;
+					packet.TakeOutFromCashShopInventory(it.get());
+					send_packet(&packet);
 				}
 				{
 					PacketCreator packet;
-					packet.TakeOutFromCashShopInventory(it.get(), 1);
+					packet.GetCashShopInventory(cashshop_storage_items_, user_id_, storage_slots_, character_slots_);
+					send_packet(&packet);
+				}
+				{
+					PacketCreator packet;
+					packet.EnableAction();
 					send_packet(&packet);
 				}
 			}
+			i++;
 		}
-
-		cashshop_storage_items_.clear();
 
 		break;
 	}
@@ -241,15 +252,16 @@ void Player::handle_cash_shop_action() {
 		Inventory *equip_inventory = get_inventory(kInventoryConstantsTypesEquip);
 
 		bool worked = false;
-
+		
 		for (auto it : *equip_inventory->get_items()) {
 			if (it.second->get_unique_id() != cash_item_unique_id_sn)
 				continue;
 
-			cashshop_storage_items_.push_back(it.second);
+			std::shared_ptr<Item> item(new Item(*it.second));
+			cashshop_storage_items_.push_back(item);
 			{
 				PacketCreator packet;
-				packet.TransferToCashShopInventory(it.second, user_id_);
+				packet.TransferToCashShopInventory(item, user_id_);
 				send_packet(&packet);
 			}
 
@@ -259,7 +271,7 @@ void Player::handle_cash_shop_action() {
 			worked = true;
 			break;
 		}
-
+		
 		if (!worked) {
 			Inventory *cash_inventory = get_inventory(kInventoryConstantsTypesCash);
 
@@ -267,15 +279,16 @@ void Player::handle_cash_shop_action() {
 				if (it.second->get_unique_id() != cash_item_unique_id_sn)
 					continue;
 
-				cashshop_storage_items_.push_back(it.second);
+				std::shared_ptr<Item> item(new Item(*it.second));
+				cashshop_storage_items_.push_back(item);
 				{
 					PacketCreator packet;
-					packet.TransferToCashShopInventory(it.second, user_id_);
+					packet.TransferToCashShopInventory(item, user_id_);
 					send_packet(&packet);
 				}
 
 				signed char target_item_slot = it.second->get_slot();
-				cash_inventory->remove_item_by_slot(target_item_slot, 1, false);
+				cash_inventory->remove_item_by_slot(target_item_slot, it.second->get_amount(), false);
 
 				worked = true;
 				break;

@@ -196,6 +196,10 @@ long long Item::get_unique_id() {
 	return unique_id_;
 }
 
+void Item::set_unique_id(long long x) {
+	unique_id_ = x;
+}
+
 // pet specific
 
 signed char Item::get_stance() {

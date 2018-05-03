@@ -9,17 +9,14 @@
 #include "send_packet_opcodes.hpp"
 #include "constants.hpp"
 
-void PacketCreator::ItemInfo(Item *item, bool show_position)
-{
+void PacketCreator::ItemInfo(Item *item, bool show_position) {
 	int item_id = item->get_item_id();
 	ItemData *item_data = ItemDataProvider::get_instance()->get_item_data(item_id);
-	if (!item_data)
-	{
+	if (!item_data) {
 		return;
 	}
 
-	enum ItemTypes
-	{
+	enum ItemTypes {
 		kEquip = 1,
 		kItem = 2,
 		kPet = 3
@@ -29,53 +26,41 @@ void PacketCreator::ItemInfo(Item *item, bool show_position)
 
 	bool is_cash = false;
 
-	if (item_type == kPet)
-	{
+	if (item_type == kPet) {
 		is_cash = true;
 	}
 
-	if (item_id / 1000000 == 5)
-	{
+	if (item_id / 1000000 == 5) {
 		is_cash = true;
 	}
 
 	// some checks for cash items
 	// though if it's a pet, it already has the correct values due to the check above
-	if (item_data->is_cash && item_type != kPet)
-	{
-		if (item->get_inventory_id() == kInventoryConstantsTypesEquip)
-		{
+	if (item_data->is_cash && item_type != kPet) {
+		if (item->get_inventory_id() == kInventoryConstantsTypesEquip) {
 			item_type = kEquip;
 		}
 
-		if (item->get_inventory_id() == kInventoryConstantsTypesCash)
-		{
+		if (item->get_inventory_id() == kInventoryConstantsTypesCash) {
 			item_type = kItem;
 		}
-
-		is_cash = true;
 	}
 
-	if (show_position)
-	{
+	if (show_position) {
 		signed char pos = item->get_slot();
 
-		if (item->is_equip())
-		{
-			if (pos < 0)
-			{
+		if (item->is_equip()) {
+			if (pos < 0) {
 				pos *= -1;
 			}
-			if (pos > 100)
-			{
+			if (pos > 100) {
 				pos -= 100;
 			}
 		}
 
 		write<signed char>(pos);
 
-		if (item->is_equip())
-		{
+		if (item->is_equip()) {
 			write<signed char>(0);
 		}
 	}
@@ -85,15 +70,13 @@ void PacketCreator::ItemInfo(Item *item, bool show_position)
 
 	write<bool>(is_cash);
 
-	if (is_cash)
-	{
+	if (is_cash) {
 		write<long long>(item->get_unique_id());
 	}
 
 	write<long long>(item->get_expiration_time());
 
-	switch (item_type)
-	{
+	switch (item_type) {
 	case kEquip:
 	{
 		write<signed char>(item->get_free_slots());
@@ -120,8 +103,7 @@ void PacketCreator::ItemInfo(Item *item, bool show_position)
 		write<int>(0); // item exp (like this ?: 0 * 100000; // 10000000 = 100% ? - apparently not entirely correct) - only has relevance for timeless equips
 		write<int>(item->get_hammers_used());
 
-		if (!is_cash)
-		{
+		if (!is_cash) {
 			write<long long>(0); // might be -1
 		}
 
@@ -137,8 +119,7 @@ void PacketCreator::ItemInfo(Item *item, bool show_position)
 		write<std::string>(item->get_owner_name());
 		write<short>(item->get_flag());
 
-		if (item->is_star())
-		{
+		if (item->is_star()) {
 			write<long long>(-1);
 		}
 
@@ -161,8 +142,7 @@ void PacketCreator::ItemInfo(Item *item, bool show_position)
 	}
 }
 
-void PacketCreator::UpdateSlot(std::shared_ptr<Item> item)
-{
+void PacketCreator::UpdateSlot(std::shared_ptr<Item> item) {
 	write<short>(send_headers::kMODIFY_INVENTORY_ITEM);
 	write<bool>(true); // sets wether to unstuck the client and update tick
 	write<signed char>(1); // how many items to upgrade
@@ -174,8 +154,7 @@ void PacketCreator::UpdateSlot(std::shared_ptr<Item> item)
 	write<short>(item->get_amount());
 }
 
-void PacketCreator::MoveItem(signed char inventory_id, short source_slot, short destination_slot)
-{
+void PacketCreator::MoveItem(signed char inventory_id, short source_slot, short destination_slot) {
 	write<short>(send_headers::kMODIFY_INVENTORY_ITEM);
 	write<bool>(true); // sets wether to unstuck the client and update tick
 	write<signed char>(1); // how many items to update
@@ -187,14 +166,12 @@ void PacketCreator::MoveItem(signed char inventory_id, short source_slot, short 
 	write<short>(destination_slot);
 
 	// add movement
-	if (destination_slot < 0 || source_slot < 0)
-	{
+	if (destination_slot < 0 || source_slot < 0) {
 		write<signed char>(source_slot < 0 ? 1 : 2);
 	}
 }
 
-void PacketCreator::NewItem(std::shared_ptr<Item> item, bool from_drop)
-{
+void PacketCreator::NewItem(std::shared_ptr<Item> item, bool from_drop) {
 	write<short>(send_headers::kMODIFY_INVENTORY_ITEM);
 	write<bool>(from_drop); // sets wether to unstuck the client and update tick
 	write<signed char>(1); // how many items to add
@@ -206,8 +183,7 @@ void PacketCreator::NewItem(std::shared_ptr<Item> item, bool from_drop)
 	ItemInfo(item.get(), false);
 }
 
-void PacketCreator::remove_item(signed char inventory_id, int slot, bool from_drop)
-{
+void PacketCreator::remove_item(signed char inventory_id, int slot, bool from_drop) {
 	write<short>(send_headers::kMODIFY_INVENTORY_ITEM);
 	write<bool>(from_drop); // sets wether to unstuck the client and update tick
 	write<signed char>(1); // how many items to remove
@@ -217,14 +193,12 @@ void PacketCreator::remove_item(signed char inventory_id, int slot, bool from_dr
 	write<short>(slot);
 
 	// add movement
-	if (slot < 0)
-	{
+	if (slot < 0) {
 		write<signed char>(2);
 	}
 }
 
-void PacketCreator::MoveItemMerge(signed char inventory_id, short source_slot, short destination_slot, short amount)
-{
+void PacketCreator::MoveItemMerge(signed char inventory_id, short source_slot, short destination_slot, short amount) {
 	write<short>(send_headers::kMODIFY_INVENTORY_ITEM);
 	write<bool>(true); // sets wether to unstuck the client and update tick
 	write<signed char>(2); // how many items to update
@@ -242,8 +216,7 @@ void PacketCreator::MoveItemMerge(signed char inventory_id, short source_slot, s
 	write<signed char>(2); // add movement
 }
 
-void PacketCreator::MoveItemMergeTwo(signed char inventory_id, short source_slot, short source_amount, short destination_slot, short destination_amount)
-{
+void PacketCreator::MoveItemMergeTwo(signed char inventory_id, short source_slot, short source_amount, short destination_slot, short destination_amount) {
 	write<short>(send_headers::kMODIFY_INVENTORY_ITEM);
 	write<bool>(true); // sets wether to unstuck the client and update tick
 	write<signed char>(2); // how many items to update
@@ -261,8 +234,7 @@ void PacketCreator::MoveItemMergeTwo(signed char inventory_id, short source_slot
 	write<short>(destination_amount);
 }
 
-void PacketCreator::ScrolledItem(std::shared_ptr<Item> scroll, std::shared_ptr<Item> equip, bool destroyed)
-{
+void PacketCreator::ScrolledItem(std::shared_ptr<Item> scroll, std::shared_ptr<Item> equip, bool destroyed) {
 	write<short>(send_headers::kMODIFY_INVENTORY_ITEM);
 	write<bool>(true); // sets wether to unstuck the client and update tick
 	write<signed char>(destroyed ? 2 : 3); // how many items to update
@@ -271,8 +243,7 @@ void PacketCreator::ScrolledItem(std::shared_ptr<Item> scroll, std::shared_ptr<I
 	write<signed char>(scroll->get_inventory_id());
 	write<short>(scroll->get_slot());
 
-	if (scroll->get_amount() > 1)
-	{
+	if (scroll->get_amount() > 1) {
 		write<short>(scroll->get_amount() - 1);
 	}
 
@@ -280,22 +251,19 @@ void PacketCreator::ScrolledItem(std::shared_ptr<Item> scroll, std::shared_ptr<I
 	write<signed char>(kInventoryConstantsTypesEquip);
 	write<short>(equip->get_slot());
 
-	if (!destroyed)
-	{
+	if (!destroyed) {
 		write<signed char>(0); // mode (0 = add item, 1 = update quantity, 2 = move, 3 = remove)
 		write<signed char>(kInventoryConstantsTypesEquip);
 		write<short>(equip->get_slot());
 		ItemInfo(equip.get(), false);
 	}
 
-	if (scroll->get_amount() > 1 && scroll->get_slot() < 0 || equip->get_slot() < 0)
-	{
+	if (scroll->get_amount() > 1 && scroll->get_slot() < 0 || equip->get_slot() < 0) {
 		write<signed char>(2); // add movement
 	}
 }
 
-void PacketCreator::InventoryUpdatePet(Item *pet)
-{
+void PacketCreator::InventoryUpdatePet(Item *pet) {
 	write<short>(send_headers::kMODIFY_INVENTORY_ITEM);
 	write<bool>(false); // sets wether to unstuck the client and update tick
 	write<signed char>(1); // how many items to upgrade
@@ -307,8 +275,7 @@ void PacketCreator::InventoryUpdatePet(Item *pet)
 	ItemInfo(pet, false);
 }
 
-void PacketCreator::get_inventory_full()
-{
+void PacketCreator::get_inventory_full() {
 	write<short>(send_headers::kMODIFY_INVENTORY_ITEM);
 	write<bool>(true); // sets wether to unstuck the client and update tick
 	write<signed char>(0); // how many items to upgrade

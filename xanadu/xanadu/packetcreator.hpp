@@ -90,7 +90,7 @@ public:
 	void IncreaseInventorySlots(signed char inventory, signed char slots);
 	void IncreaseStorageSlots(signed char slots);
 	void CashShopIncreaseCharacterSlots(short slots);
-	void TakeOutFromCashShopInventory(Item *item, short position);
+	void TakeOutFromCashShopInventory(Item *item);
 	void TransferToCashShopInventory(const std::shared_ptr<Item> &item, int account_id);
 	void CashShopShowBoughtPackage(std::vector<std::shared_ptr<Item>> items, int account_id);
 	void CashShopAddCashItemData(const std::shared_ptr<Item> &item, int account_id);

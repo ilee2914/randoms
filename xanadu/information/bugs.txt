@@ -7,13 +7,7 @@ buglist
 
 -------------------- map and map life stuff (mobs, reactors, portals) --------------------
 
-x- fix monster spawn rate (make use of mobRate info from maps) and check the correct timer seconds
-
 - fix reactors (need reactor objects system in maps, the map reactor data is already done)
-
-x- drops (from mobs or from player) fly a bit weird when spawned
-
-- meso drops missing, non-optimal workaround in place at the moment
 
 - fix party exp (Mob::give_exp function at the bottom, check the formula)
 
@@ -75,33 +69,9 @@ x- drops (from mobs or from player) fly a bit weird when spawned
 
 -------------------- scripted portals --------------------
 
-- elinia town portal to the library/grendel npc doesn't work
-
 -------------------- hired merchants --------------------
 
-- to-do fix hired merchant when store owner enters merchant for maintenance, it needs to be shown in the map on the merchant
-
-- to-do fix hired merchant when disconnecting while setting up a hired merchant, the items in it are lost
-
-- to-do fix hired merchant when owner of store takes out item it doesnt get back into inventory
-
-- to-do fix when closing hired merchant, items are stored, but it seems that amount of items stays at 1, so if multiple items were put it, some are lost
-
 -------------------- cashshop --------------------
-
-- when transfering cashitem from cash inventory to item inventory and otherwise, this may cause bugs like amount = 0 and if item already exists, amount doesn't increase
-
-- when buying cash item or package or storing or retrieving cash items, it needs to be checked first if the cash storage/item inventory has space for it
-
-- cashshop storage/inventory isn't saved to sql or loaded from it
-
-- when buying a cashitem fails, it should send the packet for that case
-
-- when an item is retrieved from the cash storage, it has a display bug: it is shown duplicate instead of one item that was already there (only a display bug, maybe an error in the packet)
-
-- storage slots need to be saved to and loaded from sql
-
-- to-do implement wishlist
 
 -------------------- guilds --------------------
 
@@ -141,10 +111,6 @@ x- drops (from mobs or from player) fly a bit weird when spawned
 
 - to-do fix when trying to fame/defame someone within the blocked time, it says try again later instead of the correct message (not sure if this is a bug)
 
-- to-do fix when trade invite is declined, the inviter gets no notification about that (not sure if this is a bug)
-
-- to-do fix when party invite is declined, the inviter gets no notification about that (not sure if this is a bug)
-
 - to-do fix inventory item merging and sorting, make it properly work (at the moment it's only item sorting)
 
 - 2x exp coupon doesnt work with partys
@@ -159,15 +125,6 @@ x- drops (from mobs or from player) fly a bit weird when spawned
 
 - to-do maybe set cash items to max one item per slot (not sure if that has to be that way)
 
-- to-do re-write logger (probably based on C++ stream functionality) and use it in exceptions
-
 - to-do maybe make acceptor asynchronous
 
-- to-do apply design rules like function naming convention
-
 - to-do make correct use of const and reference usage and passing
-
-- INFO: look up odinms based repacks how they load info from wz xmls which are simply extracts from .wz files, this will help to make proper use of .wz files
-
-- to-do check and improve .wz loading code also by consulting odinms based repacks on how they did it
-
