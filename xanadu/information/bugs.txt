@@ -1,6 +1,3 @@
-
-buglist
-
 -------------------- critical/blocking bugs --------------------
 
 -
@@ -103,15 +100,9 @@ buglist
 
 - quests give all possible rewards instead of one randomly from multiple when its a "secret" reward (not sure if this is a bug)
 
-- completed quests don't have a correct timestamp (not sure if this is a bug)
-
-- need to make a change in Item.cpp: unique id is only needed for cash stuff (cash items, cash equips and pets), change it to be that way
-
 - player summontimer needs to be fixed
 
 - to-do fix when trying to fame/defame someone within the blocked time, it says try again later instead of the correct message (not sure if this is a bug)
-
-- to-do fix inventory item merging and sorting, make it properly work (at the moment it's only item sorting)
 
 - 2x exp coupon doesnt work with partys
 
