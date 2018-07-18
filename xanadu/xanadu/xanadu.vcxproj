@@ -55,7 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>C:\angelscript_2.32.0\sdk\angelscript\include;C:\poco-1.7.8p3-all\Foundation\include;C:\poco-1.7.8p3-all\Data\include;C:\poco-1.7.8p3-all\Data\MySQL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\poco-1.7.8p3-all\Foundation\include;C:\poco-1.7.8p3-all\Data\include;C:\poco-1.7.8p3-all\Data\MySQL\include</AdditionalIncludeDirectories>
       <CompileAsManaged>false</CompileAsManaged>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -64,11 +64,11 @@
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libmysql.lib;angelscript64d.lib</AdditionalDependencies>
+      <AdditionalDependencies>libmysql.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>C:\angelscript_2.32.0\sdk\angelscript\lib;C:\poco-1.7.8p3-all\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\poco-1.7.8p3-all\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

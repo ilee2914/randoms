@@ -870,7 +870,7 @@ void Map::kill(Mob *mob) {
 	// if the mob is not part of the map, it isn't supposed to be respawned
 	// so delete the object and erase the pointer from the container
 
-	if (!mob->is_map_mob()) {
+	if (mob && !mob->is_map_mob()) {
 		delete mob;
 
 		auto it = mobs_.begin();

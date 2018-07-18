@@ -16,4 +16,4 @@ namespace GameLocales
 constexpr unsigned char kGameLocale = GameLocales::kGlobalMapleStory;
 
 // standard install path would be: "C:\\Nexon\\MapleStory\\"
-const std::string kGameFilePath = "C:\\Users\\ilee2\\Desktop\\xD\\";
+const std::string kGameFilePath = "C:\\Users\\ilee2\\Desktop\\pnano\\";
